@@ -23,7 +23,7 @@ class HomeController extends Controller
     {
         $exampleService = $this->get('app.example');
 
-        $posts = $exampleService->getDummyPosts();
+        $posts = $exampleService->getPosts();
 
         return $this->render('AppBundle:Home:list.html.twig', [
             'posts' => $posts,
