@@ -35,19 +35,6 @@ class SecurityController extends Controller
     }
 
     /**
-     * @Route("/logout", name="logout")
-     */
-    public function logoutAction(Request $request)
-    {
-       /* $session = new Session();
-        $session->getFlashBag()->add('success', 'Lauksime Jūsų sugrįžtant!');
-
-        $response = new RedirectResponse($request->headers->get('referer'));
-
-        return $response;*/
-    }
-
-    /**
      * @Route("/register", name="register")
      */
     public function registerAction(Request $request)

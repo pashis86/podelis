@@ -4,8 +4,9 @@
 
 {% block body %}
     {{ form_start(form) }}
-    {{ form_row(form_password.first) }}
-    {{ form_row(form_password.second) }}
+    {{ form_row(form.oldPassword) }}
+    {{ form_row(form.newPassword.first) }}
+    {{ form_row(form.newPassword.second) }}
     <button type="submit">Change password!</button>
     {{ form_end(form) }}
 {% endblock %}

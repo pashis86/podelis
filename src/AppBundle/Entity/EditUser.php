@@ -9,7 +9,10 @@
 namespace AppBundle\Entity;
 
 
+
+use Symfony\Component\Security\Core\Validator\Constraints\UserPassword;
 use Symfony\Component\Validator\Constraints as Assert;
+
 
 class EditUser
 {
@@ -44,8 +47,7 @@ class EditUser
 
     /**
      * @var string
-     * @SecurityAssert\UserPassword(
-     *     message = "Neteisingas slaptažodis")
+     * @UserPassword(message = "Neteisingas slaptažodis")
      */
     private $password;
 

@@ -16,7 +16,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @UniqueEntity(fields="username", message="Username already taken")
  * @ORM\Entity(repositoryClass="AppBundle\Repository\UserRepository")
  */
-class User implements UserInterface, \Serializable
+class User implements UserInterface/*, \Serializable <-- del sito buna segmentation error */
 {
     /**
      * @var int
@@ -358,7 +358,7 @@ class User implements UserInterface, \Serializable
 
     public function unserialize($serialized)
     {
-        list(
+         list(
             $this->id,
             $this->email,
             $this->username,
