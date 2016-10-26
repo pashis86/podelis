@@ -26,6 +26,7 @@ class UserType extends AbstractType
                 [
                     'type' => PasswordType::class
                 ])
+            ->add('username', TextType::class)
             ->add('name', TextType::class)
             ->add('surname', TextType::class, [
                 'required' => false

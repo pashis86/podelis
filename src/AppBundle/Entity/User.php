@@ -4,7 +4,6 @@ namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
-use Symfony\Component\Security\Core\User\AdvancedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -14,6 +13,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  *
  * @ORM\Table(name="users")
  * @UniqueEntity(fields="email", message="Email already taken")
+ * @UniqueEntity(fields="username", message="Username already taken")
  * @ORM\Entity(repositoryClass="AppBundle\Repository\UserRepository")
  */
 class User implements UserInterface, \Serializable
@@ -46,6 +46,7 @@ class User implements UserInterface, \Serializable
     /**
      * @var string
      * @Assert\NotBlank()
+     * @Assert\Length(min="6", minMessage="Password must be at least 6 characters long")
      * @ORM\Column(name="password", type="string", length=255)
      */
     private $password;
@@ -53,7 +54,15 @@ class User implements UserInterface, \Serializable
     /**
      * @var string
      * @Assert\NotBlank()
-     * @Assert\Length(min="4", max="30")
+     * @Assert\Length(min="3", max="30")
+     * @ORM\Column(name="username", type="string", length=255)
+     */
+    private $username;
+
+    /**
+     * @var string
+     * @Assert\NotBlank()
+     * @Assert\Length(min="3", max="30")
      * @ORM\Column(name="name", type="string", length=255)
      */
     private $name;
@@ -96,6 +105,12 @@ class User implements UserInterface, \Serializable
         $this->level = 1;
     }
 
+    public function editUser(EditUser $editUser)
+    {
+        $this->name = $editUser->getName();
+        $this->surname = $editUser->getSurname();
+        $this->updatedAt = new \DateTime('now');
+    }
     /**
      * Get id
      *
@@ -319,15 +334,20 @@ class User implements UserInterface, \Serializable
      */
     public function getUsername()
     {
-        return $this->name;
+        return $this->username;
     }
 
+    public function setUsername($username)
+    {
+        $this->username = $username;
+    }
 
     public function serialize()
     {
         return serialize([
             $this->id,
             $this->email,
+            $this->username,
             $this->name,
             $this->surname,
             $this->password,
@@ -341,6 +361,7 @@ class User implements UserInterface, \Serializable
         list(
             $this->id,
             $this->email,
+            $this->username,
             $this->name,
             $this->surname,
             $this->password,

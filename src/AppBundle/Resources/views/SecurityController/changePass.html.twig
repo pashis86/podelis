@@ -1,0 +1,11 @@
+{% extends "::base.html.twig" %}
+
+{% block title %}change pass{% endblock %}
+
+{% block body %}
+    {{ form_start(form) }}
+    {{ form_row(form_password.first) }}
+    {{ form_row(form_password.second) }}
+    <button type="submit">Change password!</button>
+    {{ form_end(form) }}
+{% endblock %}
