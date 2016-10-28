@@ -1,4 +1,4 @@
-set :application, 'akademija'
+set :application, 'podelis'
 set :repo_url, '#'
 
 set :deploy_to, '/home/podelis/'
