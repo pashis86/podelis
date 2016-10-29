@@ -8,6 +8,7 @@ use AppBundle\Entity\User;
 use AppBundle\Form\ChangePasswordType;
 use AppBundle\Form\EditUserType;
 use AppBundle\Form\UserType;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\Request;
@@ -20,18 +21,25 @@ class SecurityController extends Controller
      */
     public function loginAction()
     {
-        $authenticationUtils = $this->get('security.authentication_utils');
+        $securityContext = $this->get('security.authorization_checker');
 
-        // get the login error if there is one
-        $error = $authenticationUtils->getLastAuthenticationError();
+        if(!$securityContext->isGranted('IS_AUTHENTICATED_FULLY') ||
+                !$securityContext->isGranted('IS_AUTHENTICATED_REMEMBERED'))
+        {
+            $authenticationUtils = $this->get('security.authentication_utils');
 
-        // last username entered by the user
-        $lastUsername = $authenticationUtils->getLastUsername();
-      //  die($lastEmail);
-        return $this->render('@App/SecurityController/login.html.twig', [
-            'last_username' => $lastUsername,
-            'error'         => $error,
-        ]);
+            // get the login error if there is one
+            $error = $authenticationUtils->getLastAuthenticationError();
+
+            // last username entered by the user
+            $lastEmail = $authenticationUtils->getLastUsername();
+            //  die($lastEmail);
+            return $this->render('@App/Security/login.html.twig', [
+                'last_email' => $lastEmail,
+                'error'         => $error,
+            ]);
+        }
+        return $this->redirectToRoute('homepage');
     }
 
     /**
@@ -39,46 +47,52 @@ class SecurityController extends Controller
      */
     public function registerAction(Request $request)
     {
-        $user = new User();
-        $form = $this->createForm(UserType::class, $user);
+        $securityContext = $this->get('security.authorization_checker');
 
-        $form->handleRequest($request);
-        if ($form->isSubmitted() && $form->isValid()) {
+        if(!$securityContext->isGranted('IS_AUTHENTICATED_FULLY') ||
+            !$securityContext->isGranted('IS_AUTHENTICATED_REMEMBERED'))
+        {
+            $user = new User();
+            $form = $this->createForm(UserType::class, $user);
 
-            $password = $this->get('security.password_encoder')
-                ->encodePassword($user, $user->getPassword());
-            $user->setPassword($password);
+            $form->handleRequest($request);
+            if ($form->isSubmitted() && $form->isValid()) {
 
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($user);
-            $em->flush();
+                $password = $this->get('security.password_encoder')
+                    ->encodePassword($user, $user->getPassword());
+                $user->setPassword($password);
 
-            $this->get('app.send_email')->sendEmail($user);
+                $em = $this->getDoctrine()->getManager();
+                $em->persist($user);
+                $em->flush();
 
-            return $this->redirectToRoute('homepage');
+                $this->get('app.send_email')->sendEmail($user);
+
+                return $this->redirectToRoute('homepage');
+            }
+
+            return $this->render(
+                '@App/Security/register.html.twig',
+                ['form' => $form->createView()]
+            );
         }
-
-        return $this->render(
-            '@App/SecurityController/register.html.twig',
-            ['form' => $form->createView()]
-        );
+        return $this->redirectToRoute('homepage');
     }
 
     /**
-     * @Route("/paskyra/keisti", name="keistiDuomenis")
+     * @Security("has_role('ROLE_USER')")
+     * @Route("/profile/edit", name="keistiDuomenis")
      */
     public function userEditAction(Request $request) {
-
         $securityContext = $this->get('security.authorization_checker');
+        $user = $this->getUser();
 
-        if($securityContext->isGranted('IS_AUTHENTICATED_FULLY') ||
-            $securityContext->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
+        if(($securityContext->isGranted('IS_AUTHENTICATED_FULLY') ||
+            $securityContext->isGranted('IS_AUTHENTICATED_REMEMBERED')) && !$user->getFacebookId()) {
 
-            $user = $this->getUser();
             $edit = new EditUser($user);
 
             $form = $this->createForm(EditUserType::class, $edit);
-
             $form->handleRequest($request);
 
             if($form->isSubmitted()) {
@@ -93,24 +107,27 @@ class SecurityController extends Controller
                     $this->addFlash('success', 'Duomenys sėkmingai pakeisti!');
                 }
             }
-            return $this->render('@App/SecurityController/editUser.html.twig', array(
+            return $this->render('@App/Security/editUser.html.twig', array(
                 'form' => $form->createView()
             ));
         }
         else {
-            return $this->render('@App/Home/index.html.twig');
+            return $this->redirectToRoute('homepage');
         }
 
     }
 
     /**
-     * @Route("/paskyra/slaptazodis", name="keistiSlaptazodi")
+     * @Route("/profile/password", name="keistiSlaptazodi")
+     * @Security("has_role('ROLE_USER')")
+     *
      */
     public function userPasswordAction(Request $request) {
         $securityContext = $this->get('security.authorization_checker');
+        $user = $this->getUser();
 
-        if($securityContext->isGranted('IS_AUTHENTICATED_FULLY') ||
-            $securityContext->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
+        if(($securityContext->isGranted('IS_AUTHENTICATED_FULLY') ||
+            $securityContext->isGranted('IS_AUTHENTICATED_REMEMBERED')) && !$user->getFacebookId()) {
 
             $newPass = new ChangePassword();
 
@@ -121,8 +138,6 @@ class SecurityController extends Controller
             if($form->isSubmitted()) {
 
                 if($form->isValid()) {
-
-                    $user = $this->getUser();
 
                     $pass = $this->get('security.password_encoder')
                         ->encodePassword($user, $form['newPassword']->getData());
@@ -135,13 +150,32 @@ class SecurityController extends Controller
                     $this->addFlash('success', 'Duomenys sėkmingai pakeisti!');
                 }
             }
-            return $this->render('@App/SecurityController/changePass.html.twig', array(
+            return $this->render('@App/Security/changePass.html.twig', array(
                 'form' => $form->createView()
             ));
         }
         else {
-            return $this->render('@App/Home/index.html.twig');
+            return $this->redirectToRoute('homepage');
         }
+    }
+
+    /**
+     * @Route("/connect/facebook", name="fbConnect")
+     */
+    public function connectAction()
+    {
+        // will redirect to Facebook!
+        return $this->get('oauth2.registry')
+            ->getClient('facebook') // key used in config.yml
+            ->redirect();
+    }
+
+    /**
+     * @Route("/connect/facebook/check", name="connect_facebook_check")
+     */
+    public function connectCheckAction(Request $request)
+    {
+        return $this->redirectToRoute('homepage');
     }
 
 }

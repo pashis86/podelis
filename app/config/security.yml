@@ -27,8 +27,13 @@ security:
             http_basic: ~
             provider: db_provider
             form_login:
-                login_path: login
-                check_path: login
+                username_parameter: _username
+                login_path: /login
+                check_path: /login
+            guard:
+                authenticators:
+                    - app.facebook_authenticator
+
             logout:
                 path:   /logout
                 target: /

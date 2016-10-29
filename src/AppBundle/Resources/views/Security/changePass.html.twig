@@ -1,0 +1,14 @@
+{% extends "::base.html.twig" %}
+
+{% block title %}change pass{% endblock %}
+
+{% block body %}
+    {% if not app.user.facebookId %}
+        {{ form_start(form) }}
+        {{ form_row(form.oldPassword) }}
+        {{ form_row(form.newPassword.first) }}
+        {{ form_row(form.newPassword.second) }}
+        <button type="submit">Change password!</button>
+        {{ form_end(form) }}
+    {% endif %}
+{% endblock %}

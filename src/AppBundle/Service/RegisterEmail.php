@@ -24,7 +24,7 @@ class RegisterEmail
         $message = \Swift_Message::newInstance()
             ->setSubject('Sveikiname užsiregistravus!')
             ->setFrom('podelis@gmail.com')
-            ->setTo($user->getEmail())
+            ->setTo($user->getUsername())
             ->setBody(
                 $this->templating->render('@App/Emails/registerEmail.html.twig',
                     array('name' => $user->getName())), 'text/html');

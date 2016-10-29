@@ -15,13 +15,8 @@ class AppKernel extends Kernel
             new Symfony\Bundle\SwiftmailerBundle\SwiftmailerBundle(),
             new Doctrine\Bundle\DoctrineBundle\DoctrineBundle(),
             new Sensio\Bundle\FrameworkExtraBundle\SensioFrameworkExtraBundle(),
-            new \League\OAuth2\Client\Provider\Facebook([
-                'clientId'          => '{193875304387366}',
-                'clientSecret'      => '{86007a1fdbddf68b400a190c5f720e23}',
-                'redirectUri'       => 'https://google.com',
-                'graphApiVersion'   => 'v2.8',
-            ]),
             new AppBundle\AppBundle(),
+            new KnpU\OAuth2ClientBundle\KnpUOAuth2ClientBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'), true)) {

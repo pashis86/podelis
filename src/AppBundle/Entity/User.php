@@ -12,7 +12,6 @@ use Symfony\Component\Validator\Constraints as Assert;
  * User
  *
  * @ORM\Table(name="users")
- * @UniqueEntity(fields="email", message="Email already taken")
  * @UniqueEntity(fields="username", message="Username already taken")
  * @ORM\Entity(repositoryClass="AppBundle\Repository\UserRepository")
  */
@@ -34,28 +33,19 @@ class User implements UserInterface/*, \Serializable <-- del sito buna segmentat
      */
     private $active;
 
-
-    /**
-     * @var string
-     * @Assert\NotBlank()
-     * @Assert\Email()
-     * @ORM\Column(name="email", type="string", length=255)
-     */
-    private $email;
-
     /**
      * @var string
      * @Assert\NotBlank()
      * @Assert\Length(min="6", minMessage="Password must be at least 6 characters long")
-     * @ORM\Column(name="password", type="string", length=255)
+     * @ORM\Column(name="password", type="string", length=255, nullable=true)
      */
     private $password;
 
     /**
      * @var string
      * @Assert\NotBlank()
-     * @Assert\Length(min="3", max="30")
-     * @ORM\Column(name="username", type="string", length=255)
+     * @Assert\Email()
+     * @ORM\Column(name="username", type="string", length=255, nullable=true)
      */
     private $username;
 
@@ -95,6 +85,192 @@ class User implements UserInterface/*, \Serializable <-- del sito buna segmentat
      */
     private $updatedAt;
 
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="facebook_id", type="string", length=255, nullable=true)
+     */
+    private $facebookId;
+
+    /**
+     * @return int
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * @param int $id
+     * @return User
+     */
+    public function setId(int $id): User
+    {
+        $this->id = $id;
+        return $this;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function isActive()
+    {
+        return $this->active;
+    }
+
+    /**
+     * @param boolean $active
+     * @return User
+     */
+    public function setActive(bool $active): User
+    {
+        $this->active = $active;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getPassword()
+    {
+        return $this->password;
+    }
+
+    /**
+     * @param string $password
+     * @return User
+     */
+    public function setPassword(string $password = null): User
+    {
+        $this->password = $password;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getUsername()
+    {
+        return $this->username;
+    }
+
+    /**
+     * @param string $username
+     * @return User
+     */
+    public function setUsername(string $username = null): User
+    {
+        $this->username = $username;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getName()
+    {
+        return $this->name;
+    }
+
+    /**
+     * @param string $name
+     * @return User
+     */
+    public function setName(string $name): User
+    {
+        $this->name = $name;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getSurname()
+    {
+        return $this->surname;
+    }
+
+    /**
+     * @param string $surname
+     * @return User
+     */
+    public function setSurname(string $surname): User
+    {
+        $this->surname = $surname;
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getLevel()
+    {
+        return $this->level;
+    }
+
+    /**
+     * @param int $level
+     * @return User
+     */
+    public function setLevel(int $level): User
+    {
+        $this->level = $level;
+        return $this;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getCreatedAt()
+    {
+        return $this->createdAt;
+    }
+
+    /**
+     * @param \DateTime $createdAt
+     * @return User
+     */
+    public function setCreatedAt(\DateTime $createdAt): User
+    {
+        $this->createdAt = $createdAt;
+        return $this;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getUpdatedAt()
+    {
+        return $this->updatedAt;
+    }
+
+    /**
+     * @param \DateTime $updatedAt
+     * @return User
+     */
+    public function setUpdatedAt(\DateTime $updatedAt): User
+    {
+        $this->updatedAt = $updatedAt;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getFacebookId()
+    {
+        return $this->facebookId;
+    }
+
+    /**
+     * @param string $facebookId
+     * @return User
+     */
+    public function setFacebookId(string $facebookId): User
+    {
+        $this->facebookId = $facebookId;
+        return $this;
+    }
 
     public function __construct()
     {
@@ -110,207 +286,6 @@ class User implements UserInterface/*, \Serializable <-- del sito buna segmentat
         $this->name = $editUser->getName();
         $this->surname = $editUser->getSurname();
         $this->updatedAt = new \DateTime('now');
-    }
-    /**
-     * Get id
-     *
-     * @return int
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
-
-    /**
-     * Set active
-     *
-     * @param boolean $active
-     *
-     * @return User
-     */
-    public function setActive($active)
-    {
-        $this->active = $active;
-
-        return $this;
-    }
-
-    /**
-     * Get active
-     *
-     * @return bool
-     */
-    public function getActive()
-    {
-        return $this->active;
-    }
-
-    /**
-     * Set email
-     *
-     * @param string $email
-     *
-     * @return User
-     */
-    public function setEmail($email)
-    {
-        $this->email = $email;
-
-        return $this;
-    }
-
-    /**
-     * Get email
-     *
-     * @return string
-     */
-    public function getEmail()
-    {
-        return $this->email;
-    }
-
-    /**
-     * Set password
-     *
-     * @param string $password
-     *
-     * @return User
-     */
-    public function setPassword($password)
-    {
-        $this->password = $password;
-
-        return $this;
-    }
-
-    /**
-     * Get password
-     *
-     * @return string
-     */
-    public function getPassword()
-    {
-        return $this->password;
-    }
-
-    /**
-     * Set name
-     *
-     * @param string $name
-     *
-     * @return User
-     */
-    public function setName($name)
-    {
-        $this->name = $name;
-
-        return $this;
-    }
-
-    /**
-     * Get name
-     *
-     * @return string
-     */
-    public function getName()
-    {
-        return $this->name;
-    }
-
-    /**
-     * Set surname
-     *
-     * @param string $surname
-     *
-     * @return User
-     */
-    public function setSurname($surname)
-    {
-        $this->surname = $surname;
-
-        return $this;
-    }
-
-    /**
-     * Get surname
-     *
-     * @return string
-     */
-    public function getSurname()
-    {
-        return $this->surname;
-    }
-
-    /**
-     * Set level
-     *
-     * @param integer $level
-     *
-     * @return User
-     */
-    public function setLevel($level)
-    {
-        $this->level = $level;
-
-        return $this;
-    }
-
-    /**
-     * Get level
-     *
-     * @return int
-     */
-    public function getLevel()
-    {
-        return $this->level;
-    }
-
-    /**
-     * Set createdAt
-     *
-     * @param \DateTime $createdAt
-     *
-     * @return User
-     */
-    public function setCreatedAt($createdAt)
-    {
-        $this->createdAt = $createdAt;
-
-        return $this;
-    }
-
-    /**
-     * Get createdAt
-     *
-     * @return \DateTime
-     */
-    public function getCreatedAt()
-    {
-        return $this->createdAt;
-    }
-
-    /**
-     * Set updatedAt
-     *
-     * @param \DateTime $updatedAt
-     *
-     * @return User
-     */
-    public function setUpdatedAt($updatedAt)
-    {
-        $this->updatedAt = $updatedAt;
-
-        return $this;
-    }
-
-    /**
-     * Get updatedAt
-     *
-     * @return \DateTime
-     */
-    public function getUpdatedAt()
-    {
-        return $this->updatedAt;
     }
 
     /**
@@ -329,24 +304,10 @@ class User implements UserInterface/*, \Serializable <-- del sito buna segmentat
         return null;
     }
 
-    /**
-     * @return string The username
-     */
-    public function getUsername()
-    {
-        return $this->username;
-    }
-
-    public function setUsername($username)
-    {
-        $this->username = $username;
-    }
-
     public function serialize()
     {
         return serialize([
             $this->id,
-            $this->email,
             $this->username,
             $this->name,
             $this->surname,
@@ -360,7 +321,6 @@ class User implements UserInterface/*, \Serializable <-- del sito buna segmentat
     {
          list(
             $this->id,
-            $this->email,
             $this->username,
             $this->name,
             $this->surname,
@@ -378,5 +338,6 @@ class User implements UserInterface/*, \Serializable <-- del sito buna segmentat
     public function eraseCredentials()
     {
     }
+
 }
 
