@@ -4,6 +4,10 @@ parameters:
 #    parameter_name: value
 
 services:
-    app.example:
-        class: AppBundle\Service\ExampleService
-        arguments: ["@doctrine.orm.entity_manager"]
+    app.send_email:
+        class: AppBundle\Service\RegisterEmail
+        arguments: ["@mailer", "@templating"]
+
+    app.facebook_authenticator:
+        class: AppBundle\Service\FacebookAuthenticator
+        arguments: ["@oauth2.registry", "@doctrine.orm.entity_manager", "@router"]
