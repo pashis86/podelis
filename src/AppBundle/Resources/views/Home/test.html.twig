@@ -1,0 +1,20 @@
+{% extends '::base.html.twig' %}
+
+{% block body %}
+    <ul>
+        {% for group in questionGroup %}
+             {% for question in group %}
+                 <li>
+                 <div>
+                     {{ loop.index }}{{ question.content|raw }}
+                 </div>
+                 <div>
+                     {% for answer in question.answers %}
+                         <label><input type="checkbox" title=""> {{ answer|raw }}</label><br>
+                     {% endfor %}
+                 </div>
+                 </li>
+             {% endfor %}
+        {% endfor %}
+    </ul>
+{% endblock %}

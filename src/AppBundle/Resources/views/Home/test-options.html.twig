@@ -1,0 +1,9 @@
+{% extends '::base.html.twig' %}
+
+{% block body %}
+    {{ form_start(form) }}
+    {{ form_row(form.book) }}
+    {{ form_row(form.amount) }}
+    <input type="submit" value="Start the test!">
+    {{ form_end(form) }}
+{% endblock %}

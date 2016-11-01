@@ -22,5 +22,15 @@
 {% endblock %}
 
 {% block body %}
-    <div class="title">NFQ Akademija</div>
+    {% for error in app.session.flashBag.get('error') %}
+        <div class="alert alert-danger">
+            {{ error }}
+        </div>
+    {% endfor %}
+    {% for success in app.session.flashBag.get('success') %}
+        <div class="alert alert-success">
+            {{ success }}
+        </div>
+    {% endfor %}
+    <div class="title">Podelis</div>
 {% endblock %}
