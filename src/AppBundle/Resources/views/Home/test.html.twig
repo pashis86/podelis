@@ -1,0 +1,12 @@
+{% extends '::base.html.twig' %}
+
+{% block body %}
+    <ul>
+        {% for question in questions %}
+            <li>
+                {{ 'id' ~ question.id}}
+                {{ question.content|raw }}
+            </li>
+        {% endfor %}
+    </ul>
+{% endblock %}

@@ -37,8 +37,7 @@ class HomeController extends Controller
                 'amount' => $form['amount']->getData()
             ]);
 
-             return $this->forward('AppBundle:Home:test', [
-                 'request' => $request,
+             return $this->render('@App/Home/test.html.twig', [
                  'questions' => $questions
              ]);
 
