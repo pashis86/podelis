@@ -12,22 +12,31 @@ class QuestionRepository extends \Doctrine\ORM\EntityRepository
 {
     public function getSpecificQuestions($options)
     {
-        $totalRows = $this->createQueryBuilder('q')
-            ->select('q.id')
-            ->where('q.book IN (:books)')
-            ->setParameter('books', $options['books'])
-            ->getQuery()
-            ->getResult();
+        $questions = [];
 
-        shuffle($totalRows);
-        array_splice($totalRows, $options['amount']);
+        foreach ($options['books'] as $book)
+        {
+            $totalRows = $this->createQueryBuilder('q')
+                ->select('q.id')
+                ->where('q.book = :book')
+                ->setParameter('book', $book)
+                ->distinct(true)
+                ->getQuery()
+                ->getResult();
 
-        return $questions = $this->createQueryBuilder('q')
-            ->select('q')
-            ->where('q.id IN (:ids)')
-            ->setParameter('ids', $totalRows)
-            ->setMaxResults($options['amount'])
-            ->getQuery()
-            ->getResult();
+            shuffle($totalRows);
+            array_splice($totalRows, $options['amount']);
+
+            $results = $this->createQueryBuilder('q')
+                ->select('q')
+                ->where('q.id IN (:ids)')
+                ->setParameter('ids', $totalRows)
+                ->setMaxResults($options['amount'])
+                ->distinct(true)
+                ->getQuery()
+                ->getResult();
+            array_push($questions, $results);
+        }
+        return $questions;
     }
 }

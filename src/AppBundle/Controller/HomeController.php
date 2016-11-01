@@ -31,19 +31,19 @@ class HomeController extends Controller
         if($form->isSubmitted() && $form->isValid())
         {
 
-            $repository = $this->getDoctrine()->getRepository('AppBundle:Question');
-            $questions = $repository->getSpecificQuestions([
+            $qRepository = $this->getDoctrine()->getRepository('AppBundle:Question');
+            $questionGroup = $qRepository->getSpecificQuestions([
                 'books' => $form['book']->getData(),
                 'amount' => $form['amount']->getData()
             ]);
 
              return $this->render('@App/Home/test.html.twig', [
-                 'questions' => $questions
+                 'questionGroup' => $questionGroup
              ]);
 
         }
 
-        return $this->render('@App/Home/test.html.twig', [
+        return $this->render('@App/Home/test-options.html.twig', [
             'form' => $form->createView(),
         ]);
     }

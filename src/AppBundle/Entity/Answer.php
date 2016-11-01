@@ -22,7 +22,8 @@ class Answer
     private $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Question", inversedBy="id")
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Question", inversedBy="answers")
+     * @ORM\JoinColumn(name="question_id", referencedColumnName="id")
      */
     private $question;
 
@@ -54,6 +55,10 @@ class Answer
      */
     private $updatedAt;
 
+    public function __toString()
+    {
+        return $this->getContent();
+    }
 
     /**
      * Get id

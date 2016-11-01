@@ -2,7 +2,9 @@
 
 namespace AppBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Question
@@ -24,8 +26,16 @@ class Question
     /**
      * @ORM\ManyToOne(targetEntity="Book", inversedBy="id")
      * @ORM\JoinColumn(name="book_id", referencedColumnName="id")
+     * @Assert\Count(min="1", minMessage="Turite pasirinkti bent 1 kategoriją")
      */
     private $book;
+
+    /**
+     * @var ArrayCollection
+     *
+     * @ORM\OneToMany(targetEntity="Answer", mappedBy="question")
+     */
+    private $answers;
 
     /**
      * @var string
@@ -69,6 +79,10 @@ class Question
      */
     private $updatedAt;
 
+    public function __construct()
+    {
+        $this->answers = new ArrayCollection();
+    }
 
     /**
      * @return int
@@ -94,6 +108,38 @@ class Question
     {
         $this->book = $book;
         return $this;
+    }
+
+
+    /**
+     * Add answers
+     *
+     * @param Answer
+     * @return Question
+     */
+    public function addAnswer(Answer $answers)
+    {
+        $this->answers[] = $answers;
+        return $this;
+    }
+
+    /**
+     * Remove answers
+     *
+     * @param Answer $answers
+     */
+    public function removeAnswer(Answer $answers)
+    {
+        $this->answers->removeElement($answers);
+    }
+    /**
+     * Get answers
+     *
+     * @return ArrayCollection
+     */
+    public function getAnswers()
+    {
+        return $this->answers;
     }
 
     /**

@@ -2,11 +2,19 @@
 
 {% block body %}
     <ul>
-        {% for question in questions %}
-            <li>
-                {{ 'id' ~ question.id}}
-                {{ question.content|raw }}
-            </li>
+        {% for group in questionGroup %}
+             {% for question in group %}
+                 <li>
+                 <div>
+                     {{ loop.index }}{{ question.content|raw }}
+                 </div>
+                 <div>
+                     {% for answer in question.answers %}
+                         <label><input type="checkbox" title=""> {{ answer|raw }}</label><br>
+                     {% endfor %}
+                 </div>
+                 </li>
+             {% endfor %}
         {% endfor %}
     </ul>
 {% endblock %}
