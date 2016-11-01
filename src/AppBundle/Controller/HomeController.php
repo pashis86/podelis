@@ -2,8 +2,11 @@
 
 namespace AppBundle\Controller;
 
+use AppBundle\Entity\Question;
+use AppBundle\Form\QuestionType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Component\HttpFoundation\Request;
 
 class HomeController extends Controller
 {
@@ -17,16 +20,40 @@ class HomeController extends Controller
     }
 
     /**
-     * @Route("/list", name="posts_list")
+     * @Route("/test-options", name="test_options")
      */
-    public function listAction()
+    public function listAction(Request $request)
     {
-        $exampleService = $this->get('app.example');
+        $question = new Question();
+        $form = $this->createForm(QuestionType::class, $question);
+        $form->handleRequest($request);
 
-        $posts = $exampleService->getPosts();
+        if($form->isSubmitted() && $form->isValid())
+        {
 
-        return $this->render('AppBundle:Home:list.html.twig', [
-            'posts' => $posts,
+            $repository = $this->getDoctrine()->getRepository('AppBundle:Question');
+            $questions = $repository->getSpecificQuestions([
+                'books' => $form['book']->getData(),
+                'amount' => $form['amount']->getData()
+            ]);
+
+             return $this->forward('AppBundle:Home:test', [
+                 'request' => $request,
+                 'questions' => $questions
+             ]);
+
+        }
+
+        return $this->render('@App/Home/test.html.twig', [
+            'form' => $form->createView(),
         ]);
+    }
+
+    /**
+     * @Route("/test", name="test")
+     */
+    public function testAction(Request $request, $questions)
+    {
+
     }
 }
