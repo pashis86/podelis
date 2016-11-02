@@ -1,3 +1,7 @@
+sandbox:
+    resource: "@sandboxBundle/Resources/config/routing.yml"
+    prefix:   /
+
 app:
     resource: "@AppBundle/Controller"
     type: annotation
