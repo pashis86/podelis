@@ -7,7 +7,7 @@ use Symfony\Bridge\Twig\TwigEngine;
 
 
 
-class RegisterEmail
+class SendEmail
 {
     private $mailer;
     private $templating;
@@ -20,24 +20,14 @@ class RegisterEmail
 
     public function sendEmail(User $user)
     {
-
         $message = \Swift_Message::newInstance()
             ->setSubject('Sveikiname užsiregistravus!')
             ->setFrom('podelis@gmail.com')
             ->setTo($user->getUsername())
             ->setBody(
                 $this->templating->render('@App/Emails/registerEmail.html.twig',
-                    array('name' => $user->getName())), 'text/html');
-        /*
-         * If you also want to include a plaintext version of the message
-        ->addPart(
-            $this->renderView(
-                'Emails/registration.txt.twig',
-                array('name' => $name)
-            ),
-            'text/plain'
-        )
-        */
+                    ['name' => $user->getName(), 'text/html']));
+
         $this->mailer->send($message);
     }
 }
