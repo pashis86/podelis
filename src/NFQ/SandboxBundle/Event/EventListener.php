@@ -11,7 +11,7 @@ class EventListener
   public function makeChanges($event)
   {
     /** @var Bike $bike */
-    $car = $event->getBike();
-    $car->setFrame('Alluminium');
+    $bike = $event->getBike();
+    $bike->setBody('EventListener working');
   }
 }

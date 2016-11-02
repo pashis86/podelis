@@ -27,6 +27,8 @@ class BikeFactory
   {
     $bike = new Bike();
     $bike->setFrame('Carbon');
+    $bike->setWheels('29er');
+    $bike->setBody('18');
     $this->eventDispatcher->dispatch(Events::PRE_CREATE, new PreCreateEvent($bike));
     return $bike;
   }
