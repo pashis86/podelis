@@ -3,14 +3,27 @@
   "version": "1.0.0",
   "license": "MIT",
   "author": "NFQ",
-  "repository": "",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nfqakademija/podelis.git"
+  },
   "devDependencies": {
-    "gulp": "^3.9.0",
+    "bootstrap-sass": "3.*",
+    "gulp": "^3.9.1",
     "gulp-cli": "^1.2.2",
     "gulp-concat": "^2.6.0",
-    "gulp-sass": "^2.0.4",
+    "gulp-sass": "^2.3.2",
     "gulp-uglify": "^1.4.2",
-    "bootstrap-sass": "3.*",
     "jquery": "2.2.*"
-  }
+  },
+  "description": "![](https://avatars0.githubusercontent.com/u/4995607?v=3&s=100)",
+  "main": "Gulpfile.js",
+  "dependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "bugs": {
+    "url": "https://github.com/nfqakademija/podelis/issues"
+  },
+  "homepage": "https://github.com/nfqakademija/podelis#readme"
 }
