@@ -82,3 +82,13 @@ knpu_oauth2_client:
             redirect_route: connect_facebook_check
             redirect_params: {}
             graph_api_version: v2.8
+#hwi_oauth:
+#    # list of names of the firewalls in which this bundle is active, this setting MUST be set
+#    firewall_names: [secured_area]
+#        resource_owners:
+#            any_name:
+#                type:                facebook
+#                client_id:           193875304387366
+#                client_secret:       86007a1fdbddf68b400a190c5f720e23
+#                options:
+#                    csrf: true

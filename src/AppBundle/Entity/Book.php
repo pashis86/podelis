@@ -38,6 +38,13 @@ class Book
     private $content;
 
     /**
+     * @var ArrayCollection
+     *
+     * @ORM\OneToMany(targetEntity="Question", mappedBy="book")
+     */
+    private $questions;
+
+    /**
      * @var \DateTime
      *
      * @ORM\Column(name="created_at", type="datetime")
@@ -113,6 +120,25 @@ class Book
     {
         return $this->content;
     }
+
+    /**
+     * @return ArrayCollection
+     */
+    public function getQuestions(): ArrayCollection
+    {
+        return $this->questions;
+    }
+
+    /**
+     * @param ArrayCollection $questions
+     * @return Book
+     */
+    public function setQuestions(ArrayCollection $questions): Book
+    {
+        $this->questions = $questions;
+        return $this;
+    }
+
 
     /**
      * Set createdAt

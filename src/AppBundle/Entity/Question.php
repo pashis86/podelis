@@ -24,7 +24,7 @@ class Question
     private $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Book", inversedBy="id")
+     * @ORM\ManyToOne(targetEntity="Book", inversedBy="questions")
      * @ORM\JoinColumn(name="book_id", referencedColumnName="id")
      * @Assert\Count(min="1", minMessage="Turite pasirinkti bent 1 kategoriją")
      */

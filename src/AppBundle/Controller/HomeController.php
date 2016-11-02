@@ -4,6 +4,7 @@ namespace AppBundle\Controller;
 
 use AppBundle\Entity\Question;
 use AppBundle\Form\QuestionType;
+use AppBundle\Form\TestQuestionType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\Request;
@@ -49,10 +50,27 @@ class HomeController extends Controller
     }
 
     /**
-     * @Route("/test", name="test")
+     * @Route("/question/{id}", name="question")
      */
-    public function testAction(Request $request, $questions)
+    public function testAction(Request $request, $id)
     {
+        $repository = $this->getDoctrine()->getRepository('AppBundle:Question');
+        $question = $repository->findOneBy(['id' => $id]);
 
+        if($question)
+        {
+            $form = $this->createForm(TestQuestionType::class, ['question' => $question]);
+            $form->handleRequest($request);
+
+            if($form->isSubmitted() && $form->isValid()){
+                dump($form->getData());
+                die();
+            }
+
+            return $this->render('@App/Home/question.html.twig', [
+                'form' => $form->createView()
+            ]);
+        }
+        return $this->render('@App/Home/404.html.twig');
     }
 }
