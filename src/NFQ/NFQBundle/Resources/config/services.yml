@@ -1,0 +1,25 @@
+services:
+    app.crane_factory:
+        class: NFQ\NFQBundle\Service\CraneFactory
+        arguments: ["@event_dispatcher"]
+    #    sandbox.example:
+    #        class: NFQ\NFQBundle\Example
+      #        arguments: ["@service_id", "plain_value", %parameter%]
+    app.crane:
+        class: NFQ\NFQBundle\Service\Crane
+        factory: ["@app.crane_factory", create]
+
+    #app.crane_part_body:
+     #   #class: NFQ\NFQBundle\
+      #  tags:
+       #     - { name: app_crane_part, type: body }
+
+    app.event_listener:
+        class: NFQ\NFQBundle\Event\EventListener
+        tags:
+          - { name: kernel.event_listener, event: app.pre_create, method: makeChanges }
+
+    app.subscriber:
+        class: NFQ\NFQBundle\Event\SubscribeListener
+        tags:
+          - { name: kernel.event_subscriber }
