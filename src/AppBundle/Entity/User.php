@@ -194,7 +194,7 @@ class User implements UserInterface/*, \Serializable <-- del sito buna segmentat
      * @param string $surname
      * @return User
      */
-    public function setSurname(string $surname): User
+    public function setSurname(string $surname = null): User
     {
         $this->surname = $surname;
         return $this;
@@ -280,14 +280,7 @@ class User implements UserInterface/*, \Serializable <-- del sito buna segmentat
         $this->updatedAt = new \DateTime('now');
         $this->level = 1;
     }
-
-    public function editUser(EditUser $editUser)
-    {
-        $this->name = $editUser->getName();
-        $this->surname = $editUser->getSurname();
-        $this->updatedAt = new \DateTime('now');
-    }
-
+    
     /**
      * @return (Role|string)[] The user roles
      */
