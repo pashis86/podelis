@@ -30,9 +30,23 @@ security:
                 username_parameter: _username
                 login_path: /login
                 check_path: /login
-            guard:
-                authenticators:
-                    - app.facebook_authenticator
+          #  oauth:
+          #      resource_owners:
+          #          facebook:           "/login/check-facebook"
+          #  oauth:
+          #      resource_owners:
+          #          facebook:           "/login/check-facebook"
+          #          google:             "/login/check-google"
+          #      login_path:        /login
+          #      failure_path:      /login
+
+          #      oauth_user_provider:
+                    #this is my custom user provider, created from FOSUBUserProvider - will manage the
+                    #automatic user registration on your site, with data from the provider (facebook. google, etc.)
+          #          service: my_user_provider
+          #  guard:
+          #      authenticators:
+           #         - app.facebook_authenticator
 
             logout:
                 path:   /logout

@@ -8,6 +8,13 @@ services:
         class: AppBundle\Service\SendEmail
         arguments: ["@mailer", "@templating"]
 
-    app.facebook_authenticator:
-        class: AppBundle\Service\FacebookAuthenticator
-        arguments: ["@oauth2.registry", "@doctrine.orm.entity_manager", "@router"]
+  #  services:
+  #      my_user_provider:
+  #          class: AppBundle\Service\FOSUBUserProvider
+            #this is the place where the properties are passed to the UserProvider - see config.yml
+  #          arguments: ["@fos_user.user_manager", {facebook: facebook_id}]
+
+
+  #  app.facebook_authenticator:
+  #      class: AppBundle\Service\FacebookAuthenticator
+  #      arguments: ["@oauth2.registry", "@doctrine.orm.entity_manager", "@router"]
