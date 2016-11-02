@@ -1,0 +1,23 @@
+services:
+    app.bike_factory:
+        class: NFQ\SandboxBundle\Service\BikeFactory
+        arguments: ["@event_dispatcher"]
+
+    app.bike:
+        class: NFQ\SandboxBundle\Service\Bike
+        factory: ["@app.bike_factory", create]
+
+    #app.bike_part_wheel:
+     #   #class: NFQ\SandboxBundle\
+      #  tags:
+       #     - { name: app_bike_part, type: wheel }
+
+    app.event_listener:
+        class: NFQ\SandboxBundle\Event\EventListener
+        tags:
+          - { name: kernel.event_listener, event: app.pre_create, method: makeChanges }
+
+    app.subscriber:
+        class: NFQ\SandboxBundle\Event\SubscribeListener
+        tags:
+          - { name: kernel.event_subscriber }
