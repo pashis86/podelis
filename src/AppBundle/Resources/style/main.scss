@@ -1,6 +1,8 @@
 //bootstrap
-@import "./node_modules/bootstrap-sass/assets/stylesheets/bootstrap";
+@import "bootstrap-sass/assets/stylesheets/bootstrap";
 
 @import "basicStyle";
 
-@import "footer";
+@import "progressButton";
+
+@import "button";

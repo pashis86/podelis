@@ -1,9 +1,8 @@
 {% extends "::base.html.twig" %}
 
-{% block title %}Homepage - {{ parent() }}{% endblock %}
+{% block title %}Pagrindinis puslapis - {{ parent() }}{% endblock %}
 
 {% block stylesheets %}
-    <link href="https://fonts.googleapis.com/css?family=Lato:100" rel="stylesheet" type="text/css">
     {{ parent() }}
 {% endblock %}
 
@@ -18,5 +17,96 @@
             {{ success }}
         </div>
     {% endfor %}
-    <div class="titleN">Podelis</div>
+
+    <div class="container-fluid greyBackground">
+        <div class="container">
+            <div class="titleN">PHP žinių įvertinimo testas</div>
+
+            <div class="row bungeeS">
+                <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12 allignCenter">
+                    <a href="#" class="buttonB  rounded">Zend testas</a>
+                </div>
+                <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12 allignCenter">
+                    <a href="#" class="buttonB  rounded">Bendras <br> žinių testas</a>
+                </div>
+                <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12 allignCenter">
+                    <a href="#" class="buttonB  rounded">Temos testas</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container-fluid whiteBackground">
+        <div class="container">
+
+            <div class="row">
+                <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+                    <h2>Prisijunk mūsų jau virš</h2>
+                </div>
+                <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <a href="#" class="button blue big">Download</a>
+        <a href="#" class="button blue medium">Submit</a>
+        <a href="#" class="button small blue rounded">Submit</a>
+        <h1>Progress Buttons</h1>
+
+        <a id="submitButton" href="{{ path('login') }}" class="progress-button">Submit</a>
+
+        <a id="actionButton" href="{{ path('login') }}" class="progress-button green" data-loading="Working.." data-finished="Finished!" data-type="background-bar">Action!</a>
+
+        <a id="generateButton" href="{{ path('login') }}" class="progress-button red" data-loading="Generating.." data-finished="Download" data-type="background-vertical">Generate</a>
+
+        <h1>Progress Control</h1>
+
+        <a id="controlButton" href="{{ path('login') }}" class="progress-button">Start</a>
+
+        <div class="control-area">
+            <a class="command increment">Increment</a>
+            <a class="command set-to-1">Set to 1%</a>
+            <a class="command set-to-50">Set to 50%</a>
+            <a class="command finish">Finish</a>
+        </div>
+
+
+
+
+        <style type='text/css'>
+            @-webkit-keyframes rotate {
+                from {
+                    -webkit-transform: rotate(0deg);
+                }
+                to {
+                    -webkit-transform: rotate(360deg);
+                }
+            }
+            #loading {
+                border: 1px solid #000;
+                border-right: 0;
+                border-bottom: 0;
+                -webkit-border-radius: 100px;
+                height: 100px;
+                width: 100px;
+                margin: 100px;
+                -webkit-transition: all 0.5s ease-in;
+                -webkit-animation-name:             rotate;
+                -webkit-animation-duration:         3.0s;
+                -webkit-animation-iteration-count:  infinite;
+                -webkit-animation-timing-function: linear;
+            }
+        </style>
+
+        <div id="loading"></div>
+
+        <div><p>Labas</p></div>
+        <H1>Lorem</H1>
+        <H1>Lorem</H1>
+        <H1>Lorem</H1>
+        <H1>Lorem</H1>
+    </div>
 {% endblock %}

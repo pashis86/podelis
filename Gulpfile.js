@@ -8,12 +8,12 @@ var uglify  = require('gulp-uglify');
 var dir = {
     assets: './src/AppBundle/Resources/',
     dist: './web/',
-    npm: './node_modules/',
+    npm: './node_modules/'
 };
 
 gulp.task('sass', function() {
     gulp.src(dir.assets + 'style/main.scss')
-        .pipe(sass({ outputStyle: 'compressed' }).on('error', sass.logError))
+        .pipe(sass({ outputStyle: 'compressed' , includePaths:[dir.npm] }).on('error', sass.logError))
         .pipe(concat('style.css'))
         .pipe(gulp.dest(dir.dist + 'css'));
 });
@@ -25,7 +25,8 @@ gulp.task('scripts', function() {
             dir.npm + 'bootstrap-sass/assets/javascripts/bootstrap.min.js',
 
             // Main JS file
-            dir.assets + 'scripts/main.js'
+            dir.assets + 'scripts/main.js',
+            dir.assets + 'scripts/script.js'
         ])
         .pipe(concat('script.js'))
         .pipe(uglify())
