@@ -8,6 +8,7 @@ use AppBundle\Form\TestQuestionType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Session\Session;
 
 class HomeController extends Controller
 {
@@ -33,14 +34,20 @@ class HomeController extends Controller
         {
 
             $qRepository = $this->getDoctrine()->getRepository('AppBundle:Question');
-            $questionGroup = $qRepository->getSpecificQuestions([
+            $questionGroups = $qRepository->getSpecificQuestions([
                 'books' => $form['book']->getData(),
                 'amount' => $form['amount']->getData()
             ]);
 
-             return $this->render('@App/Home/test.html.twig', [
-                 'questionGroup' => $questionGroup
-             ]);
+            $session = new Session();
+            $session->set('questionGroups', $questionGroups);
+
+            /* return $this->render('@App/Home/test.html.twig', [
+                 'questionGroups' => $questionGroups
+             ]);*/
+           // dump($session->get('questionGroups'));
+           // die();
+            return $this->testAction($request, 1);
 
         }
 
@@ -57,6 +64,8 @@ class HomeController extends Controller
         $repository = $this->getDoctrine()->getRepository('AppBundle:Question');
         $question = $repository->findOneBy(['id' => $id]);
 
+        $session = $this->get('session');
+
         if($question)
         {
             $form = $this->createForm(TestQuestionType::class, ['question' => $question]);
@@ -68,7 +77,8 @@ class HomeController extends Controller
             }
 
             return $this->render('@App/Home/question.html.twig', [
-                'form' => $form->createView()
+                'form' => $form->createView(),
+                'session' => $session->get('questionGroups')
             ]);
         }
         return $this->render('@App/Home/404.html.twig');
