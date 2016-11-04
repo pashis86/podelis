@@ -18,7 +18,7 @@
         </div>
     {% endfor %}
 
-    <div class="container-fluid greyBackground">
+    <div class="greyBackground container-fluid">
         <div class="container">
             <div class="titleN">PHP žinių įvertinimo testas</div>
 
@@ -33,11 +33,38 @@
                     </a>
                 </div>
                 <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12 allignCenter">
-                    <a class="buttonB rounded" name="buttonCustom">Temos testas</a>
+                    <a class="buttonB rounded" id="formButton">Temos testas</a>
                 </div>
             </div>
-            <div id="categoryForm">
-                Lasgasgasfa
+            <div id="formCategories" class="allignCenter">
+                <div class="panel-group">
+                    <div class="panel panel-primary">
+                        <div class="panel-heading">Testų kategorijos</div>
+                        <div class="panel-body">
+                            <div class="row">
+                                <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+                                    <a href="/login"><button type="submit" class="btn btnY">String</button></a>
+                                </div>
+                                <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+                                    <a href="/login"><button type="submit" class="btn btnY">PHP</button></a>
+                                </div>
+                                <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+                                    <a href="/login"><button type="submit" class="btn btnY">Basic</button></a>
+                                </div>
+                                <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+                                    <a href="/login"><button type="submit" class="btn btnY">String</button></a>
+                                </div>
+                                <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+                                    <a href="/login"><button type="submit" class="btn btnY">String</button></a>
+                                </div>
+                                <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+                                    <a href="/login"><button type="submit" class="btn btnY">String</button></a>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -57,9 +84,6 @@
     </div>
 
     <div class="container">
-        <a href="#" class="buttonB blue big">Download</a>
-        <a href="#" class="buttonB blue medium">Submit</a>
-        <a href="#" class="buttonB small blue rounded">Submit</a>
         <h1>Progress Buttons</h1>
 
         <a id="submitButton" href="{{ path('login') }}" class="progress-button">Submit</a>
@@ -81,10 +105,12 @@
 
 
         <div id="loading"></div>
+        <h2>Prisijunk mūsų jau virš</h2>
+        <h2>Prisijunk mūsų jau virš</h2>
+        <h2>Prisijunk mūsų jau virš</h2>
+        <h2>Prisijunk mūsų jau virš</h2>
+        <h2>Prisijunk mūsų jau virš</h2>
+        <h2>Prisijunk mūsų jau virš</h2>
 
-        <H1>Lorem</H1>
-        <H1>Lorem</H1>
-        <H1>Lorem</H1>
-        <H1>Lorem</H1>
     </div>
 {% endblock %}

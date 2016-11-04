@@ -1,17 +1,15 @@
-body {
-  height: 100%;
-  margin: 0;
-}
 html {
-  padding-bottom: 50px;
+  padding-bottom: 30px;
   min-height: 100%;
   box-sizing: border-box;
   -moz-box-sizing: border-box;
   position: relative;
 }
 
-.container-fluid{
-  min-width: 360px;
+body {
+  min-width: 400px !important;
+  height: 100%;
+  margin: 0;
 }
 
 .imageBackground {
@@ -63,4 +61,13 @@ html {
   padding: 20px;
   text-align: center;
   vertical-align: middle;
+}
+
+.btnY{
+  width: 100%;
+}
+
+.btnY:hover {
+  border: 2px ridge yellow;
+  border-radius: 5px;
 }
