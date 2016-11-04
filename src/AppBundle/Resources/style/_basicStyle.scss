@@ -7,7 +7,7 @@ html {
 }
 
 body {
-  min-width: 400px !important;
+  min-width: 360px !important;
   height: 100%;
   margin: 0;
 }
@@ -20,11 +20,11 @@ body {
 }
 
 .whiteBackground {
-  background-color: whitesmoke;
+  background-color: antiquewhite;
 }
 
 .greyBackground {
-  background-color: lightgrey;
+  background-color: rgb(220,220,220);
 }
 
 .footer {
@@ -45,11 +45,15 @@ body {
 
 .bungeeS {
   font-family: 'Bungee Hairline', cursive;
-  font-size: 40px;
+  font-size: 35px;
 }
 
 .font-20 {
   font-size: 20px;
+}
+
+.boldS{
+  font-weight: bold;
 }
 
 .latoS {
@@ -64,10 +68,21 @@ body {
 }
 
 .btnY{
+  padding: 5px;
+  margin: 5px;
   width: 100%;
 }
 
 .btnY:hover {
   border: 2px ridge yellow;
   border-radius: 5px;
+}
+
+#hours, #minutes, #seconds{
+  display: inline-block;
+}
+
+.navbar{
+  border: none;
+  background-color: white;
 }

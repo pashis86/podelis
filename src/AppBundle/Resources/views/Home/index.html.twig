@@ -18,24 +18,27 @@
         </div>
     {% endfor %}
 
-    <div class="greyBackground container-fluid">
+
+
+    <div class="greyBackground">
         <div class="container">
             <div class="titleN">PHP žinių įvertinimo testas</div>
 
             <div class="row bungeeS">
                 <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12 allignCenter">
-                    <a href="/" class="buttonB rounded">Zend testas</a>
+                    <a href="/" class="buttonB rounded boldS">Zend testas</a>
                 </div>
                 <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12 allignCenter">
-                    <a href="/" class="buttonB rounded">
+                    <a href="/" class="buttonB rounded boldS">
                         Bendrasis <br>
                         <div class="font-20">žinių testas</div>
                     </a>
                 </div>
                 <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12 allignCenter">
-                    <a class="buttonB rounded" id="formButton">Temos testas</a>
+                    <a class="buttonB rounded boldS" id="formButton">Temos testas</a>
                 </div>
             </div>
+
             <div id="formCategories" class="allignCenter">
                 <div class="panel-group">
                     <div class="panel panel-primary">
@@ -69,15 +72,14 @@
         </div>
     </div>
 
-    <div class="container-fluid whiteBackground">
+    <div class="whiteBackground">
         <div class="container">
-
             <div class="row">
                 <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
-                    <h2>Prisijunk mūsų jau virš</h2>
+                    <h2 class="bungeeS boldS font-20">Prisijunk mūsų jau virš</h2>
                 </div>
                 <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
-
+                    <h2 class="bungeeS boldS font-20">Prisijunk mūsų jau virš</h2>
                 </div>
             </div>
         </div>
@@ -103,14 +105,10 @@
             <a class="command finish">Finish</a>
         </div>
 
-
-        <div id="loading"></div>
-        <h2>Prisijunk mūsų jau virš</h2>
-        <h2>Prisijunk mūsų jau virš</h2>
-        <h2>Prisijunk mūsų jau virš</h2>
-        <h2>Prisijunk mūsų jau virš</h2>
-        <h2>Prisijunk mūsų jau virš</h2>
-        <h2>Prisijunk mūsų jau virš</h2>
-
+        <!--testo timeris-->
+        <div class="font-20">
+            <div id="loading" class=""></div>
+            <div id="hours">00</div><span>:</span><div id="minutes">00</div><span>:</span><div id="seconds">00</div>
+        </div>
     </div>
 {% endblock %}
