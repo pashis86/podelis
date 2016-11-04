@@ -1,0 +1,22 @@
+@-webkit-keyframes rotate {
+  from {
+    -webkit-transform: rotate(0deg);
+  }
+  to {
+    -webkit-transform: rotate(360deg);
+  }
+}
+#loading {
+  border: 1px solid #000;
+  border-right: 0;
+  border-bottom: 0;
+  -webkit-border-radius: 100px;
+  height: 100px;
+  width: 100px;
+  margin: 100px;
+  -webkit-transition: all 0.5s ease-in;
+  -webkit-animation-name:             rotate;
+  -webkit-animation-duration:         3.0s;
+  -webkit-animation-iteration-count:  infinite;
+  -webkit-animation-timing-function: linear;
+}

@@ -1,6 +1,3 @@
-<!--<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 <!-- Static navbar -->
 <header>
     <nav class="navbar navbar-default">
@@ -13,10 +10,9 @@
                     <span class="icon-bar"></span>
                 </button>
                 <a class="navbar-brand latoS" href="/">
-                    {% image '@AppBundle/Resources/images/php.png' %}
-                        <img src="{{ asset_url }} " alt="Logo" width="50px" align="left"/> &nbsp PHP testai
+                    {% image 'bundles/app/dist/php.png' %}
+                    <img src="{{ asset_url }} " alt="Logo" width="50px" align="left"/> &nbsp PHP testai
                     {% endimage %}
-
                 </a>
             </div>
             <div id="navbar" class="navbar-collapse collapse">
