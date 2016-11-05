@@ -1,33 +1,33 @@
 $(document).ready(function() {
 
-    $("#formCategories").hide();
+    $(".formCategories").hide();
 
-    $("#menu-on").hide();
+    $(".menu-on").hide();
 
-    $("#registerForm").hide();
+    $(".registerForm").hide();
 
-    $("#loginForm").hide();
+    $(".loginForm").hide();
 
-    $( "#formButton" ).click(function() {
-        $( "#formCategories" ).toggle( "slow", function() {
+    $( ".formButton" ).click(function() {
+        $( ".formCategories" ).toggle( "slow", function() {
             // Animation complete.
         });
     });
 
-    $( "#loginButton" ).click(function() {
+    $( ".loginButton" ).click(function() {
         
-        $("#registerForm").hide();
+        $(".registerForm").hide();
         
-        $( "#loginForm" ).toggle( "slow", function() {
+        $( ".loginForm" ).toggle( "slow", function() {
             // Animation complete.
         });
     });
 
-    $( "#registerButton" ).click(function() {
+    $( ".registerButton" ).click(function() {
 
-        $("#loginForm").hide();
+        $(".loginForm").hide();
 
-        $( "#registerForm" ).toggle( "slow", function() {
+        $( ".registerForm" ).toggle( "slow", function() {
             // Animation complete.
         });
     });

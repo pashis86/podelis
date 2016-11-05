@@ -18,11 +18,13 @@
         </div>
     {% endfor %}
 
+
+
     <!--login register forms-->
     <div class="container allign-center">
         <div class="row">
 
-             <div class="col-lg-4 col-lg-offset-4 col-sm-12" id="loginForm">
+             <div class="col-lg-4 col-lg-offset-4 col-sm-12 loginForm">
                 <div class="panel panel-success">
                     <div class="panel-heading">
                         Log in
@@ -47,7 +49,7 @@
                 </div>
             </div>
 
-            <div class="col-lg-4 col-lg-offset-4 col-sm-12" id="registerForm">
+            <div class="col-lg-4 col-lg-offset-4 col-sm-12 registerForm">
                 <div class="panel panel-success">
                     <div class="panel-heading">
                         Register
@@ -72,6 +74,69 @@
         </div>
     </div>
 
+
+
+
+    <!--great cover-->
+    <div class="homepage-hero-module jumbotron" style="padding: 0; margin-bottom: 0;">
+        <div class="video-container">
+            <video preload="auto" autoplay loop class="fillWidth" poster="{{ asset('background/Hello-World.jpg') }}">
+                <source src="{{ asset('background/Hello-World.mp4') }}" type="video/mp4" />
+                <source src="{{ asset('background/Hello-World.webm') }}" type="video/webm" />
+                <source src="{{ asset('background/Hello-World.ogg') }}" type="video/ogg" />
+            </video>
+
+            <div class="title-container">
+                <div class="titleN">PHP knowledge evaluation tests</div>
+
+                <div class="row bungeeS">
+                    <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12 allignCenter">
+                        <a href="/" class="btn-primary boldS">Zend testas</a>
+                    </div>
+                    <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12 allignCenter">
+                        <a href="/" class="btn-primary boldS">
+                            Bendrasis <br>
+                            <span class="font-20">žinių testas</span>
+                        </a>
+                    </div>
+                    <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12 allignCenter">
+                        <a class="btn btn-primary boldS formButton">Temos testas</a>
+                    </div>
+                </div>
+
+                <div class="allignCenter formCategories">
+                    <div class="panel-group">
+                        <div class="panel panel-success">
+                            <div class="panel-heading"><p class="titleN">Testų kategorijos</p></div>
+                            <div class="panel-body">
+                                <div class="row">
+                                    <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+                                        <a href="/login"><button type="submit" class="btn btnY">String</button></a>
+                                        <a href="/login"><button type="submit" class="btn btnY">PHP</button></a>
+                                        <a href="/login"><button type="submit" class="btn btnY">Basic</button></a>
+                                    </div>
+                                    <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+                                        <a href="/login"><button type="submit" class="btn btnY">String</button></a>
+                                        <a href="/login"><button type="submit" class="btn btnY">String</button></a>
+                                        <a href="/login"><button type="submit" class="btn btnY">String</button></a>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+
+
+
     <!--primary content test buttons-->
     <div class="grey-background">
         <div class="container">
@@ -88,11 +153,11 @@
                     </a>
                 </div>
                 <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12 allignCenter">
-                    <a class="buttonB rounded boldS" id="formButton">Temos testas</a>
+                    <a class="buttonB rounded boldS formButton">Temos testas</a>
                 </div>
             </div>
 
-            <div id="formCategories" class="allignCenter">
+            <div class="allignCenter formCategories">
                 <div class="panel-group panel-grey">
                     <div class="panel panel-primary">
                         <div class="panel-heading"><p class="titleN">Testų kategorijos</p></div>
@@ -124,32 +189,26 @@
                 <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
                     <h2 class="bungeeS boldS font-20 allignCenter">Join us</h2>
                     <p>Number</p>
+                    <p>Number</p>
+                    <p>Number</p>
+                    <p>Number</p>
+                    <p>Number</p>
+                    <p>Number</p>
+                    <p>Number</p><p>Number</p>
+                    <p>Number</p>
+                    <p>Number</p>
+
                 </div>
-                <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
-                    <p class="bungeeS boldS font-20 allignCenter">
-                        <iframe width="560" height="315" allowfullscreen frameborder="0"
+                <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12 allignCenter">
+                    <div class="bungeeS boldS font-20 ">
+                        <iframe  width="auto" height="auto" allowfullscreen frameborder="0"
                                 src="https://www.youtube.com/embed/Y2JbjD1wGsw">
                         </iframe>
-                    </p>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-
-
-
-
-
-    <div class="homepage-hero-module jumbotron" style="padding: 0; margin-bottom: 0;">
-        <div class="video-container">
-            <video preload="auto" autoplay loop class="fillWidth" poster="{{ asset('background/Hello-World.jpg') }}">
-                <source src="{{ asset('background/Hello-World.mp4') }}" type="video/mp4" />Your browser does not support the video tag. I suggest you upgrade your browser.
-                <source src="{{ asset('background/Hello-World.webm') }}" type="video/webm" />Your browser does not support the video tag. I suggest you upgrade your browser.
-            </video>
-        </div>
-    </div>
-
-
 
     <div class="container">
 
@@ -163,26 +222,7 @@
             <!--test junk-->
 
             <div class="col-lg-6 col-sm-12">
-                <h1>Progress Buttons</h1>
-
-                <a id="submitButton" href="{{ path('login') }}" class="progress-button">Submit</a>
-
-                <a id="actionButton" href="{{ path('login') }}" class="progress-button green" data-loading="Working.." data-finished="Finished!" data-type="background-bar">Action!</a>
-
                 <a id="generateButton" href="{{ path('login') }}" class="progress-button red" data-loading="Generating.." data-finished="Download" data-type="background-vertical">Generate</a>
-            </div>
-
-            <div class="col-lg-6 col-sm-12">
-                <h1>Progress Control</h1>
-
-                <a id="controlButton" href="{{ path('login') }}" class="progress-button">Start</a>
-
-                <div class="control-area">
-                    <a class="command increment">Increment</a>
-                    <a class="command set-to-1">Set to 1%</a>
-                    <a class="command set-to-50">Set to 50%</a>
-                    <a class="command finish">Finish</a>
-                </div>
             </div>
         </div>
     </div>
