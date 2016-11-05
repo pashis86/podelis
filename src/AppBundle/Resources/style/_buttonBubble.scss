@@ -24,37 +24,6 @@
 
 /* BlueButton */
 
-.blue.buttonB{
-  color:#0f4b6d !important;
-
-  border:1px solid #84acc3 !important;
-
-  /* A fallback background color */
-  background-color: #48b5f2;
-
-  /* Specifying a version with gradients according to */
-
-  background-image:    url('../images/bubble_background.jpg'), url('../images/bubble_background.jpg'),
-  -moz-radial-gradient(    center bottom, circle, rgba(89,208,244,1) 0,rgba(89,208,244,0) 100px),
-  -moz-linear-gradient(#4fbbf7, #3faeeb);
-
-  background-image:    url('../images/bubble_background.jpg'), url('../images/bubble_background.jpg'),
-  -webkit-gradient(    radial, 50% 100%, 0, 50% 100%, 100, from(rgba(89,208,244,1)), to(rgba(89,208,244,0))),
-  -webkit-gradient(linear, 0% 0%, 0% 100%, from(#4fbbf7), to(#3faeeb));
-}
-
-.blue.buttonB:hover{
-  background-color:#63c7fe;
-
-  background-image:    url('../images/bubble_background.jpg'), url('../images/bubble_background.jpg'),
-  -moz-radial-gradient(    center bottom, circle, rgba(109,217,250,1) 0,rgba(109,217,250,0) 100px),
-  -moz-linear-gradient(#63c7fe, #58bef7);
-
-  background-image:    url('../images/bubble_background.jpg'), url('../images/bubble_background.jpg'),
-  -webkit-gradient(    radial, 50% 100%, 0, 50% 100%, 100, from(rgba(109,217,250,1)), to(rgba(109,217,250,0))),
-  -webkit-gradient(linear, 0% 0%, 0% 100%, from(#63c7fe), to(#58bef7));
-}
-
 .buttonB{
 
   /* A semi-transparent text shadow */
@@ -99,8 +68,56 @@
   /* Animating the background positions with CSS3 */
   /* Currently works only in Safari/Chrome */
 
-  -webkit-transition:background-position 1s;
-  -moz-transition:background-position 3s;
-  -o-transition:background-position 1s;
-  transition:background-position 3s;
+  -webkit-transition:background-position 10s ease;
+  -moz-transition:background-position 10s ease;
+  -o-transition:background-position 10s ease;
+  transition:background-position 10s ease;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+.blue.buttonB{
+  color:#0f4b6d !important;
+
+  border:1px solid #84acc3 !important;
+
+  /* A fallback background color */
+  background-color: #48b5f2;
+
+  /* Specifying a version with gradients according to */
+
+  background-image:    url('../images/bubble_background.jpg'), url('../images/bubble_background.jpg'),
+  -moz-radial-gradient(    center bottom, circle, rgba(89,208,244,1) 0,rgba(89,208,244,0) 100px),
+  -moz-linear-gradient(#4fbbf7, #3faeeb);
+
+  background-image:    url('../images/bubble_background.jpg'), url('../images/bubble_background.jpg'),
+  -webkit-gradient(    radial, 50% 100%, 0, 50% 100%, 100, from(rgba(89,208,244,1)), to(rgba(89,208,244,0))),
+  -webkit-gradient(linear, 0% 0%, 0% 100%, from(#4fbbf7), to(#3faeeb));
+}
+
+.blue.buttonB:hover{
+  background-color:#63c7fe;
+
+  background-image:    url('../images/bubble_background.jpg'), url('../images/bubble_background.jpg'),
+  -moz-radial-gradient(    center bottom, circle, rgba(109,217,250,1) 0,rgba(109,217,250,0) 100px),
+  -moz-linear-gradient(#63c7fe, #58bef7);
+
+  background-image:    url('../images/bubble_background.jpg'), url('../images/bubble_background.jpg'),
+  -webkit-gradient(    radial, 50% 100%, 0, 50% 100%, 100, from(rgba(109,217,250,1)), to(rgba(109,217,250,0))),
+  -webkit-gradient(linear, 0% 0%, 0% 100%, from(#63c7fe), to(#58bef7));
 }

@@ -2,8 +2,18 @@ $(document).ready(function() {
 
     $("#formCategories").hide();
 
+    $("#registerForm").hide();
+
+    $("#loginForm").hide();
+
     $( "#formButton" ).click(function() {
         $( "#formCategories" ).toggle( "slow", function() {
+            // Animation complete.
+        });
+    });
+
+    $( "#loginButton" ).click(function() {
+        $( "#loginForm" ).toggle( "slow", function() {
             // Animation complete.
         });
     });

@@ -13,7 +13,24 @@ class HomeController extends Controller
      */
     public function indexAction()
     {
-        return $this->render('AppBundle:Home:index.html.twig', []);
+        $securityContext = $this->get('security.authorization_checker');
+
+        if(!$securityContext->isGranted('IS_AUTHENTICATED_FULLY') ||
+            !$securityContext->isGranted('IS_AUTHENTICATED_REMEMBERED'))
+        {
+            $authenticationUtils = $this->get('security.authentication_utils');
+
+            // get the login error if there is one
+            $error = $authenticationUtils->getLastAuthenticationError();
+
+            // last username entered by the user
+            $lastEmail = $authenticationUtils->getLastUsername();
+            //  die($lastEmail);
+            return $this->render('AppBundle:Home:index.html.twig', [
+                'last_email' => $lastEmail,
+                'error'         => $error,
+            ]);
+        }
     }
 
     /**

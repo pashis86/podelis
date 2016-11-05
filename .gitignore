@@ -1,5 +1,6 @@
 /.docker
 /.idea
+/.node_modules
 /app/config/parameters.yml
 /var/*
 !/var/cache

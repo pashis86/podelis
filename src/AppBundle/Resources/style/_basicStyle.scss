@@ -12,18 +12,18 @@ body {
   margin: 0;
 }
 
-.imageBackground {
+.image-background {
   height: 100%;
   background-repeat: no-repeat;
   background-size: cover;
   background-image: url("../images/seigaiha.png");
 }
 
-.whiteBackground {
+.sand-background {
   background-color: antiquewhite;
 }
 
-.greyBackground {
+.grey-background {
   background-color: rgb(220,220,220);
 }
 
@@ -67,10 +67,18 @@ body {
   vertical-align: middle;
 }
 
+.allign-center{
+  padding: 20px;
+  text-align: center;
+  vertical-align: middle;
+}
+
 .btnY{
   padding: 5px;
   margin: 5px;
   width: 100%;
+  border: 2px ridge white;
+  border-radius: 5px;
 }
 
 .btnY:hover {
@@ -85,4 +93,17 @@ body {
 .navbar{
   border: none;
   background-color: white;
+}
+
+.panel-grey{
+  background-color: lightslategray;
+  border-color: black;
+}
+
+.panel-heading-grey{
+  background-color: lightslategray !important;
+}
+
+.label-width{
+  width: 75px;
 }
