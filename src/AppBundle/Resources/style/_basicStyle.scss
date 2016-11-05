@@ -68,7 +68,6 @@ body {
 }
 
 .allign-center{
-  padding: 20px;
   text-align: center;
   vertical-align: middle;
 }
@@ -79,6 +78,8 @@ body {
   width: 100%;
   border: 2px ridge white;
   border-radius: 5px;
+  color: black;
+  font-weight: bold;
 }
 
 .btnY:hover {
@@ -96,14 +97,19 @@ body {
 }
 
 .panel-grey{
-  background-color: lightslategray;
-  border-color: black;
-}
-
-.panel-heading-grey{
   background-color: lightslategray !important;
+  border-color: black !important;
 }
 
 .label-width{
   width: 75px;
+}
+
+.black-text-bold{
+  color: black;
+  font-weight: bold;
+}
+
+#formCategories, #loginForm, #registerForm{
+  display: none;
 }

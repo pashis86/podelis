@@ -2,6 +2,8 @@ $(document).ready(function() {
 
     $("#formCategories").hide();
 
+    $("#menu-on").hide();
+
     $("#registerForm").hide();
 
     $("#loginForm").hide();
@@ -13,7 +15,19 @@ $(document).ready(function() {
     });
 
     $( "#loginButton" ).click(function() {
+        
+        $("#registerForm").hide();
+        
         $( "#loginForm" ).toggle( "slow", function() {
+            // Animation complete.
+        });
+    });
+
+    $( "#registerButton" ).click(function() {
+
+        $("#loginForm").hide();
+
+        $( "#registerForm" ).toggle( "slow", function() {
             // Animation complete.
         });
     });

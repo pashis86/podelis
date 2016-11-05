@@ -10,15 +10,15 @@
                     <span class="icon-bar"></span>
                 </button>
                 <a class="navbar-brand latoS" href="/">
-                    <img src="{{ asset('images/php.png') }}" alt="Logo!" width="50px" align="left"/> &nbsp PHP testai
+                    <img src="{{ asset('images/php.png') }}" alt="Logo!" width="50px" align="left"/> &nbsp PHP tests
                 </a>
             </div>
             <div id="navbar" class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    <li><a href="/">Bendras testas</a></li>
-                    <li><a href="/">ZEND testas</a></li>
+                    <li><a href="/">ZEND test</a></li>
+                    <li><a href="/">Basic test</a></li>
                     <li class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Testai pasirinktiniai <span class="caret"></span></a>
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Category tests <span class="caret"></span></a>
                         <ul class="dropdown-menu">
                             <li><a href="/customTest/1">List</a></li>
                             <li><a href="/">String</a></li>
@@ -30,9 +30,20 @@
                         </ul>
                     </li>
                 </ul>
-                <ul class="nav navbar-nav navbar-right">
-                    <li><a id="loginButton">Prisijungti</a></li>
-                    <li><a href="{{ path('register') }}">Registruotis</a></li>
+                <ul class="nav navbar-nav navbar-right" id="menu-off">
+                    <li><a class="btn" id="loginButton">Log in</a></li>
+                    <li><a class="btn" id="registerButton">Sign up</a></li>
+                </ul>
+                <ul class="nav navbar-nav navbar-right" id="menu-on">
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">User <span class="caret"></span></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="{{ path('keistiDuomenis') }}">Statistics</a></li>
+                            <li><a href="{{ path('login') }}">Edit profile</a></li>
+                            <li><a href="{{ path('login') }}">Log out</a></li>
+                        </ul>
+                    </li>
+
                 </ul>
             </div><!--/.nav-collapse -->
         </div><!--/.container-fluid -->

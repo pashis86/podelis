@@ -40,6 +40,13 @@ gulp.task('images', function() {
         .pipe(gulp.dest(dir.dist + 'images'));
 });
 
+gulp.task('background', function() {
+    gulp.src([
+        dir.assets + 'background/**'
+    ])
+        .pipe(gulp.dest(dir.dist + 'background'));
+});
+
 gulp.task('fonts', function() {
     gulp.src([
         dir.npm + 'bootstrap-sass/assets/fonts/**'
@@ -47,4 +54,4 @@ gulp.task('fonts', function() {
         .pipe(gulp.dest(dir.dist + 'fonts'));
 });
 
-gulp.task('default', ['sass', 'scripts', 'fonts', 'images']);
+gulp.task('default', ['sass', 'scripts', 'fonts', 'images', 'background']);

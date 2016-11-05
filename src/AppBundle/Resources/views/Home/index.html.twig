@@ -1,6 +1,6 @@
 {% extends "::base.html.twig" %}
 
-{% block title %}Pagrindinis puslapis - {{ parent() }}{% endblock %}
+{% block title %}Home page - {{ parent() }}{% endblock %}
 
 {% block stylesheets %}
     {{ parent() }}
@@ -22,13 +22,13 @@
     <div class="container allign-center">
         <div class="row">
 
-             <div class="col-lg-4 col-lg-offset-1 col-sm-12" id="loginForm">
+             <div class="col-lg-4 col-lg-offset-4 col-sm-12" id="loginForm">
                 <div class="panel panel-success">
                     <div class="panel-heading">
                         Log in
                     </div>
                     <div class="panel-body">
-                        <form action="{{ path('login') }}" method="post" class="form-horizontal">
+                        <form action="{{ path('homepage') }}" method="post" class="form-horizontal">
                             <fieldset class="form-group">
                                 <label class="control-label label-width" for="email">Email: </label>
                                 <input type="text" id="email" name="_username" value="{{ last_email }}" />
@@ -47,10 +47,10 @@
                 </div>
             </div>
 
-            <div class="col-lg-4 col-lg-offset-1 col-sm-12" id="registerForm">
+            <div class="col-lg-4 col-lg-offset-4 col-sm-12" id="registerForm">
                 <div class="panel panel-success">
                     <div class="panel-heading">
-                        Log in
+                        Register
                     </div>
                     <div class="panel-body">
                         <form action="{{ path('login') }}" method="post" class="form-horizontal">
@@ -62,12 +62,9 @@
                                 <label class="control-label label-width" for="password">Password: </label>
                                 <input type="password" id="password" name="_password" />
                             </fieldset>
-                            <button class="btn btn-lg btn-block btn-success" type="submit">Log in</button>
+                            <button class="btn btn-lg btn-block btn-success" type="submit">Register</button>
                         </form>
 
-                    </div>
-                    <div class="panel-footer">
-                        <div class="text-center"><b><a href="{{ path('fbConnect') }}">Login with Facebook</a></b></div>
                     </div>
                 </div>
             </div>
@@ -78,7 +75,7 @@
     <!--primary content test buttons-->
     <div class="grey-background">
         <div class="container">
-            <div class="titleN">PHP žinių įvertinimo testas</div>
+            <div class="titleN">PHP knowledge evaluation tests</div>
 
             <div class="row bungeeS">
                 <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12 allignCenter">
@@ -96,7 +93,7 @@
             </div>
 
             <div id="formCategories" class="allignCenter">
-                <div class="panel-group">
+                <div class="panel-group panel-grey">
                     <div class="panel panel-primary">
                         <div class="panel-heading"><p class="titleN">Testų kategorijos</p></div>
                         <div class="panel-body">
@@ -125,10 +122,15 @@
         <div class="container">
             <div class="row">
                 <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
-                    <h2 class="bungeeS boldS font-20 allignCenter">Prisijunk mūsų jau virš</h2>
+                    <h2 class="bungeeS boldS font-20 allignCenter">Join us</h2>
+                    <p>Number</p>
                 </div>
                 <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
-                    <h2 class="bungeeS boldS font-20 allignCenter">Prisijunk mūsų jau virš</h2>
+                    <p class="bungeeS boldS font-20 allignCenter">
+                        <iframe width="560" height="315" allowfullscreen frameborder="0"
+                                src="https://www.youtube.com/embed/Y2JbjD1wGsw">
+                        </iframe>
+                    </p>
                 </div>
             </div>
         </div>
@@ -138,8 +140,14 @@
 
 
 
-
-
+    <div class="homepage-hero-module jumbotron" style="padding: 0; margin-bottom: 0;">
+        <div class="video-container">
+            <video preload="auto" autoplay loop class="fillWidth" poster="{{ asset('background/Hello-World.jpg') }}">
+                <source src="{{ asset('background/Hello-World.mp4') }}" type="video/mp4" />Your browser does not support the video tag. I suggest you upgrade your browser.
+                <source src="{{ asset('background/Hello-World.webm') }}" type="video/webm" />Your browser does not support the video tag. I suggest you upgrade your browser.
+            </video>
+        </div>
+    </div>
 
 
 
