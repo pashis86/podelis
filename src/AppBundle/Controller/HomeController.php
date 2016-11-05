@@ -41,13 +41,9 @@ class HomeController extends Controller
 
             $session = new Session();
             $session->set('questionGroups', $questionGroups);
+            $session->set('answered', []);
 
-            /* return $this->render('@App/Home/test.html.twig', [
-                 'questionGroups' => $questionGroups
-             ]);*/
-           // dump($session->get('questionGroups'));
-           // die();
-            return $this->testAction($request, 1);
+            return $this->redirectToRoute('question', ['id' => $questionGroups[0][0]->getId()]);
 
         }
 
@@ -62,23 +58,103 @@ class HomeController extends Controller
     public function testAction(Request $request, $id)
     {
         $repository = $this->getDoctrine()->getRepository('AppBundle:Question');
+        $switcher = $this->get('app.question_switcher');
         $question = $repository->findOneBy(['id' => $id]);
 
         $session = $this->get('session');
+        $answered = $session->get('answered');
+        $questionGroups = $session->get('questionGroups');
 
         if($question)
         {
-            $form = $this->createForm(TestQuestionType::class, ['question' => $question]);
+            $form = $this->createForm(TestQuestionType::class, ['question' => $question, 'answered' => $answered]);
             $form->handleRequest($request);
 
-            if($form->isSubmitted() && $form->isValid()){
-                dump($form->getData());
-                die();
+            if($form->get('next')->isClicked()){
+                $answered[$id] = $form['answers']->getData();
+                $session->set('answered', $answered);
+                $newId = $switcher->getNext($questionGroups, $id);
+
+                return $this->redirectToRoute('question', ['id' => $newId]);
+            }
+
+            if($form->get('previous')->isClicked()){
+                $answered[$id] = $form['answers']->getData();
+                $session->set('answered', $answered);
+                $newId = $switcher->getPrevious($questionGroups, $id);
+
+                return $this->redirectToRoute('question', ['id' => $newId]);
+            }
+
+            if($form->get('submit')->isClicked()){
+                $answered[$id] = $form['answers']->getData();
+                $session->set('answered', $answered);
+
+                return $this->redirectToRoute('testResults', ['id' => $questionGroups[0][0]->getId()]);
             }
 
             return $this->render('@App/Home/question.html.twig', [
                 'form' => $form->createView(),
-                'session' => $session->get('questionGroups')
+                'current' => $id
+            ]);
+        }
+        return $this->render('@App/Home/404.html.twig');
+    }
+
+    /**
+     * @Route("/add-answer", name="questionChosen")
+     */
+    public function questionChosenAction(Request $request)
+    {
+        $session = $this->get('session');
+        $answered = $session->get('answered');
+        $repository = $this->getDoctrine()->getRepository('AppBundle:Answer');
+
+        if($request->isXmlHttpRequest()){
+            $question = $request->request->get('question');
+            $answerId = $request->request->get('answer');
+            $answer = $repository->findOneBy(['id' => $answerId]);
+
+            $answered[$question] = $answer;
+            $session->set('answered', $answered);
+        }
+        return $this->render('@App/Home/404.html.twig');
+    }
+
+    /**
+     * @Route("/results/{id}", name="testResults")
+     */
+    public function testResultsAction(Request $request, $id)
+    {
+        $repository = $this->getDoctrine()->getRepository('AppBundle:Question');
+        $switcher = $this->get('app.question_switcher');
+        $question = $repository->findOneBy(['id' => $id]);
+
+        $session = $this->get('session');
+        $answered = $session->get('answered');
+        $questionGroups = $session->get('questionGroups');
+
+        if($question)
+        {
+            $form = $this->createForm(TestQuestionType::class, ['question' => $question, 'answered' => $answered]);
+            $form->handleRequest($request);
+
+            if($form->get('next')->isClicked()){
+                $newId = $switcher->getNext($questionGroups, $id);
+                return $this->redirectToRoute('testResults', ['id' => $newId]);
+            }
+
+            if($form->get('previous')->isClicked()){
+                $newId = $switcher->getPrevious($questionGroups, $id);
+                return $this->redirectToRoute('testResults', ['id' => $newId]);
+            }
+
+            if($form->get('submit')->isClicked()){
+                // dump($session->get('answered'));
+            }
+            return $this->render('@App/Home/results.html.twig', [
+                'form' => $form->createView(),
+                'current' => $id
             ]);
         }
         return $this->render('@App/Home/404.html.twig');

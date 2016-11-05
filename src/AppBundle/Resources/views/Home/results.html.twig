@@ -1,0 +1,24 @@
+{% extends '::base.html.twig' %}
+
+{% block body %}
+    {% for group in app.session.get('questionGroups') %}
+        <b>{{ loop.index }}</b>
+            {% for question in group %}
+                <a title="{{ question.title }}" href="{{ path('testResults', {'id': question.id }) }}">{{ loop.index }}</a>
+            {% endfor %}<br>
+        {% endfor %}
+    {{ form_start(form) }}
+    {{ form_label(form.answers) }}
+    {{ form_widget(form.answers) }}
+    {{ form_widget(form.previous) }}
+    {{ form_widget(form.next) }}
+    {{ form_end(form) }}
+
+    {% if app.session.get('answered')[current].correct is not defined %}
+        <p>Your choice is incorrect.</p>
+    {% elseif app.session.get('answered')[current].correct %}
+        <p>Your choice is correct!</p>
+    {% else %}
+        <p>Your choice is incorrect.</p>
+    {% endif %}
+{% endblock %}

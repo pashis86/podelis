@@ -11,3 +11,12 @@ services:
     app.facebook_authenticator:
         class: AppBundle\Service\FacebookAuthenticator
         arguments: ["@oauth2.registry", "@doctrine.orm.entity_manager", "@router"]
+
+    app.question_switcher:
+        class: AppBundle\Service\QuestionSwitcher
+
+    app.test_question:
+        class: AppBundle\Form\TestQuestionType
+        arguments: ["@doctrine.orm.entity_manager"]
+        tags:
+            - { name: form.type }

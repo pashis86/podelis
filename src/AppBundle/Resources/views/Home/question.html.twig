@@ -1,15 +1,32 @@
 {% extends '::base.html.twig' %}
 
 {% block body %}
-    {% for group in session %}
+    {% for group in app.session.get('questionGroups') %}
         <b>{{ loop.index }}</b>
             {% for question in group %}
-                <button title="{{ question.title }}">{{ loop.index }}</button>
+                <a title="{{ question.title }}" href="{{ path('question', {'id': question.id }) }}">{{ loop.index }}</a>
             {% endfor %}<br>
         {% endfor %}
     {{ form_start(form) }}
     {{ form_label(form.answers) }}
     {{ form_widget(form.answers) }}
-    <input type="submit" value="Next">
+    {{ form_widget(form.previous) }}
+    {{ form_widget(form.next) }}
     {{ form_end(form) }}
+{% endblock %}
+{% block javascripts %}
+    <!-- laikinai inportinu per src -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("input[name='test_question[answers]']").on('change', function () {
+            var answer = $("input[name='test_question[answers]']:checked").val();
+            $.ajax({
+                type: "POST",
+                url: '{{ path('questionChosen') }}',
+                data: { 'question': {{ current }}, 'answer': answer }
+            });
+        });
+    });
+</script>
 {% endblock %}
