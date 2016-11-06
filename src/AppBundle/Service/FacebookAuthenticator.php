@@ -53,12 +53,10 @@ class FacebookAuthenticator extends SocialAuthenticator
         /** @var FacebookUser $facebookUser */
         $facebookUser = $this->getFacebookClient()
             ->fetchUserFromToken($credentials);
-      //  dump($facebookUser);
-      //  die();
-        $email = $facebookUser->getEmail();
 
-        $existingUser = $this->em->getRepository('AppBundle:User')
-            ->findOneBy(['facebookId' => $facebookUser->getId()]);
+        $email = $facebookUser->getEmail();
+        $repository = $this->em->getRepository('AppBundle:User');
+        $existingUser = $repository->findOneBy(['facebookId' => $facebookUser->getId()]);
 
         if($existingUser)
         {
@@ -66,13 +64,21 @@ class FacebookAuthenticator extends SocialAuthenticator
         }
 
         $user = $this->em->getRepository('AppBundle:User')
-            ->findOneBy(['username' => $email]);
+            ->findOneBy(['email' => $email]);
 
         if(!$user)
         {
             $user = new User();
+            $username = substr($facebookUser->getFirstName(), 0, 3) .
+                strtolower(substr($facebookUser->getLastName(), 0, 3));
+
+            $all = $repository->findBy(['username' => $username]);
+            if($all){
+               $username = $username . count($all);
+            }
             $user->setFacebookId($facebookUser->getId())
-                ->setUsername($facebookUser->getEmail())
+                ->setUsername($username)
+                ->setEmail($facebookUser->getEmail())
                 ->setName($facebookUser->getFirstName())
                 ->setSurname($facebookUser->getLastName());
 

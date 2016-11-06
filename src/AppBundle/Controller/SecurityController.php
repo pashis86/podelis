@@ -2,8 +2,6 @@
 
 namespace AppBundle\Controller;
 
-use AppBundle\Entity\ChangePassword;
-use AppBundle\Entity\EditUser;
 use AppBundle\Entity\User;
 use AppBundle\Form\ChangePasswordType;
 use AppBundle\Form\EditUserType;
@@ -32,10 +30,10 @@ class SecurityController extends Controller
             $error = $authenticationUtils->getLastAuthenticationError();
 
             // last username entered by the user
-            $lastEmail = $authenticationUtils->getLastUsername();
+            $lastUsername = $authenticationUtils->getLastUsername();
             //  die($lastEmail);
             return $this->render('@App/Security/login.html.twig', [
-                'last_email' => $lastEmail,
+                'last_username' => $lastUsername,
                 'error'         => $error,
             ]);
         }
@@ -85,22 +83,23 @@ class SecurityController extends Controller
      */
     public function userEditAction(Request $request) {
         $securityContext = $this->get('security.authorization_checker');
+        /** @var User $user */
         $user = $this->getUser();
 
         if(($securityContext->isGranted('IS_AUTHENTICATED_FULLY') ||
             $securityContext->isGranted('IS_AUTHENTICATED_REMEMBERED')) && !$user->getFacebookId()) {
 
-            $edit = new EditUser($user);
+          //  $edit = new EditUser($user);
 
-            $form = $this->createForm(EditUserType::class, $edit);
+            $form = $this->createForm(EditUserType::class, $user);
             $form->handleRequest($request);
 
             if($form->isSubmitted()) {
 
                 if($form->isValid()) {
 
-                    $user->editUser($edit);
-
+                 //   $user->editUser($user);
+                    $user->setUpdatedAt(new \DateTime('now'));
                     $em = $this->getDoctrine()->getManager();
                     $em->persist($user);
                     $em->flush();
@@ -129,9 +128,7 @@ class SecurityController extends Controller
         if(($securityContext->isGranted('IS_AUTHENTICATED_FULLY') ||
             $securityContext->isGranted('IS_AUTHENTICATED_REMEMBERED')) && !$user->getFacebookId()) {
 
-            $newPass = new ChangePassword();
-
-            $form = $this->createForm(ChangePasswordType::class, $newPass);
+            $form = $this->createForm(ChangePasswordType::class);
 
             $form->handleRequest($request);
 

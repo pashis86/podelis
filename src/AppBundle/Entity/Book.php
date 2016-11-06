@@ -19,7 +19,6 @@ class Book
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
-     * @ORM\OneToMany(mappedBy="book", targetEntity="AppBundle\Entity\Question")
      */
     private $id;
 
@@ -38,6 +37,13 @@ class Book
     private $content;
 
     /**
+     * @var ArrayCollection
+     *
+     * @ORM\OneToMany(targetEntity="Question", mappedBy="book")
+     */
+    private $questions;
+
+    /**
      * @var \DateTime
      *
      * @ORM\Column(name="created_at", type="datetime")
@@ -51,20 +57,31 @@ class Book
      */
     private $updatedAt;
 
-    public function __construct()
-    {
-        $this->id = new ArrayCollection();
-    }
 
     public function __toString()
     {
         return $this->getTitle();
     }
 
+    /**
+     * @return int
+     */
     public function getId()
     {
-        return $this->id->toArray();
+        return $this->id;
     }
+
+    /**
+     * @param int $id
+     * @return Book
+     */
+    public function setId(int $id): Book
+    {
+        $this->id = $id;
+        return $this;
+    }
+
+
 
     /**
      * Set title
@@ -113,6 +130,25 @@ class Book
     {
         return $this->content;
     }
+
+    /**
+     * @return ArrayCollection
+     */
+    public function getQuestions(): ArrayCollection
+    {
+        return $this->questions;
+    }
+
+    /**
+     * @param ArrayCollection $questions
+     * @return Book
+     */
+    public function setQuestions(ArrayCollection $questions): Book
+    {
+        $this->questions = $questions;
+        return $this;
+    }
+
 
     /**
      * Set createdAt

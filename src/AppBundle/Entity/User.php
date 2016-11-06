@@ -13,6 +13,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  *
  * @ORM\Table(name="users")
  * @UniqueEntity(fields="username", message="Username already taken")
+ * @UniqueEntity(fields="email", message="Email already taken")
  * @ORM\Entity(repositoryClass="AppBundle\Repository\UserRepository")
  */
 class User implements UserInterface/*, \Serializable <-- del sito buna segmentation error */
@@ -44,10 +45,18 @@ class User implements UserInterface/*, \Serializable <-- del sito buna segmentat
     /**
      * @var string
      * @Assert\NotBlank()
-     * @Assert\Email()
+     * @Assert\Length(min="3", max="30", minMessage="Vartotojo vardas per trumpas", maxMessage="Vartotojo vardas per ilgas")
      * @ORM\Column(name="username", type="string", length=255, nullable=true)
      */
     private $username;
+
+    /**
+     * @var string
+     * @Assert\NotBlank()
+     * @Assert\Email()
+     * @ORM\Column(name="email", type="string", length=255, nullable=true)
+     */
+    private $email;
 
     /**
      * @var string
@@ -158,11 +167,28 @@ class User implements UserInterface/*, \Serializable <-- del sito buna segmentat
      * @param string $username
      * @return User
      */
-    public function setUsername(string $username = null): User
+    public function setUsername(string $username): User
     {
         $this->username = $username;
         return $this;
     }
+
+
+    public function getEmail()
+    {
+        return $this->email;
+    }
+
+    /**
+     * @param string $email
+     * @return User
+     */
+    public function setEmail(string $email = null): User
+    {
+        $this->email = $email;
+        return $this;
+    }
+
 
     /**
      * @return string
@@ -194,7 +220,7 @@ class User implements UserInterface/*, \Serializable <-- del sito buna segmentat
      * @param string $surname
      * @return User
      */
-    public function setSurname(string $surname): User
+    public function setSurname(string $surname = null): User
     {
         $this->surname = $surname;
         return $this;
@@ -280,14 +306,7 @@ class User implements UserInterface/*, \Serializable <-- del sito buna segmentat
         $this->updatedAt = new \DateTime('now');
         $this->level = 1;
     }
-
-    public function editUser(EditUser $editUser)
-    {
-        $this->name = $editUser->getName();
-        $this->surname = $editUser->getSurname();
-        $this->updatedAt = new \DateTime('now');
-    }
-
+    
     /**
      * @return (Role|string)[] The user roles
      */

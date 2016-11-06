@@ -2,20 +2,49 @@
 
 namespace AppBundle\Form;
 
+use AppBundle\Entity\Question;
+use AppBundle\Service\QuestionChecker;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class TestQuestionType extends AbstractType
 {
+    private $questionChecker;
+
+    /** @var QuestionChecker $questionChecker */
+    public function __construct($questionChecker)
+    {
+        $this->questionChecker = $questionChecker;
+    }
+
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+        /** @var Question $question */
+        $question = $options['data']['question'];
+        $answered = $options['data']['answered'];
+        $id = $question->getId();
+        $checkedAnswers = $this->questionChecker->prepareSelectedOptions($question, $answered, $id);
 
+        $builder->add('answers', EntityType::class, [
+            'class' => 'AppBundle\Entity\Answer',
+            'expanded' => true,
+            'multiple' => $question->getCheckboxAnswers(),
+            'label' => $question->getContent(),
+            'required' => false,
+            'choices' => $question->getAnswers(),
+            'placeholder' => false,
+            'data' => $checkedAnswers])
+        ->add('next', SubmitType::class)
+        ->add('previous', SubmitType::class)
+        ->add('submit', SubmitType::class);
     }
 
     public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setDefaults(['data_class' => 'AppBundle\Entity\Question']);
+     //   $resolver->setDefaults(['data_class' => 'AppBundle\Entity\Question']);
     }
 
     public function getName()
