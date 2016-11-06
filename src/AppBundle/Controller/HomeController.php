@@ -42,7 +42,7 @@ class HomeController extends Controller
             $session->set('questionGroups', $questionGroups);
             $session->set('answered', []);
 
-            return $this->redirectToRoute('question', ['id' => $questionGroups[0][0]]);
+            return $this->redirectToRoute('question', ['id' => $questionGroups[0][0]->getId()]);
         }
 
         return $this->render('@App/Home/test-options.html.twig', [
@@ -64,7 +64,7 @@ class HomeController extends Controller
         $answered = $session->get('answered');
         $questionGroups = $session->get('questionGroups');
 
-        if($question)
+        if($question && $switcher->questionInTest($id))
         {
             $form = $this->createForm(TestQuestionType::class, ['question' => $question, 'answered' => $answered]);
             $form->handleRequest($request);
@@ -130,14 +130,14 @@ class HomeController extends Controller
      */
     public function testResultsAction(Request $request, $id)
     {
-        $repository = $this->getDoctrine()->getRepository('AppBundle:Question');
+        $session = $this->get('session');
+
+        $answered = $session->get('answered');
         $switcher = $this->get('app.question_switcher');
+        $repository = $this->getDoctrine()->getRepository('AppBundle:Question');
         $question = $repository->findOneBy(['id' => $id]);
 
-        $session = $this->get('session');
-        $answered = $session->get('answered');
-
-        if($question)
+        if($question && $switcher->questionInTest($id))
         {
             $form = $this->createForm(TestQuestionType::class, ['question' => $question, 'answered' => $answered]);
             $form->handleRequest($request);

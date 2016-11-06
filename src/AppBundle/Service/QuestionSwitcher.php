@@ -41,11 +41,15 @@ class QuestionSwitcher
         return (array_key_exists($previousQ, $this->questions) ? $this->questions[$previousQ] : end($this->questions));
     }
 
-    public function getCurrent($currentQ)
+    public function questionInTest($questionId)
     {
-        return $this->questions[$currentQ - 1];
+        foreach ($this->questions as $question){
+            if($question == $questionId){
+                return true;
+            }
+        }
+        return false;
     }
-
     /**
      * @return array
      */
