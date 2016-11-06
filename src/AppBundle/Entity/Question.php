@@ -78,6 +78,7 @@ class Question
      */
     private $updatedAt;
 
+
     public function __construct()
     {
         $this->answers = new ArrayCollection();
@@ -109,36 +110,31 @@ class Question
         return $this;
     }
 
-
-    /**
-     * Add answers
-     *
-     * @param Answer
-     * @return Question
-     */
-    public function addAnswer(Answer $answers)
+    public function addAnswer(Answer $answer)
     {
-        $this->answers[] = $answers;
+        $this->answers[] = $answer;
+        $answer->setQuestion($this);
+
         return $this;
     }
 
+
     /**
-     * Remove answers
-     *
-     * @param Answer $answers
-     */
-    public function removeAnswer(Answer $answers)
-    {
-        $this->answers->removeElement($answers);
-    }
-    /**
-     * Get answers
-     *
      * @return ArrayCollection
      */
     public function getAnswers()
     {
         return $this->answers;
+    }
+
+    /**
+     * @param ArrayCollection $answers
+     * @return Question
+     */
+    public function setAnswers(ArrayCollection $answers): Question
+    {
+        $this->answers = $answers;
+        return $this;
     }
 
     /**

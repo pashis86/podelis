@@ -10,42 +10,58 @@ namespace AppBundle\Service;
 
 
 use AppBundle\Entity\Question;
+use Symfony\Component\HttpFoundation\Session\Session;
 
 class QuestionSwitcher
 {
-    public function getNext($questionGroups, $questionId)
+    private $questions;
+
+    /** @param Session $session */
+    public function __construct($session)
     {
-        $allIds = [];
+        $this->questions = [];
+        $questionGroups = $session->get('questionGroups');
+
         foreach ($questionGroups as $group){
             /** @var Question $question */
             foreach ($group as $question)
-            array_push($allIds, $question->getId());
-        }
-        $nextQ = array_search($questionId, $allIds) + 1;
-
-        if(array_key_exists($nextQ, $allIds)){
-            return $allIds[$nextQ];
-        }
-        else{
-            return $allIds[0];
+                array_push($this->questions, $question->getId());
         }
     }
 
-    public function getPrevious($questionGroups, $questionId)
+    public function getNext($currentQ)
     {
-        $allIds = [];
-        foreach ($questionGroups as $group){
-            /** @var Question $question */
-            foreach ($group as $question)
-                array_push($allIds, $question->getId());
-        }
-        $previousQ = array_search($questionId, $allIds) - 1;
-
-        if(array_key_exists($previousQ, $allIds)){
-            return $allIds[$previousQ];
-        }
-        else{
-            return end($allIds);
-        }
+        $nextQ = array_search($currentQ, $this->questions) + 1;
+        return (array_key_exists($nextQ, $this->questions) ? $this->questions[$nextQ] : $this->questions[0]);
     }
+
+    public function getPrevious($currentQ)
+    {
+        $previousQ = array_search($currentQ, $this->questions) - 1;
+        return (array_key_exists($previousQ, $this->questions) ? $this->questions[$previousQ] : end($this->questions));
+    }
+
+    public function getCurrent($currentQ)
+    {
+        return $this->questions[$currentQ - 1];
+    }
+
+    /**
+     * @return array
+     */
+    public function getQuestions(): array
+    {
+        return $this->questions;
+    }
+
+    /**
+     * @param array $questions
+     * @return QuestionSwitcher
+     */
+    public function setQuestions(array $questions): QuestionSwitcher
+    {
+        $this->questions = $questions;
+        return $this;
+    }
+
 }

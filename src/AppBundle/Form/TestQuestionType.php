@@ -3,7 +3,7 @@
 namespace AppBundle\Form;
 
 use AppBundle\Entity\Question;
-use Doctrine\ORM\EntityManager;
+use AppBundle\Service\QuestionChecker;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
@@ -12,12 +12,12 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class TestQuestionType extends AbstractType
 {
-    private $em;
+    private $questionChecker;
 
-    /** @var EntityManager $em */
-    public function __construct($em)
+    /** @var QuestionChecker $questionChecker */
+    public function __construct($questionChecker)
     {
-        $this->em = $em;
+        $this->questionChecker = $questionChecker;
     }
 
     public function buildForm(FormBuilderInterface $builder, array $options)
@@ -26,21 +26,17 @@ class TestQuestionType extends AbstractType
         $question = $options['data']['question'];
         $answered = $options['data']['answered'];
         $id = $question->getId();
-
-        $checkedAnswer = (array_key_exists($id, $answered) ? $answered[$id]: null);
-
-        if($checkedAnswer != null){
-            $checkedAnswer = $this->em->merge($checkedAnswer);
-        }
+        $checkedAnswers = $this->questionChecker->prepareSelectedOptions($question, $answered, $id);
 
         $builder->add('answers', EntityType::class, [
             'class' => 'AppBundle\Entity\Answer',
             'expanded' => true,
+            'multiple' => $question->getCheckboxAnswers(),
             'label' => $question->getContent(),
             'required' => false,
             'choices' => $question->getAnswers(),
             'placeholder' => false,
-            'data' => $checkedAnswer])
+            'data' => $checkedAnswers])
         ->add('next', SubmitType::class)
         ->add('previous', SubmitType::class)
         ->add('submit', SubmitType::class);

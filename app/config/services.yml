@@ -14,9 +14,14 @@ services:
 
     app.question_switcher:
         class: AppBundle\Service\QuestionSwitcher
+        arguments: ["@session"]
+
+    app.question_checker:
+        class: AppBundle\Service\QuestionChecker
+        arguments: ["@session", "@doctrine.orm.entity_manager"]
 
     app.test_question:
         class: AppBundle\Form\TestQuestionType
-        arguments: ["@doctrine.orm.entity_manager"]
+        arguments: ["@app.question_checker"]
         tags:
             - { name: form.type }

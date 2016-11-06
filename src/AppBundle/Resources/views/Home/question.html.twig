@@ -2,7 +2,7 @@
 
 {% block body %}
     {% for group in app.session.get('questionGroups') %}
-        <b>{{ loop.index }}</b>
+        <b>{{ loop.index }}.{{ group[0].book.title }}</b>
             {% for question in group %}
                 <a title="{{ question.title }}" href="{{ path('question', {'id': question.id }) }}">{{ loop.index }}</a>
             {% endfor %}<br>
@@ -17,6 +17,7 @@
 {% block javascripts %}
     <!-- laikinai inportinu per src -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+
 <script type="text/javascript">
     $(document).ready(function () {
         $("input[name='test_question[answers]']").on('change', function () {
@@ -25,6 +26,18 @@
                 type: "POST",
                 url: '{{ path('questionChosen') }}',
                 data: { 'question': {{ current }}, 'answer': answer }
+            });
+        });
+
+        $("input[name='test_question[answers][]']").on('change', function () {
+            var answers = [];
+            $("input[name='test_question[answers][]']:checked").each(function () {
+                answers.push($(this).val());
+            });
+            $.ajax({
+                type: "POST",
+                url: '{{ path('questionChosen') }}',
+                data: { 'question': {{ current }}, 'answer': answers }
             });
         });
     });

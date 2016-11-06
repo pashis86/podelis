@@ -19,7 +19,6 @@ class Book
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
-     * @ORM\OneToMany(mappedBy="book", targetEntity="AppBundle\Entity\Question")
      */
     private $id;
 
@@ -58,20 +57,31 @@ class Book
      */
     private $updatedAt;
 
-    public function __construct()
-    {
-        $this->id = new ArrayCollection();
-    }
 
     public function __toString()
     {
         return $this->getTitle();
     }
 
+    /**
+     * @return int
+     */
     public function getId()
     {
-        return $this->id->toArray();
+        return $this->id;
     }
+
+    /**
+     * @param int $id
+     * @return Book
+     */
+    public function setId(int $id): Book
+    {
+        $this->id = $id;
+        return $this;
+    }
+
+
 
     /**
      * Set title

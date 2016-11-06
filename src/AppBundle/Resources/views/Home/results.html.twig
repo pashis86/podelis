@@ -2,9 +2,13 @@
 
 {% block body %}
     {% for group in app.session.get('questionGroups') %}
-        <b>{{ loop.index }}</b>
+        <b>{{ loop.index }}.{{ group[0].book.title }}</b>
             {% for question in group %}
-                <a title="{{ question.title }}" href="{{ path('testResults', {'id': question.id }) }}">{{ loop.index }}</a>
+                {% if app.session.get('isCorrect')[question.id] is not defined or not app.session.get('isCorrect')[question.id] %}
+                <a style="color: #C82829" title="{{ question.title }}" href="{{ path('testResults', {'id': question.id }) }}">{{ loop.index }}</a>
+                {% else %}
+                <a style="color: #66dd66" title="{{ question.title }}" href="{{ path('testResults', {'id': question.id }) }}">{{ loop.index }}</a>
+                {% endif %}
             {% endfor %}<br>
         {% endfor %}
     {{ form_start(form) }}
@@ -14,11 +18,15 @@
     {{ form_widget(form.next) }}
     {{ form_end(form) }}
 
-    {% if app.session.get('answered')[current].correct is not defined %}
+    {% if app.session.get('isCorrect')[currentQ.id] is not defined or not app.session.get('isCorrect')[currentQ.id] %}
         <p>Your choice is incorrect.</p>
-    {% elseif app.session.get('answered')[current].correct %}
-        <p>Your choice is correct!</p>
+        <div class="visible">
+            {{ currentQ.explanation }}
+        </div>
     {% else %}
-        <p>Your choice is incorrect.</p>
+        <p>Your choice is correct!</p>
+        <div class="hidden">
+            {{ currentQ.explanation }}
+        </div>
     {% endif %}
 {% endblock %}

@@ -10,4 +10,14 @@ namespace AppBundle\Repository;
  */
 class AnswerRepository extends \Doctrine\ORM\EntityRepository
 {
+    public function getAllChecked($answers)
+    {
+        return $allChecked = $this->createQueryBuilder('a')
+            ->select('a')
+            ->where('a.id IN (:ids)')
+            ->setParameter('ids', $answers)
+            ->distinct(true)
+            ->getQuery()
+            ->getResult();
+    }
 }
