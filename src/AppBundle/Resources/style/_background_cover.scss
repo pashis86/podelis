@@ -1,7 +1,26 @@
+.circle {
+  position: relative;
+  display: inline-block;
+  width: 150px;
+  height: 0;
+  padding: 75px 0;
+  border-radius: 75px;
+
+  /* Just making it pretty */
+  @shadow: rgba(0, 0, 0, 0.1);
+  @shadow-length: 4px;
+  background: rgba(56,169,225, 0.3);
+  color: white;
+}
+
+
+
 .homepage-hero-module {
   border-right: none;
   border-left: none;
   position: relative;
+  padding: 0;
+  margin-bottom: 0;
 }
 .no-video .video-container video,
 .touch .video-container video {

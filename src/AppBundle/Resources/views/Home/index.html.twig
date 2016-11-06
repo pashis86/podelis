@@ -39,7 +39,7 @@
                                 <label class="control-label label-width" for="password">Password: </label>
                                 <input type="password" id="password" name="_password" />
                             </fieldset>
-                            <button class="btn btn-lg btn-block btn-success" type="submit">Log in</button>
+                            <button class="btn btn-4" type="submit">Log in</button>
                         </form>
 
                     </div>
@@ -54,7 +54,7 @@
                     <div class="panel-heading">
                         Register
                     </div>
-                    <div class="panel-body">
+                    <div class="panel-body relative-button">
                         <form action="{{ path('login') }}" method="post" class="form-horizontal">
                             <fieldset class="form-group">
                                 <label class="control-label label-width" for="email">Email: </label>
@@ -64,7 +64,7 @@
                                 <label class="control-label label-width" for="password">Password: </label>
                                 <input type="password" id="password" name="_password" />
                             </fieldset>
-                            <button class="btn btn-lg btn-block btn-success" type="submit">Register</button>
+                            <button class="btn btn-4" type="submit">Register</button>
                         </form>
 
                     </div>
@@ -74,11 +74,8 @@
         </div>
     </div>
 
-
-
-
     <!--great cover-->
-    <div class="homepage-hero-module jumbotron" style="padding: 0; margin-bottom: 0;">
+    <div class="homepage-hero-module jumbotron">
         <div class="video-container">
             <video preload="auto" autoplay loop class="fillWidth" poster="{{ asset('background/Hello-World.jpg') }}">
                 <source src="{{ asset('background/Hello-World.mp4') }}" type="video/mp4" />
@@ -91,117 +88,71 @@
 
                 <div class="row bungeeS">
                     <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12 allignCenter">
-                        <a href="/" class="btn-primary boldS">Zend testas</a>
+                        <a href="/" class="btn-primary boldS">Zend test</a>
                     </div>
                     <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12 allignCenter">
-                        <a href="/" class="btn-primary boldS">
-                            Bendrasis <br>
-                            <span class="font-20">žinių testas</span>
+                        <a href="/" class="btn btn-1 btn-1e  boldS">
+                            Overal <br>
+                            <span class="font-20">knowledge test</span>
                         </a>
                     </div>
                     <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12 allignCenter">
-                        <a class="btn btn-primary boldS formButton">Temos testas</a>
+                        <a class="btn btn-1 btn-1e boldS formButton">Category test</a>
                     </div>
                 </div>
 
-                <div class="allignCenter formCategories">
-                    <div class="panel-group">
-                        <div class="panel panel-success">
-                            <div class="panel-heading"><p class="titleN">Testų kategorijos</p></div>
-                            <div class="panel-body">
-                                <div class="row">
-                                    <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
-                                        <a href="/login"><button type="submit" class="btn btnY">String</button></a>
-                                        <a href="/login"><button type="submit" class="btn btnY">PHP</button></a>
-                                        <a href="/login"><button type="submit" class="btn btnY">Basic</button></a>
-                                    </div>
-                                    <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
-                                        <a href="/login"><button type="submit" class="btn btnY">String</button></a>
-                                        <a href="/login"><button type="submit" class="btn btnY">String</button></a>
-                                        <a href="/login"><button type="submit" class="btn btnY">String</button></a>
-                                    </div>
-                                </div>
-                            </div>
-
+                <div class="allignCenter users-count">
+                    <h2 class="bungeeS boldS allignCenter font-40">Over</h2>
+                        <div class="circle allignCenter">
+                            <div class="user-count font-50">0</div>
                         </div>
-                    </div>
+
+                    <h2 class="bungeeS boldS allignCenter">users! Join us</h2>
                 </div>
+
             </div>
         </div>
     </div>
 
-
-
-
-
-
-
-
-    <!--primary content test buttons-->
-    <div class="grey-background">
-        <div class="container">
-            <div class="titleN">PHP knowledge evaluation tests</div>
-
-            <div class="row bungeeS">
-                <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12 allignCenter">
-                    <a href="/" class="buttonB rounded boldS">Zend testas</a>
-                </div>
-                <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12 allignCenter">
-                    <a href="/" class="buttonB rounded boldS">
-                        Bendrasis <br>
-                        <div class="font-20">žinių testas</div>
-                    </a>
-                </div>
-                <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12 allignCenter">
-                    <a class="buttonB rounded boldS formButton">Temos testas</a>
-                </div>
-            </div>
-
-            <div class="allignCenter formCategories">
-                <div class="panel-group panel-grey">
-                    <div class="panel panel-primary">
-                        <div class="panel-heading"><p class="titleN">Testų kategorijos</p></div>
-                        <div class="panel-body">
-                            <div class="row">
-                                <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
-                                    <a href="/login"><button type="submit" class="btn btnY">String</button></a>
-                                    <a href="/login"><button type="submit" class="btn btnY">PHP</button></a>
-                                    <a href="/login"><button type="submit" class="btn btnY">Basic</button></a>
-                                </div>
-                                <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
-                                    <a href="/login"><button type="submit" class="btn btnY">String</button></a>
-                                    <a href="/login"><button type="submit" class="btn btnY">String</button></a>
-                                    <a href="/login"><button type="submit" class="btn btnY">String</button></a>
-                                </div>
-                            </div>
+    <!--categories-->
+    <div class="allignCenter formCategories">
+        <div class="panel-group">
+            <div class="panel panel-success">
+                <div class="panel-heading"><p class="titleN">Test categories</p></div>
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-lg-6 col-md-6 col-lg-offset-3 col-md-offset-3 col-sm-12 col-xs-12">
+                            <a href="/login"><button type="submit" class="btn btnY btn-3">Functions and arrays</button></a>
+                            <a href="/login"><button type="submit" class="btn btnY btn-3">Object oriented programming</button></a>
+                            <a href="/login"><button type="submit" class="btn btnY btn-3">Security</button></a>
+                            <a href="/login"><button type="submit" class="btn btnY btn-3">Data format & types</button></a>
+                            <a href="/login"><button type="submit" class="btn btnY btn-3">String and patterns</button></a>
+                            <a href="/login"><button type="submit" class="btn btnY btn-3">Databases and SQL</button></a>
+                            <a href="/login"><button type="submit" class="btn btnY btn-3">Web feateures</button></a>
+                            <a href="/login"><button type="submit" class="btn btnY btn-3">INPUT/OUTPUT</button></a>
+                            <a href="/login"><button type="submit" class="btn btnY btn-3">Basic 1</button></a>
+                            <a href="/login"><button type="submit" class="btn btnY btn-3">Arrays 1</button></a>
+                            <a href="/login"><button type="submit" class="btn btnY btn-3">Strings 1</button></a>
+                            <a href="/login"><button type="submit" class="btn btnY btn-3">Web features 1</button></a>
                         </div>
-
                     </div>
                 </div>
+
             </div>
         </div>
     </div>
 
     <!--secondary content test info-->
-    <div class="sand-background">
+    <div class="grey-background">
         <div class="container">
             <div class="row">
                 <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
-                    <h2 class="bungeeS boldS font-20 allignCenter">Join us</h2>
-                    <p>Number</p>
-                    <p>Number</p>
-                    <p>Number</p>
-                    <p>Number</p>
-                    <p>Number</p>
-                    <p>Number</p>
-                    <p>Number</p><p>Number</p>
-                    <p>Number</p>
-                    <p>Number</p>
-
+                    <h2 class="bungeeS boldS font-20 allignCenter">Learn PHP</h2>
+                    <p><a href="http://php.net/docs.php">http://php.net/docs.php</a></p>
                 </div>
                 <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12 allignCenter">
                     <div class="bungeeS boldS font-20 ">
-                        <iframe  width="auto" height="auto" allowfullscreen frameborder="0"
+                        <iframe class="myIframe" width="100%" allowfullscreen frameborder="0"
                                 src="https://www.youtube.com/embed/Y2JbjD1wGsw">
                         </iframe>
                     </div>
@@ -209,21 +160,5 @@
             </div>
         </div>
     </div>
-
-    <div class="container">
-
-        <!--testo timeris-->
-        <div class="font-20">
-            <div id="loading" class=""></div>
-            <div id="hours">00</div><span>:</span><div id="minutes">00</div><span>:</span><div id="seconds">00</div>
-        </div>
-
-        <div class="row">
-            <!--test junk-->
-
-            <div class="col-lg-6 col-sm-12">
-                <a id="generateButton" href="{{ path('login') }}" class="progress-button red" data-loading="Generating.." data-finished="Download" data-type="background-vertical">Generate</a>
-            </div>
-        </div>
     </div>
 {% endblock %}

@@ -52,6 +52,14 @@ body {
   font-size: 20px;
 }
 
+.font-40 {
+  font-size: 40px;
+}
+
+.font-50 {
+  font-size: 50px;
+}
+
 .boldS{
   font-weight: bold;
 }
@@ -73,9 +81,7 @@ body {
 }
 
 .btnY{
-  padding: 5px;
-  margin: 5px;
-  width: 100%;
+  width: 90%;
   border: 2px ridge white;
   border-radius: 5px;
   color: black;
@@ -112,4 +118,18 @@ body {
 
 #formCategories, #loginForm, #registerForm{
   display: none;
+}
+
+.navbar{
+  margin-bottom: 0px;
+}
+
+.user-count{
+  position: relative;
+  bottom: 35px;
+}
+
+.opacity{
+  position: relative;
+  background: rgba(255,255,255,0.25);
 }

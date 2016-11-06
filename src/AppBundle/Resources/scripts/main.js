@@ -1,43 +1,25 @@
-$(document).ready(function() {
+function timedCounter(finalValue, seconds, callback){
 
-    $(".formCategories").hide();
+    var startTime = (new Date).getTime();
+    var milliseconds = seconds*1000;
 
-    $(".menu-on").hide();
+    (function update(){
 
-    $(".registerForm").hide();
+        var currentTime = (new Date).getTime();
+        var value = finalValue*(currentTime - startTime)/milliseconds;
 
-    $(".loginForm").hide();
+        if(value >= finalValue)
+            value = finalValue;
+        else
+            setTimeout(update, 250);
 
-    $( ".formButton" ).click(function() {
-        $( ".formCategories" ).toggle( "slow", function() {
-            // Animation complete.
-        });
-    });
+        callback && callback(value);
 
-    $( ".loginButton" ).click(function() {
-        
-        $(".registerForm").hide();
-        
-        $( ".loginForm" ).toggle( "slow", function() {
-            // Animation complete.
-        });
-    });
+    })();
 
-    $( ".registerButton" ).click(function() {
+}
 
-        $(".loginForm").hide();
-
-        $( ".registerForm" ).toggle( "slow", function() {
-            // Animation complete.
-        });
-    });
+timedCounter(75, 5, function(value){
+    value = Math.floor(value);
+    $('.user-count').html(value);
 });
-
-
-var sec = 0;
-function pad ( val ) { return val > 9 ? val : "0" + val; }
-setInterval( function(){
-    $("#seconds").html(pad(++sec%60));
-    $("#minutes").html(pad(parseInt(sec/60,10)));
-    $("#hours").html(pad(parseInt(sec/3600,10)))
-}, 1000);

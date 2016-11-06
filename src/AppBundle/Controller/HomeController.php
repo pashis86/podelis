@@ -46,4 +46,13 @@ class HomeController extends Controller
             'posts' => $posts,
         ]);
     }
+
+    /**
+     * @Route("/failures", name="failures")
+     */
+    public function failuresAction()
+    {
+            return $this->render('AppBundle:Home:failures.html.twig', [
+            ]);
+    }
 }
