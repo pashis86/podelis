@@ -40,8 +40,9 @@ class HomeController extends Controller
 
             $session = new Session();
             $session->set('questionGroups', $questionGroups);
+            $switcher = $this->get('app.question_switcher');
+            $session->set('endsAt', new \DateTime($switcher->setTimeLimit('+1 minute')));
             $session->set('answered', []);
-
             return $this->redirectToRoute('question', ['id' => $questionGroups[0][0]->getId()]);
         }
 
@@ -56,39 +57,35 @@ class HomeController extends Controller
      */
     public function testAction(Request $request, $id)
     {
+
         $repository = $this->getDoctrine()->getRepository('AppBundle:Question');
         $switcher = $this->get('app.question_switcher');
         $question = $repository->findOneBy(['id' => $id]);
 
         $session = $this->get('session');
-        $answered = $session->get('answered');
         $questionGroups = $session->get('questionGroups');
 
         if($question && $switcher->questionInTest($id))
         {
-            $form = $this->createForm(TestQuestionType::class, ['question' => $question, 'answered' => $answered]);
+            if($session->get('endsAt') <= new \DateTime('now')){
+                return $this->redirectToRoute('testResults', ['id' => $questionGroups[0][0]->getId()]);
+            }
+            $form = $this->createForm(TestQuestionType::class,
+                ['question' => $question, 'answered' => $session->get('answered')]);
             $form->handleRequest($request);
 
             if($form->get('next')->isClicked()){
-                $answered[$id] = $form['answers']->getData();
-                $session->set('answered', $answered);
-                $newId = $switcher->getNext($id);
-
-                return $this->redirectToRoute('question', ['id' => $newId]);
+                $switcher->addAnswer($id, $form['answers']->getData());
+                return $this->redirectToRoute('question', ['id' => $switcher->getNext($id)]);
             }
 
             if($form->get('previous')->isClicked()){
-                $answered[$id] = $form['answers']->getData();
-                $session->set('answered', $answered);
-                $newId = $switcher->getPrevious($id);
-
-                return $this->redirectToRoute('question', ['id' => $newId]);
+                $switcher->addAnswer($id, $form['answers']->getData());
+                return $this->redirectToRoute('question', ['id' => $switcher->getPrevious($id)]);
             }
 
             if($form->get('submit')->isClicked()){
-                $answered[$id] = $form['answers']->getData();
-                $session->set('answered', $answered);
-                $session->set('isCorrect', []);
+                $switcher->submit($id, $form['answers']->getData());
                 $this->get('app.question_checker')->checkAnswers();
 
                 return $this->redirectToRoute('testResults', ['id' => $questionGroups[0][0]->getId()]);
@@ -111,14 +108,11 @@ class HomeController extends Controller
         $answered = $session->get('answered');
         $repository = $this->getDoctrine()->getRepository('AppBundle:Answer');
 
-        if($request->isXmlHttpRequest()){
-
+        if($request->isXmlHttpRequest() && $session->get('endsAt') >= new \DateTime()){
             $question = $request->request->get('question');
             $answerIds = $request->request->get('answer');
 
-            //$answer = $repository->findOneBy(['id' => $answerId]);
             $answers = $repository->getAllChecked($answerIds);
-
             $answered[$question] = $answers;
             $session->set('answered', $answered);
         }
@@ -132,28 +126,26 @@ class HomeController extends Controller
     {
         $session = $this->get('session');
 
-        $answered = $session->get('answered');
         $switcher = $this->get('app.question_switcher');
         $repository = $this->getDoctrine()->getRepository('AppBundle:Question');
         $question = $repository->findOneBy(['id' => $id]);
 
         if($question && $switcher->questionInTest($id))
         {
-            $form = $this->createForm(TestQuestionType::class, ['question' => $question, 'answered' => $answered]);
+            $form = $this->createForm(TestQuestionType::class,
+                ['question' => $question, 'answered' => $session->get('answered')]);
             $form->handleRequest($request);
 
             if($form->get('next')->isClicked()){
-                $newId = $switcher->getNext($id);
-                return $this->redirectToRoute('testResults', ['id' => $newId]);
+                return $this->redirectToRoute('testResults', ['id' => $switcher->getNext($id)]);
             }
 
             if($form->get('previous')->isClicked()){
-                $newId = $switcher->getPrevious($id);
-                return $this->redirectToRoute('testResults', ['id' => $newId]);
+                return $this->redirectToRoute('testResults', ['id' => $switcher->getPrevious($id)]);
             }
 
             if($form->get('submit')->isClicked()){
-                // dump($session->get('answered'));
+
             }
             return $this->render('@App/Home/results.html.twig', [
                 'form' => $form->createView(),

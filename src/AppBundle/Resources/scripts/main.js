@@ -34,3 +34,17 @@ function sendAnswer(inputSelector, url, question) {
         });
     });
 }
+
+function sendAnswers(inputSelector, url, question) {
+    $(inputSelector).on('change', function () {
+        var answers = [];
+        var answer = $(inputSelector.checked).each(function () {
+            answers.push($(this).val());
+        });
+        $.ajax({
+            type: "POST",
+            url: url,
+            data: { 'question': question, 'answer': answers }
+        });
+    });
+}

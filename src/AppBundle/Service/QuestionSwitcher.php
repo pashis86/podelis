@@ -16,10 +16,13 @@ class QuestionSwitcher
 {
     private $questions;
 
+    private $session;
+
     /** @param Session $session */
     public function __construct($session)
     {
         $this->questions = [];
+        $this->session = $session;
         $questionGroups = $session->get('questionGroups');
 
         foreach ($questionGroups as $group){
@@ -50,6 +53,37 @@ class QuestionSwitcher
         }
         return false;
     }
+
+    public function addAnswer($id, $answer)
+    {
+        if($this->session->get('endsAt') >= new \DateTime()){
+            $answered = $this->session->get('answered');
+            $answered[$id] = $answer;
+            $this->session->set('answered', $answered);
+        }
+    }
+
+    public function submit($id, $answer)
+    {
+        if($this->session->get('endsAt') >= new \DateTime()){
+            $answered = $this->session->get('answered');
+            $answered[$id] = $answer;
+            $this->session->set('answered', $answered);
+            $this->session->set('isCorrect', []);
+            $this->session->set('endsAt', new \DateTime());
+        }
+    }
+
+    public function setTimeLimit($timePerQuestion)
+    {
+       if(preg_match('#[0-9]+#', $timePerQuestion, $time)){
+           $time = intval($time);
+           $time = $time * count($this->questions);
+          return preg_replace('#[0-9]+#', $time, $timePerQuestion);
+       }
+       throw new \Exception('Invalid argument %s', $timePerQuestion);
+    }
+
     /**
      * @return array
      */
