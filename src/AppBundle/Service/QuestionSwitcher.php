@@ -16,6 +16,8 @@ class QuestionSwitcher
 {
     private $questions;
 
+    private $questionGroups;
+
     private $session;
 
     /** @param Session $session */
@@ -23,9 +25,9 @@ class QuestionSwitcher
     {
         $this->questions = [];
         $this->session = $session;
-        $questionGroups = $session->get('questionGroups');
+        $this->questionGroups = $session->get('questionGroups');
 
-        foreach ($questionGroups as $group){
+        foreach ($this->questionGroups as $group){
             /** @var Question $question */
             foreach ($group as $question)
                 array_push($this->questions, $question->getId());
@@ -82,6 +84,19 @@ class QuestionSwitcher
           return preg_replace('#[0-9]+#', $time, $timePerQuestion);
        }
        throw new \Exception('Invalid argument %s', $timePerQuestion);
+    }
+
+    public function getCurrentIndex($currentQ)
+    {
+        foreach ($this->questionGroups as $group) {
+            /**@var Question $question */
+            foreach ($group as $key => $question){
+                if($question->getId() == $currentQ){
+                    return $key + 1;
+                }
+            }
+        }
+        return false;
     }
 
     /**

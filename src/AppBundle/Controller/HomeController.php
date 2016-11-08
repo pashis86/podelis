@@ -41,6 +41,7 @@ class HomeController extends Controller
             $session = new Session();
             $session->set('questionGroups', $questionGroups);
             $switcher = $this->get('app.question_switcher');
+
             $session->set('endsAt', new \DateTime($switcher->setTimeLimit('+1 minute')));
             $session->set('answered', []);
             return $this->redirectToRoute('question', ['id' => $questionGroups[0][0]->getId()]);
@@ -49,6 +50,24 @@ class HomeController extends Controller
         return $this->render('@App/Home/test-options.html.twig', [
             'form' => $form->createView(),
         ]);
+    }
+
+    /**
+     * @Route("/quick-test", name="quick_test")
+     */
+    public function quickTestAction(Request $request)
+    {
+        $qRepository = $this->getDoctrine()->getRepository('AppBundle:Question');
+        $questions = $qRepository->getRandomQuestions(10);
+
+        $session = new Session();
+        $session->set('questionGroups', $questions);
+
+        $switcher = $this->get('app.question_switcher');
+        $session->set('endsAt', new \DateTime($switcher->setTimeLimit('+1 minute')));
+        $session->set('answered', []);
+
+        return $this->redirectToRoute('question', ['id' => $questions[0][0]->getId()]);
     }
 
     /**
@@ -93,7 +112,8 @@ class HomeController extends Controller
 
             return $this->render('@App/Home/question.html.twig', [
                 'form' => $form->createView(),
-                'current' => $id
+                'current' => $question,
+                'index' => $switcher->getCurrentIndex($id)
             ]);
         }
         return $this->render('@App/Home/404.html.twig');
@@ -149,7 +169,8 @@ class HomeController extends Controller
             }
             return $this->render('@App/Home/results.html.twig', [
                 'form' => $form->createView(),
-                'currentQ' => $question
+                'current' => $question,
+                'index' => $switcher->getCurrentIndex($id)
             ]);
         }
         return $this->render('@App/Home/404.html.twig');

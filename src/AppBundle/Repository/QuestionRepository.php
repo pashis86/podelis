@@ -16,27 +16,35 @@ class QuestionRepository extends \Doctrine\ORM\EntityRepository
 
         foreach ($options['books'] as $book)
         {
-            $totalRows = $this->createQueryBuilder('q')
-                ->select('q.id')
-                ->where('q.book = :book')
-                ->setParameter('book', $book)
-                ->distinct(true)
-                ->getQuery()
-                ->getResult();
-
-            shuffle($totalRows);
-            array_splice($totalRows, $options['amount']);
-
             $results = $this->createQueryBuilder('q')
                 ->select('q')
-                ->where('q.id IN (:ids)')
-                ->setParameter('ids', $totalRows)
+                ->where('q.book = :book')
+                ->setParameter('book', $book)
+                ->addSelect('RAND() as HIDDEN rand')
+                ->orderBy('rand')
                 ->setMaxResults($options['amount'])
-                ->distinct(true)
+                ->distinct()
                 ->getQuery()
                 ->getResult();
             array_push($questions, $results);
         }
+        return $questions;
+    }
+
+    public function getRandomQuestions($limit)
+    {
+        $questions = [];
+
+        $results = $this->createQueryBuilder('q')
+            ->select('q')
+            ->addSelect('RAND() as HIDDEN rand')
+            ->orderBy('rand')
+            ->setMaxResults($limit)
+            ->distinct()
+            ->getQuery()
+            ->getResult();
+
+        array_push($questions, $results);
         return $questions;
     }
 }
