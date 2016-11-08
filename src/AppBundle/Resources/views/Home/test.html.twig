@@ -9,6 +9,7 @@
                      {{ loop.index }}{{ question.content|raw }}
                  </div>
                  <div>
+                     <hr>
                      {% for answer in question.answers %}
                          <label><input type="checkbox" title=""> {{ answer|raw }}</label><br>
                      {% endfor %}
