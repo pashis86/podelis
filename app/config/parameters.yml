@@ -1,0 +1,12 @@
+# This file is auto-generated during the composer install
+parameters:
+    database_host: stud.if.ktu.lt
+    database_port: null
+    database_name: eimmar
+    database_user: eimmar
+    database_password: ipaequ1eeGhaikee
+    mailer_transport: smtp
+    mailer_host: 127.0.0.1
+    mailer_user: null
+    mailer_password: null
+    secret: SuperSecretAcademyHashKeyDoNotTellAnyone
