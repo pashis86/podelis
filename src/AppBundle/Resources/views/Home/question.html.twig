@@ -9,7 +9,7 @@
         {% endfor %}
     <div id="clock"></div>
     {{ form_start(form) }}
-    {{ index ~ '.'}}{{ current.content|replace({'<?php' : '&#x3C;?php'})|raw }}
+    {{ index ~ '.'}}{{ current.content|raw }}
     {{ form_widget(form.answers) }}
     {{ form_widget(form.previous) }}
     {{ form_widget(form.next) }}
