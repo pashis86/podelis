@@ -11,8 +11,6 @@ $(document).ready(function() {
 
     $(".formCategories").hide();
 
-    $(".menu-on").hide();
-
     $(".registerForm").hide();
 
     $(".loginForm").hide();
