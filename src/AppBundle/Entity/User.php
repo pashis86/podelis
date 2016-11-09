@@ -399,6 +399,20 @@ class User implements UserInterface/*, \Serializable <-- del sito buna segmentat
         return $this;
     }
 
+    public function finishedTest($answers)
+    {
+        foreach ($answers as $answer)
+        {
+            if($answer == true){
+                $this->correct++;
+            }
+            else{
+                $this->incorrect++;
+            }
+        }
+        $this->testsTaken++;
+    }
+
 
     public function __construct()
     {

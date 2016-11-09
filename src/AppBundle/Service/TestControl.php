@@ -9,13 +9,14 @@
 namespace AppBundle\Service;
 
 
+use AppBundle\Entity\Answer;
 use AppBundle\Entity\Question;
 use AppBundle\Entity\User;
 use Doctrine\ORM\EntityManager;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorage;
 
-class QuestionSwitcher
+class TestControl
 {
     private $questions;
 
@@ -27,6 +28,8 @@ class QuestionSwitcher
 
     private $em;
 
+    private $answers;
+
     /** @param Session $session
      * @param EntityManager $em
      * @param TokenStorage $security*/
@@ -35,6 +38,7 @@ class QuestionSwitcher
         $this->questions = [];
         $this->session = $session;
         $this->security = $security;
+        $this->answers = $session->get('answered');
         $this->em = $em;
         $this->questionGroups = $session->get('questionGroups');
 
@@ -78,16 +82,17 @@ class QuestionSwitcher
 
     public function submit($id, $answer)
     {
-
         if($this->session->get('endsAt') >= new \Datetime()){
+
             $answered = $this->session->get('answered');
             $answered[$id] = $answer;
-            $this->session->set('answered', $answered);
-            $this->session->set('isCorrect', []);
-            $this->session->set('endsAt', new \DateTime());
-            /** @var User $user */
-            $user = $this->security->getToken()->getUser();
 
+            $this->session->set('answered', $answered);
+            $started = $this->session->get('started');
+            $this->session->set('isCorrect', []);
+            $this->session->set('timeSpent', date_diff(new \DateTime(), $started));
+            $this->session->set('endsAt', new \DateTime());
+            $this->checkAnswers();
         }
     }
 
@@ -114,6 +119,77 @@ class QuestionSwitcher
         return false;
     }
 
+    public function array_equal($a, $b) {
+        return (
+            is_array($a) && is_array($b) &&
+            count($a) == count($b) &&
+            array_diff($a, $b) === array_diff($b, $a)
+        );
+    }
+
+    public function checkAnswers()
+    {
+        if(count($this->session->get('isCorrect')) != count($this->questions)){
+            $started = $this->session->get('started');
+            $this->session->set('isCorrect', []);
+            $this->session->set('timeSpent', date_diff(new \DateTime(), $started));
+            $this->session->set('endsAt', new \DateTime());
+            foreach ($this->questions as $question){
+                $qAnswers= $this->em->getRepository('AppBundle:Answer')
+                    ->findBy(['question' => $question, 'correct' => true]);
+
+                $pickedAnswers = (array_key_exists($question, $this->answers) ? $this->answers[$question] : null);
+
+                if(!is_array($pickedAnswers)){
+                    $answer = $pickedAnswers;
+                    $pickedAnswers = [$answer];
+                }
+
+                $isCorrect = $this->session->get('isCorrect');
+
+                if($this->array_equal($qAnswers, $pickedAnswers)){
+                    $isCorrect[$question] = true;
+                    $this->session->set('isCorrect', $isCorrect);
+                } else {
+                    $isCorrect[$question] = false;
+                    $this->session->set('isCorrect', $isCorrect);
+                }
+            }
+            /** @var User $user */
+           if($user = $this->security->getToken()->getUser())
+           {
+               $user->finishedTest($this->session->get('isCorrect'));
+               $this->em->getRepository('AppBundle:User')
+                   ->addTime($this->session->get('timeSpent'), $user->getId());
+               $this->em->merge($user);
+               $this->em->flush();
+           }
+        }
+    }
+
+    /** @param Question $question */
+    public function prepareSelectedOptions($question, $answered, $id)
+    {
+        $checkedAnswers = (array_key_exists($id, $answered) ? $answered[$id]: null);
+
+        if(!is_array($checkedAnswers)){
+            $checkedAnswers = [$checkedAnswers];
+        }
+
+        if($checkedAnswers != null){
+            foreach ($checkedAnswers as $key => $answer) {
+                if($answer != null) {
+                    $checkedAnswers[$key] = $this->em->merge($answer);
+                }
+            }
+        }
+        if(!$question->getCheckboxAnswers()){
+            $checkedAnswers = $checkedAnswers[0];
+        }
+
+        return $checkedAnswers;
+    }
+
     /**
      * @return array
      */
@@ -124,11 +200,29 @@ class QuestionSwitcher
 
     /**
      * @param array $questions
-     * @return QuestionSwitcher
+     * @return TestControl
      */
-    public function setQuestions(array $questions): QuestionSwitcher
+    public function setQuestions(array $questions)
     {
         $this->questions = $questions;
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getQuestionGroups()
+    {
+        return $this->questionGroups;
+    }
+
+    /**
+     * @param mixed $questionGroups
+     * @return TestControl
+     */
+    public function setQuestionGroups($questionGroups)
+    {
+        $this->questionGroups = $questionGroups;
         return $this;
     }
 

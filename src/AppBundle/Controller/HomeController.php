@@ -40,9 +40,10 @@ class HomeController extends Controller
 
             $session = new Session();
             $session->set('questionGroups', $questionGroups);
-            $switcher = $this->get('app.question_switcher');
+            $testControl = $this->get('app.test_control');
 
-            $session->set('endsAt', new \DateTime($switcher->setTimeLimit('+1 minute')));
+            $session->set('endsAt', new \DateTime($testControl->setTimeLimit('+1 minute')));
+            $session->set('started', new \DateTime());
             $session->set('answered', []);
             return $this->redirectToRoute('question', ['id' => $questionGroups[0][0]->getId()]);
         }
@@ -63,8 +64,9 @@ class HomeController extends Controller
         $session = new Session();
         $session->set('questionGroups', $questions);
 
-        $switcher = $this->get('app.question_switcher');
-        $session->set('endsAt', new \DateTime($switcher->setTimeLimit('+1 minute')));
+        $testControl = $this->get('app.test_control');
+        $session->set('started', new \DateTime());
+        $session->set('endsAt', new \DateTime($testControl->setTimeLimit('+1 minute')));
         $session->set('answered', []);
 
         return $this->redirectToRoute('question', ['id' => $questions[0][0]->getId()]);
@@ -78,42 +80,40 @@ class HomeController extends Controller
     {
 
         $repository = $this->getDoctrine()->getRepository('AppBundle:Question');
-        $switcher = $this->get('app.question_switcher');
+        $testControl = $this->get('app.test_control');
         $question = $repository->findOneBy(['id' => $id]);
 
         $session = $this->get('session');
-        $questionGroups = $session->get('questionGroups');
 
-        if($question && $switcher->questionInTest($id))
+        if($question && $testControl->questionInTest($id))
         {
             if($session->get('endsAt') <= new \DateTime('now')){
-                return $this->redirectToRoute('testResults', ['id' => $questionGroups[0][0]->getId()]);
+                return $this->redirectToRoute('testResults', ['id' => $testControl->getQuestionGroups()[0][0]->getId()]);
             }
             $form = $this->createForm(TestQuestionType::class,
                 ['question' => $question, 'answered' => $session->get('answered')]);
             $form->handleRequest($request);
 
             if($form->get('next')->isClicked()){
-                $switcher->addAnswer($id, $form['answers']->getData());
-                return $this->redirectToRoute('question', ['id' => $switcher->getNext($id)]);
+                $testControl->addAnswer($id, $form['answers']->getData());
+                return $this->redirectToRoute('question', ['id' => $testControl->getNext($id)]);
             }
 
             if($form->get('previous')->isClicked()){
-                $switcher->addAnswer($id, $form['answers']->getData());
-                return $this->redirectToRoute('question', ['id' => $switcher->getPrevious($id)]);
+                $testControl->addAnswer($id, $form['answers']->getData());
+                return $this->redirectToRoute('question', ['id' => $testControl->getPrevious($id)]);
             }
 
             if($form->get('submit')->isClicked()){
-                $switcher->submit($id, $form['answers']->getData());
-                $this->get('app.question_checker')->checkAnswers();
+                $testControl->submit($id, $form['answers']->getData());
 
-                return $this->redirectToRoute('testResults', ['id' => $questionGroups[0][0]->getId()]);
+                return $this->redirectToRoute('testResults', ['id' => $testControl->getQuestionGroups()[0][0]->getId()]);
             }
 
             return $this->render('@App/Home/question.html.twig', [
                 'form' => $form->createView(),
                 'current' => $question,
-                'index' => $switcher->getCurrentIndex($id)
+                'index' => $testControl->getCurrentIndex($id)
             ]);
         }
         return $this->render('@App/Home/404.html.twig');
@@ -145,22 +145,24 @@ class HomeController extends Controller
     public function testResultsAction(Request $request, $id)
     {
         $session = $this->get('session');
-        $switcher = $this->get('app.question_switcher');
+        $testControl = $this->get('app.test_control');
+        $testControl->checkAnswers();
+
         $repository = $this->getDoctrine()->getRepository('AppBundle:Question');
         $question = $repository->findOneBy(['id' => $id]);
 
-        if($question && $switcher->questionInTest($id))
+        if($question && $testControl->questionInTest($id))
         {
             $form = $this->createForm(TestQuestionType::class,
                 ['question' => $question, 'answered' => $session->get('answered')]);
             $form->handleRequest($request);
 
             if($form->get('next')->isClicked()){
-                return $this->redirectToRoute('testResults', ['id' => $switcher->getNext($id)]);
+                return $this->redirectToRoute('testResults', ['id' => $testControl->getNext($id)]);
             }
 
             if($form->get('previous')->isClicked()){
-                return $this->redirectToRoute('testResults', ['id' => $switcher->getPrevious($id)]);
+                return $this->redirectToRoute('testResults', ['id' => $testControl->getPrevious($id)]);
             }
 
             if($form->get('submit')->isClicked()){
@@ -169,7 +171,7 @@ class HomeController extends Controller
             return $this->render('@App/Home/results.html.twig', [
                 'form' => $form->createView(),
                 'current' => $question,
-                'index' => $switcher->getCurrentIndex($id)
+                'index' => $testControl->getCurrentIndex($id)
             ]);
         }
         return $this->render('@App/Home/404.html.twig');

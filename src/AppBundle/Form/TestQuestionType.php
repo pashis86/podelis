@@ -4,6 +4,8 @@ namespace AppBundle\Form;
 
 use AppBundle\Entity\Question;
 use AppBundle\Service\QuestionChecker;
+use AppBundle\Service\QuestionSwitcher;
+use AppBundle\Service\TestControl;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
@@ -12,12 +14,12 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class TestQuestionType extends AbstractType
 {
-    private $questionChecker;
+    private $testControl;
 
-    /** @var QuestionChecker $questionChecker */
-    public function __construct($questionChecker)
+    /** @var TestControl $testControl */
+    public function __construct($testControl)
     {
-        $this->questionChecker = $questionChecker;
+        $this->testControl = $testControl;
     }
 
     public function buildForm(FormBuilderInterface $builder, array $options)
@@ -26,7 +28,7 @@ class TestQuestionType extends AbstractType
         $question = $options['data']['question'];
         $answered = $options['data']['answered'];
         $id = $question->getId();
-        $checkedAnswers = $this->questionChecker->prepareSelectedOptions($question, $answered, $id);
+        $checkedAnswers = $this->testControl->prepareSelectedOptions($question, $answered, $id);
 
         $builder->add('answers', EntityType::class, [
             'class' => 'AppBundle\Entity\Answer',

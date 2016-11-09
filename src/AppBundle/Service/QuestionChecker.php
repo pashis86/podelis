@@ -41,7 +41,7 @@ class QuestionChecker
         }
     }
 
-    function array_equal($a, $b) {
+    public function array_equal($a, $b) {
         return (
             is_array($a) && is_array($b) &&
             count($a) == count($b) &&

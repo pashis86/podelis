@@ -1,6 +1,7 @@
 <?php
 
 namespace AppBundle\Repository;
+use Doctrine\ORM\Query\ResultSetMapping;
 
 /**
  * UserRepository
@@ -10,4 +11,15 @@ namespace AppBundle\Repository;
  */
 class UserRepository extends \Doctrine\ORM\EntityRepository
 {
+    public function addTime($time, $uId)
+    {
+        $rsm = new ResultSetMapping();
+
+        $query = $this->_em->createNativeQuery(
+            "UPDATE users 
+            SET time_spent = DATE_ADD(time_spent, ?) 
+            WHERE id = ?", $rsm);
+        $query->setParameters([1 => $time->format('%days'), 2 => $uId]);
+        $query->getResult();
+    }
 }
