@@ -10,7 +10,9 @@ namespace AppBundle\Service;
 
 
 use AppBundle\Entity\Question;
+use Doctrine\ORM\EntityManager;
 use Symfony\Component\HttpFoundation\Session\Session;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorage;
 
 class QuestionSwitcher
 {
@@ -20,11 +22,19 @@ class QuestionSwitcher
 
     private $session;
 
-    /** @param Session $session */
-    public function __construct($session)
+    private $security;
+
+    private $em;
+
+    /** @param Session $session
+     * @param EntityManager $em
+     * @param TokenStorage $security*/
+    public function __construct($session, $security, $em)
     {
         $this->questions = [];
         $this->session = $session;
+        $this->security = $security;
+        $this->em = $em;
         $this->questionGroups = $session->get('questionGroups');
 
         foreach ($this->questionGroups as $group){
@@ -73,6 +83,8 @@ class QuestionSwitcher
             $this->session->set('answered', $answered);
             $this->session->set('isCorrect', []);
             $this->session->set('endsAt', new \DateTime());
+
+            $user = $this->security->getToken()->getUser();
         }
     }
 

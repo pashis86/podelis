@@ -4,10 +4,10 @@
     {% for group in app.session.get('questionGroups') %}
         <b>{{ loop.index }}.{{ group[0].book.title }}</b><br>
             {% for question in group %}
-                {% if app.session.get('isCorrect')[question.id] is not defined or not app.session.get('isCorrect')[question.id] %}
-                <a style="color: #C82829" title="{{ question.title }}" href="{{ path('testResults', {'id': question.id }) }}">{{ loop.index }}</a>
+                {% if app.session.get('isCorrect')[question.id] %}
+                    <a style="color: #66dd66" title="{{ question.title }}" href="{{ path('testResults', {'id': question.id }) }}">{{ loop.index }}</a>
                 {% else %}
-                <a style="color: #66dd66" title="{{ question.title }}" href="{{ path('testResults', {'id': question.id }) }}">{{ loop.index }}</a>
+                    <a style="color: #C82829" title="{{ question.title }}" href="{{ path('testResults', {'id': question.id }) }}">{{ loop.index }}</a>
                 {% endif %}
             {% endfor %}<br>
         {% endfor %}
@@ -21,12 +21,12 @@
     {% if app.session.get('isCorrect')[current.id] is not defined or not app.session.get('isCorrect')[current.id] %}
         <p>Your choice is incorrect.</p>
         <div class="visible">
-            {{ current.explanation|replace({'<?php' : '&#x3C;?php'})|raw }}
+            {{ current.explanation|raw }}
         </div>
     {% else %}
         <p>Your choice is correct!</p>
         <div class="hidden">
-            {{ current.explanation|replace({'<?php' : '&#x3C;?php'})|raw }}
+            {{ current.explanation|raw }}
         </div>
     {% endif %}
 {% endblock %}

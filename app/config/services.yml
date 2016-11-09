@@ -14,7 +14,7 @@ services:
 
     app.question_switcher:
         class: AppBundle\Service\QuestionSwitcher
-        arguments: ["@session"]
+        arguments: ["@session", "@security.token_storage", "@doctrine.orm.entity_manager"]
 
     app.question_checker:
         class: AppBundle\Service\QuestionChecker
