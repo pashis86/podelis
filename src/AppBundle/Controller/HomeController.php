@@ -145,7 +145,6 @@ class HomeController extends Controller
     public function testResultsAction(Request $request, $id)
     {
         $session = $this->get('session');
-
         $switcher = $this->get('app.question_switcher');
         $repository = $this->getDoctrine()->getRepository('AppBundle:Question');
         $question = $repository->findOneBy(['id' => $id]);

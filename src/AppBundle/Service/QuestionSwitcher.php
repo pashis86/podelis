@@ -10,6 +10,7 @@ namespace AppBundle\Service;
 
 
 use AppBundle\Entity\Question;
+use AppBundle\Entity\User;
 use Doctrine\ORM\EntityManager;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorage;
@@ -77,14 +78,16 @@ class QuestionSwitcher
 
     public function submit($id, $answer)
     {
-        if($this->session->get('endsAt') >= new \DateTime()){
+
+        if($this->session->get('endsAt') >= new \Datetime()){
             $answered = $this->session->get('answered');
             $answered[$id] = $answer;
             $this->session->set('answered', $answered);
             $this->session->set('isCorrect', []);
             $this->session->set('endsAt', new \DateTime());
-
+            /** @var User $user */
             $user = $this->security->getToken()->getUser();
+
         }
     }
 

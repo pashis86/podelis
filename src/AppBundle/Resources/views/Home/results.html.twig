@@ -4,7 +4,7 @@
     {% for group in app.session.get('questionGroups') %}
         <b>{{ loop.index }}.{{ group[0].book.title }}</b><br>
             {% for question in group %}
-                {% if app.session.get('isCorrect')[question.id] %}
+                {% if app.session.get('isCorrect')[question.id]  %}
                     <a style="color: #66dd66" title="{{ question.title }}" href="{{ path('testResults', {'id': question.id }) }}">{{ loop.index }}</a>
                 {% else %}
                     <a style="color: #C82829" title="{{ question.title }}" href="{{ path('testResults', {'id': question.id }) }}">{{ loop.index }}</a>
