@@ -13,7 +13,7 @@
         {% endfor %}
     <div id="clock"></div>
     {{ form_start(form) }}
-    {{ index ~ '.'}}{{ current.content|replace({'<?php' : '&#x3C;?php'})|raw }}
+    {{ index ~ '.'}}{{ current.content|raw }}
 
     {% for answer in form.answers %}
         {{ loop.index }}{{ form_widget(answer) }}

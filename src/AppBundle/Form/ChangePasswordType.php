@@ -25,7 +25,7 @@ class ChangePasswordType extends AbstractType
                 'constraints' => [
                     new NotBlank(['message' => 'Iveskite slaptazodi']),
                     new Length(['min' => 6,
-                                'max' => 4096,
+                                'max' => 32,
                                 'minMessage' => 'Slaptazodi turi sudaryti bent 6 symboliai',
                                 'maxMessage' => 'Slaptazodis per ilgas'])
                 ]
