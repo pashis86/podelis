@@ -17,7 +17,7 @@ class HomeController extends Controller
     /**
      * @Route("/", name="homepage")
      */
-    public function indexAction()
+    public function indexAction(Request $request)
     {
         return $this->render('AppBundle:Home:index.html.twig', []);
     }
