@@ -5,6 +5,7 @@ namespace AppBundle\Controller;
 use AppBundle\Entity\Question;
 use AppBundle\Form\QuestionType;
 use AppBundle\Form\TestQuestionType;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\Request;
@@ -23,6 +24,7 @@ class HomeController extends Controller
 
     /**
      * @Route("/test-options", name="test_options")
+     * @Security("has_role('ROLE_USER')")
      */
     public function testOptionsAction(Request $request)
     {
@@ -39,6 +41,7 @@ class HomeController extends Controller
             ]);
 
             $session = new Session();
+            $session->clear();
             $session->set('questionGroups', $questionGroups);
             $testControl = $this->get('app.test_control');
 
@@ -60,8 +63,9 @@ class HomeController extends Controller
     {
         $qRepository = $this->getDoctrine()->getRepository('AppBundle:Question');
         $questions = $qRepository->getRandomQuestions(10);
-
         $session = new Session();
+        $session->clear();
+
         $session->set('questionGroups', $questions);
 
         $testControl = $this->get('app.test_control');

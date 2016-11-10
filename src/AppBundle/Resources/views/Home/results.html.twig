@@ -12,8 +12,14 @@
             {% endfor %}<br>
         {% endfor %}
     {{ form_start(form) }}
-    {{ index ~ '.'}}{{ current.content|replace({'<?php' : '&#x3C;?php'})|raw }}
-    {{ form_widget(form.answers) }}
+    {{ index ~ '.'}}{{ current.content|raw }}
+
+    {% for answer in form.answers %}
+        {{ loop.index }}{{ form_widget(answer) }}
+        {{ form_label(answer)|replace({"&lt;" : "<", "&gt;" : ">"})|raw }}
+        <br>
+    {% endfor %}
+
     {{ form_widget(form.previous) }}
     {{ form_widget(form.next) }}
     {{ form_end(form) }}

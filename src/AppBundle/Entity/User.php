@@ -399,24 +399,8 @@ class User implements UserInterface/*, \Serializable <-- del sito buna segmentat
         return $this;
     }
 
-    public function finishedTest($answers)
-    {
-        foreach ($answers as $answer)
-        {
-            if($answer == true){
-                $this->correct++;
-            }
-            else{
-                $this->incorrect++;
-            }
-        }
-        $this->testsTaken++;
-    }
-
-
     public function __construct()
     {
-        // temporary
         $this->active = true;
         $this->createdAt = new \DateTime('now');
         $this->updatedAt = new \DateTime('now');
@@ -424,6 +408,7 @@ class User implements UserInterface/*, \Serializable <-- del sito buna segmentat
         $this->correct = 0;
         $this->incorrect = 0;
         $this->testTaken = 0;
+        $this->timeSpent = new \DateTime('1000-01-01 00:00:00');
     }
     
     /**

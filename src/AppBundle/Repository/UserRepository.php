@@ -1,7 +1,6 @@
 <?php
 
 namespace AppBundle\Repository;
-use Doctrine\ORM\Query\ResultSetMapping;
 
 /**
  * UserRepository
@@ -11,15 +10,35 @@ use Doctrine\ORM\Query\ResultSetMapping;
  */
 class UserRepository extends \Doctrine\ORM\EntityRepository
 {
-    public function addTime($time, $uId)
+    /** @param  \DateInterval $time */
+    public function addTime($time, $answers, $uId)
     {
-        $rsm = new ResultSetMapping();
+        $seconds = $time->format('%Y%m%d%H%i%s');
+        $correct = $incorrect = 0;
+        die($seconds);
+        foreach ($answers as $answer)
+        {
+            if($answer == true){
+                $correct++;
+            }
+            else{
+                $incorrect++;
+            }
+        }
 
-        $query = $this->_em->createNativeQuery(
-            "UPDATE users 
-            SET time_spent = DATE_ADD(time_spent, ?) 
-            WHERE id = ?", $rsm);
-        $query->setParameters([1 => $time->format('%days'), 2 => $uId]);
-        $query->getResult();
+        $connection = $this->_em->getConnection();
+        $sql = "UPDATE users SET 
+                time_spent = DATE_ADD(time_spent, INTERVAL :seconds SECOND),
+                 correct = correct + :correct,
+                  incorrect = incorrect + :incorrect,
+                   tests_taken = tests_taken + 1
+                   WHERE id = :id";
+
+        $stmt = $connection->prepare($sql);
+        $stmt->bindValue('seconds', $seconds);
+        $stmt->bindValue('id', $uId);
+        $stmt->bindValue('correct', $correct);
+        $stmt->bindValue('incorrect', $incorrect);
+        $stmt->execute();
     }
 }

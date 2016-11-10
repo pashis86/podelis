@@ -46,7 +46,6 @@ class TestQuestionType extends AbstractType
 
     public function configureOptions(OptionsResolver $resolver)
     {
-     //   $resolver->setDefaults(['data_class' => 'AppBundle\Entity\Question']);
     }
 
     public function getName()
