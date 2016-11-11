@@ -102,6 +102,35 @@ class User implements UserInterface/*, \Serializable <-- del sito buna segmentat
     private $facebookId;
 
     /**
+     * @var integer
+     *
+     * @ORM\Column(name="tests_taken", type="integer", nullable=true)
+     */
+    private $testsTaken;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="correct", type="integer", nullable=true)
+     */
+    private $correct;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="incorrect", type="integer", nullable=true)
+     */
+    private $incorrect;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="time_spent", type="datetime", nullable=true)
+     */
+    private $timeSpent;
+
+
+    /**
      * @return int
      */
     public function getId()
@@ -298,13 +327,88 @@ class User implements UserInterface/*, \Serializable <-- del sito buna segmentat
         return $this;
     }
 
+    /**
+     * @return int
+     */
+    public function getTestsTaken(): int
+    {
+        return $this->testsTaken;
+    }
+
+    /**
+     * @param int $testsTaken
+     * @return User
+     */
+    public function setTestsTaken(int $testsTaken): User
+    {
+        $this->testsTaken = $testsTaken;
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getCorrect(): int
+    {
+        return $this->correct;
+    }
+
+    /**
+     * @param int $correct
+     * @return User
+     */
+    public function setCorrect(int $correct): User
+    {
+        $this->correct = $correct;
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getIncorrect(): int
+    {
+        return $this->incorrect;
+    }
+
+    /**
+     * @param int $incorrect
+     * @return User
+     */
+    public function setIncorrect(int $incorrect): User
+    {
+        $this->incorrect = $incorrect;
+        return $this;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getTimeSpent(): \DateTime
+    {
+        return $this->timeSpent;
+    }
+
+    /**
+     * @param \DateTime $timeSpent
+     * @return User
+     */
+    public function setTimeSpent(\DateTime $timeSpent): User
+    {
+        $this->timeSpent = $timeSpent;
+        return $this;
+    }
+
     public function __construct()
     {
-        // temporary
         $this->active = true;
         $this->createdAt = new \DateTime('now');
         $this->updatedAt = new \DateTime('now');
         $this->level = 1;
+        $this->correct = 0;
+        $this->incorrect = 0;
+        $this->testTaken = 0;
+        $this->timeSpent = new \DateTime('1000-01-01 00:00:00');
     }
     
     /**

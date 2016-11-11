@@ -4,13 +4,23 @@
     {% for group in app.session.get('questionGroups') %}
         <b>{{ loop.index }}.{{ group[0].book.title }}</b><br>
             {% for question in group %}
-                <a title="{{ question.title }}" href="{{ path('question', {'id': question.id }) }}">{{ loop.index }}</a>
+                {% if question.id == current.id %}
+                    <b><a title="{{ question.title }}" href="{{ path('question', {'id': question.id }) }}">{{ loop.index }}</a></b>
+                {% else %}
+                    <a title="{{ question.title }}" href="{{ path('question', {'id': question.id }) }}">{{ loop.index }}</a>
+                {% endif %}
             {% endfor %}<br>
         {% endfor %}
     <div id="clock"></div>
     {{ form_start(form) }}
-    {{ index ~ '.'}}{{ current.content|replace({'<?php' : '&#x3C;?php'})|raw }}
-    {{ form_widget(form.answers) }}
+    {{ index ~ '.'}}{{ current.content|raw }}
+
+    {% for answer in form.answers %}
+        {{ loop.index }}{{ form_widget(answer) }}
+        {{ form_label(answer)|replace({"&lt;" : "<", "&gt;" : ">"})|raw }}
+        <br>
+    {% endfor %}
+
     {{ form_widget(form.previous) }}
     {{ form_widget(form.next) }}
     {{ form_end(form) }}

@@ -4,16 +4,22 @@
     {% for group in app.session.get('questionGroups') %}
         <b>{{ loop.index }}.{{ group[0].book.title }}</b><br>
             {% for question in group %}
-                {% if app.session.get('isCorrect')[question.id] is not defined or not app.session.get('isCorrect')[question.id] %}
-                <a style="color: #C82829" title="{{ question.title }}" href="{{ path('testResults', {'id': question.id }) }}">{{ loop.index }}</a>
+                {% if app.session.get('isCorrect')[question.id]  %}
+                    <a style="color: #66dd66" title="{{ question.title }}" href="{{ path('testResults', {'id': question.id }) }}">{{ loop.index }}</a>
                 {% else %}
-                <a style="color: #66dd66" title="{{ question.title }}" href="{{ path('testResults', {'id': question.id }) }}">{{ loop.index }}</a>
+                    <a style="color: #C82829" title="{{ question.title }}" href="{{ path('testResults', {'id': question.id }) }}">{{ loop.index }}</a>
                 {% endif %}
             {% endfor %}<br>
         {% endfor %}
     {{ form_start(form) }}
-    {{ index ~ '.'}}{{ current.content|replace({'<?php' : '&#x3C;?php'})|raw }}
-    {{ form_widget(form.answers) }}
+    {{ index ~ '.'}}{{ current.content|raw }}
+
+    {% for answer in form.answers %}
+        {{ loop.index }}{{ form_widget(answer) }}
+        {{ form_label(answer)|replace({"&lt;" : "<", "&gt;" : ">"})|raw }}
+        <br>
+    {% endfor %}
+
     {{ form_widget(form.previous) }}
     {{ form_widget(form.next) }}
     {{ form_end(form) }}
@@ -21,12 +27,12 @@
     {% if app.session.get('isCorrect')[current.id] is not defined or not app.session.get('isCorrect')[current.id] %}
         <p>Your choice is incorrect.</p>
         <div class="visible">
-            {{ current.explanation|replace({'<?php' : '&#x3C;?php'})|raw }}
+            {{ current.explanation|raw }}
         </div>
     {% else %}
         <p>Your choice is correct!</p>
         <div class="hidden">
-            {{ current.explanation|replace({'<?php' : '&#x3C;?php'})|raw }}
+            {{ current.explanation|raw }}
         </div>
     {% endif %}
 {% endblock %}

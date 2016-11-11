@@ -41,7 +41,7 @@ class QuestionChecker
         }
     }
 
-    function array_equal($a, $b) {
+    public function array_equal($a, $b) {
         return (
             is_array($a) && is_array($b) &&
             count($a) == count($b) &&
@@ -51,36 +51,38 @@ class QuestionChecker
 
     public function checkAnswers()
     {
-        /** @var Question $question */
-        foreach ($this->questions as $question){
-            $qId = $question->getId();
+        if(count($this->session->get('isCorrect')) != count($this->questions)){
+            /** @var Question $question */
+            foreach ($this->questions as $question){
+                $qId = $question->getId();
 
-            $qAnswers= $this->em->getRepository('AppBundle:Answer')
-                ->findBy(['question' => $qId]);
-            //$qAnswers = $question->getAnswers(); grazina PersistentCollection ir nera jokiu atsakymu
+                $qAnswers= $this->em->getRepository('AppBundle:Answer')
+                    ->findBy(['question' => $qId]);
+                //$qAnswers = $question->getAnswers(); grazina PersistentCollection ir nera jokiu atsakymu
 
-            /** @var Answer $answer */
-            foreach ($qAnswers as $key => $answer){
-                if(!$answer->getCorrect()){
-                    unset($qAnswers[$key]);
+                /** @var Answer $answer */
+                foreach ($qAnswers as $key => $answer){
+                    if(!$answer->getCorrect()){
+                        unset($qAnswers[$key]);
+                    }
                 }
-            }
 
-            $pickedAnswers = (array_key_exists($qId, $this->answers) ? $this->answers[$qId] : null);
+                $pickedAnswers = (array_key_exists($qId, $this->answers) ? $this->answers[$qId] : null);
 
-            if(!is_array($pickedAnswers)){
-                $answer = $pickedAnswers;
-                $pickedAnswers = [$answer];
-            }
+                if(!is_array($pickedAnswers)){
+                    $answer = $pickedAnswers;
+                    $pickedAnswers = [$answer];
+                }
 
-            $isCorrect = $this->session->get('isCorrect');
+                $isCorrect = $this->session->get('isCorrect');
 
-            if($this->array_equal($qAnswers, $pickedAnswers)){
-                $isCorrect[$qId] = true;
-                $this->session->set('isCorrect', $isCorrect);
-            } else {
-                $isCorrect[$qId] = false;
-                $this->session->set('isCorrect', $isCorrect);
+                if($this->array_equal($qAnswers, $pickedAnswers)){
+                    $isCorrect[$qId] = true;
+                    $this->session->set('isCorrect', $isCorrect);
+                } else {
+                    $isCorrect[$qId] = false;
+                    $this->session->set('isCorrect', $isCorrect);
+                }
             }
         }
     }

@@ -48,3 +48,9 @@ function sendAnswers(inputSelector, url, question) {
         });
     });
 }
+
+$("#clock").countdown('{{ app.session.get('endsAt')|date('Y/m/d/H:i:s') }}', function(event) {
+    $(this).text(
+        event.strftime('%H:%M:%S')
+    );
+});

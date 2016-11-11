@@ -12,16 +12,12 @@ services:
         class: AppBundle\Service\FacebookAuthenticator
         arguments: ["@oauth2.registry", "@doctrine.orm.entity_manager", "@router"]
 
-    app.question_switcher:
-        class: AppBundle\Service\QuestionSwitcher
-        arguments: ["@session"]
-
-    app.question_checker:
-        class: AppBundle\Service\QuestionChecker
-        arguments: ["@session", "@doctrine.orm.entity_manager"]
+    app.test_control:
+        class: AppBundle\Service\TestControl
+        arguments: ["@session", "@security.token_storage", "@doctrine.orm.entity_manager"]
 
     app.test_question:
         class: AppBundle\Form\TestQuestionType
-        arguments: ["@app.question_checker"]
+        arguments: ["@app.test_control"]
         tags:
             - { name: form.type }
