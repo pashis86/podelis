@@ -13,14 +13,15 @@ class UserRepository extends \Doctrine\ORM\EntityRepository
     /** @param  \DateInterval $time */
     public function addTime($time, $answers, $uId)
     {
-        $seconds = $time->format('%Y%m%d%H%i%s');
+        $seconds = $time->s + $time->i * 60 + $time->h * 3600;
         $correct = $incorrect = 0;
-        die($seconds);
+
         foreach ($answers as $answer)
         {
             if($answer == true){
                 $correct++;
             }
+
             else{
                 $incorrect++;
             }

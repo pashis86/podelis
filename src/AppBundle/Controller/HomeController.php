@@ -43,6 +43,7 @@ class HomeController extends Controller
             $session = new Session();
             $session->clear();
             $session->set('questionGroups', $questionGroups);
+            $session->set('trackResults', true);
             $testControl = $this->get('app.test_control');
 
             $session->set('endsAt', new \DateTime($testControl->setTimeLimit('+1 minute')));
@@ -69,6 +70,7 @@ class HomeController extends Controller
         $session->set('questionGroups', $questions);
 
         $testControl = $this->get('app.test_control');
+        $session->set('trackResults', false);
         $session->set('started', new \DateTime());
         $session->set('endsAt', new \DateTime($testControl->setTimeLimit('+1 minute')));
         $session->set('answered', []);
