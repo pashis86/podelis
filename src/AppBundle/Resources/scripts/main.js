@@ -24,33 +24,4 @@ timedCounter(75, 5, function(value){
     $('.user-count').html(value);
 });
 
-function sendAnswer(inputSelector, url, question) {
-    $(inputSelector).on('change', function () {
-        var answer = $(inputSelector.checked).val();
-        $.ajax({
-            type: "POST",
-            url: url,
-            data: { 'question': question, 'answer': answer }
-        });
-    });
-}
 
-function sendAnswers(inputSelector, url, question) {
-    $(inputSelector).on('change', function () {
-        var answers = [];
-        var answer = $(inputSelector.checked).each(function () {
-            answers.push($(this).val());
-        });
-        $.ajax({
-            type: "POST",
-            url: url,
-            data: { 'question': question, 'answer': answers }
-        });
-    });
-}
-
-$("#clock").countdown('{{ app.session.get('endsAt')|date('Y/m/d/H:i:s') }}', function(event) {
-    $(this).text(
-        event.strftime('%H:%M:%S')
-    );
-});
