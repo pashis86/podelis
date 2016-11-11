@@ -102,6 +102,13 @@ class User implements UserInterface/*, \Serializable <-- del sito buna segmentat
     private $facebookId;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="token", type="string", length=255, nullable=true)
+     */
+    private $token;
+
+    /**
      * @var integer
      *
      * @ORM\Column(name="tests_taken", type="integer", nullable=true)
@@ -309,6 +316,24 @@ class User implements UserInterface/*, \Serializable <-- del sito buna segmentat
         return $this;
     }
 
+
+    public function getToken()
+    {
+        return $this->token;
+    }
+
+    /**
+     * @param string $token
+     * @return User
+     */
+    public function setToken(string $token = null)
+    {
+        $this->token = $token;
+        return $this;
+    }
+
+
+
     /**
      * @return string
      */
@@ -401,13 +426,13 @@ class User implements UserInterface/*, \Serializable <-- del sito buna segmentat
 
     public function __construct()
     {
-        $this->active = true;
+        $this->active = false;
         $this->createdAt = new \DateTime('now');
         $this->updatedAt = new \DateTime('now');
         $this->level = 1;
         $this->correct = 0;
         $this->incorrect = 0;
-        $this->testTaken = 0;
+        $this->testsTaken = 0;
         $this->timeSpent = new \DateTime('1000-01-01 00:00:00');
     }
     

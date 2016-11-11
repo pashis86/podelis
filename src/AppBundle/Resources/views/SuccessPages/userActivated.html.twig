@@ -1,0 +1,8 @@
+{% extends "::base.html.twig" %}
+
+{% block title %}AppBundle:SecurityController:login{% endblock %}
+
+{% block body %}
+    <h4>Your account has been successfully activated. You can now <a href="{{ path('login') }}">log in.</a></h4>
+    <p><a href="{{ path('resendActivation') }}">Didn't received an activation message? Try re-sending another one.</a></p>
+{% endblock %}

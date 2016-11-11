@@ -1,6 +1,7 @@
 <?php
 
 namespace AppBundle\Repository;
+use AppBundle\Entity\User;
 
 /**
  * UserRepository
@@ -41,5 +42,22 @@ class UserRepository extends \Doctrine\ORM\EntityRepository
         $stmt->bindValue('correct', $correct);
         $stmt->bindValue('incorrect', $incorrect);
         $stmt->execute();
+    }
+
+    /** @param User $user */
+    public function activateUser($user)
+    {
+        $user->setToken(null)->setActive(true);
+
+        $this->_em->persist($user);
+        $this->_em->flush();
+    }
+
+    /** @param User $user */
+    public function resetPassword($user, $newPass)
+    {
+        $user->setPassword($newPass);
+        $this->_em->persist($user);
+        $this->_em->flush();
     }
 }
