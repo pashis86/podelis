@@ -332,8 +332,6 @@ class User implements UserInterface/*, \Serializable <-- del sito buna segmentat
         return $this;
     }
 
-
-
     /**
      * @return string
      */
