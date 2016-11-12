@@ -11,8 +11,9 @@
 <div class="container page_content_offset">
     <div class="col-md-12">
         <div class="page-header">
-            UZSIREGISTRAVAI, {{ name }}
+            You've successfully registered, {{ name }}!.
         </div>
+        <h3>You can now activate your account by <a href="{{ path('userActivation', {'token': token}) }}">clicking this link.</a></h3>
     </div>
 
 </div><!-- /.container -->

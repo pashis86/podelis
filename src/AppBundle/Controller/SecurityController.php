@@ -69,7 +69,7 @@ class SecurityController extends Controller
 
                 $this->get('app.send_email')->registrationEmail($user);
 
-                return $this->redirectToRoute('homepage');
+                return new Response($this->renderView('@App/SuccessPages/regComplete.html.twig'));
             }
 
             return $this->render(
@@ -216,12 +216,18 @@ class SecurityController extends Controller
 
         if($form->isSubmitted() && $form->isValid()){
             $repository = $this->getDoctrine()->getRepository('AppBundle:User');
+            /** @var User $user */
             $user = $repository->findOneBy(['username' => $form['username']->getData(),
             'email' => $form['email']->getData()]);
 
             if($user){
-                $this->get('app.send_email')->registrationEmail($user);
-                return $this->render('@App/SuccessPages/activationResent.html.twig');
+                if(!$user->isActive()){
+                    $this->get('app.send_email')->registrationEmail($user);
+                    return $this->render('@App/SuccessPages/activationResent.html.twig');
+                }
+                else{
+                    $this->addFlash('error', 'This account is already activated!');
+                }
             }
             else{
                 return $this->render('@App/Home/404.html.twig');
@@ -246,7 +252,7 @@ class SecurityController extends Controller
      */
     public function connectCheckAction(Request $request)
     {
-        return $this->redirectToRoute('homepage');
+        return $this->redirectToRoute('@App/Home/index.html.twig');
     }
 
 }

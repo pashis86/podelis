@@ -27,7 +27,9 @@ class EmailSender
             ->setTo($user->getEmail())
             ->setBody(
                 $this->templating->render('@App/Emails/registerEmail.html.twig',
-                    ['name' => $user->getName(), 'text/html']));
+                    ['name' => $user->getName(),
+                        'token' => $user->getToken(),
+                        'text/html']));
         /*
          * If you also want to include a plaintext version of the message
         ->addPart(
