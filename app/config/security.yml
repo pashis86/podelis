@@ -3,6 +3,7 @@
 
 security:
 
+    access_denied_url: /
     encoders:
         AppBundle\Entity\User:
           algorithm: bcrypt
@@ -40,6 +41,8 @@ security:
 
     access_control:
      - { path: ^/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+     - { path: ^/forgot-password, allow_if: "!has_role('ROLE_USER')" }
+     - { path: ^/connect/facebook, allow_if: "!has_role('ROLE_USER')" }
             # activate different ways to authenticate
 
             # http_basic: ~

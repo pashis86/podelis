@@ -65,6 +65,7 @@ class TestControl
     public function questionInTest($questionId)
     {
         foreach ($this->questions as $question) {
+
             if ($question == $questionId) {
                 return true;
             }
@@ -91,6 +92,10 @@ class TestControl
             $this->session->set('answered', $answered);
             $this->checkAnswers();
         }
+
+        else {
+            $this->checkAnswers();
+        }
     }
 
     public function setTimeLimit($timePerQuestion)
@@ -98,6 +103,7 @@ class TestControl
         if (preg_match('#[0-9]+#', $timePerQuestion, $time)) {
             $time = intval($time);
             $time = $time * count($this->questions);
+
             return preg_replace('#[0-9]+#', $time, $timePerQuestion);
         }
         throw new \Exception('Invalid argument %s', $timePerQuestion);
@@ -108,6 +114,7 @@ class TestControl
         foreach ($this->questionGroups as $group) {
             /**@var Question $question */
             foreach ($group as $key => $question) {
+
                 if ($question->getId() == $currentQ) {
                     return $key + 1;
                 }
@@ -130,12 +137,12 @@ class TestControl
         if (count($this->session->get('isCorrect')) != count($this->questions)) {
 
             $ended = new \DateTime();
-            if($this->session->get('endsAt') <= new \Datetime()){
+            if($this->session->get('endsAt') <= $ended){
                 $ended = $this->session->get('endsAt');
             }
             $started = $this->session->get('started');
             $this->session->set('isCorrect', []);
-            $this->session->set('timeSpent', date_diff($ended, $started)); // edit this
+            $this->session->set('timeSpent', date_diff($ended, $started));
             $this->session->set('endsAt', new \DateTime());
 
             foreach ($this->questions as $question) {
@@ -161,9 +168,10 @@ class TestControl
             }
             /** @var User $user */
             $user = $this->security->getToken()->getUser();
-            if ($user != 'anon.') {
-                $this->em->getRepository('AppBundle:User')
-                    ->addTime($this->session->get('timeSpent'), $this->session->get('isCorrect'), $user->getId());
+            if ($user != 'anon.' && $this->session->get('trackResults')) {
+                $user->updateStats($this->session->get('timeSpent'), $this->session->get('isCorrect'));
+                $this->em->persist($user);
+                $this->em->flush();
             }
         }
     }

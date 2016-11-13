@@ -5,7 +5,7 @@ parameters:
 
 services:
     app.send_email:
-        class: AppBundle\Service\RegisterEmail
+        class: AppBundle\Service\EmailSender
         arguments: ["@mailer", "@templating"]
 
     app.facebook_authenticator:

@@ -4,7 +4,7 @@ namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
-use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Security\Core\User\AdvancedUserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 
 
@@ -16,7 +16,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @UniqueEntity(fields="email", message="Email already taken")
  * @ORM\Entity(repositoryClass="AppBundle\Repository\UserRepository")
  */
-class User implements UserInterface/*, \Serializable <-- del sito buna segmentation error */
+class User implements AdvancedUserInterface /*, \Serializable <-- del sito buna segmentation error */
 {
     /**
      * @var int
@@ -102,6 +102,13 @@ class User implements UserInterface/*, \Serializable <-- del sito buna segmentat
     private $facebookId;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="token", type="string", length=255, nullable=true)
+     */
+    private $token;
+
+    /**
      * @var integer
      *
      * @ORM\Column(name="tests_taken", type="integer", nullable=true)
@@ -123,9 +130,9 @@ class User implements UserInterface/*, \Serializable <-- del sito buna segmentat
     private $incorrect;
 
     /**
-     * @var \DateTime
+     * @var int
      *
-     * @ORM\Column(name="time_spent", type="datetime", nullable=true)
+     * @ORM\Column(name="time_spent", type="integer", nullable=true)
      */
     private $timeSpent;
 
@@ -309,6 +316,22 @@ class User implements UserInterface/*, \Serializable <-- del sito buna segmentat
         return $this;
     }
 
+
+    public function getToken()
+    {
+        return $this->token;
+    }
+
+    /**
+     * @param string $token
+     * @return User
+     */
+    public function setToken(string $token = null)
+    {
+        $this->token = $token;
+        return $this;
+    }
+
     /**
      * @return string
      */
@@ -382,33 +405,94 @@ class User implements UserInterface/*, \Serializable <-- del sito buna segmentat
     }
 
     /**
-     * @return \DateTime
+     * @return integer
      */
-    public function getTimeSpent(): \DateTime
+    public function getTimeSpent()
     {
         return $this->timeSpent;
     }
 
     /**
-     * @param \DateTime $timeSpent
+     * @param integer $timeSpent
      * @return User
      */
-    public function setTimeSpent(\DateTime $timeSpent): User
+    public function setTimeSpent($timeSpent): User
     {
         $this->timeSpent = $timeSpent;
         return $this;
     }
 
+    public function getFormatedTimeSpent()
+    {
+        $formated = "";
+        $time = $this->timeSpent;
+
+        $seconds = 31556926;
+        if($time >= $seconds){
+            $yr = floor($time / $seconds);
+            $time -= $yr * $seconds;
+            $formated .= sprintf('%d years ', $yr);
+        }
+
+        $seconds = 2629744;
+        if($time >= $seconds){
+            $mnt = floor($time / $seconds);
+            $time -= $mnt * $seconds;
+            $formated .= sprintf('%d months ', $mnt);
+        }
+
+        $seconds = 86400;
+        if($time >= $seconds){
+            $day = floor($time / $seconds);
+            $time -= $day * $seconds;
+            $formated .= sprintf('%d days ', $day);
+        }
+
+        $seconds = 3600;
+        if($time >= $seconds){
+            $hr = floor($time / $seconds);
+            $time -= $hr * $seconds;
+            $formated .= sprintf('%d hours ', $hr);
+        }
+
+        $seconds = 60;
+        if($time >= $seconds){
+            $min = floor($time / $seconds);
+            $time -= $min * $seconds;
+            $formated .= sprintf('%d minutes ', $min);
+        }
+
+        $formated .= sprintf('%d seconds', $time);
+
+        return $formated;
+    }
     public function __construct()
     {
-        $this->active = true;
+        $this->active = false;
         $this->createdAt = new \DateTime('now');
         $this->updatedAt = new \DateTime('now');
         $this->level = 1;
         $this->correct = 0;
         $this->incorrect = 0;
-        $this->testTaken = 0;
-        $this->timeSpent = new \DateTime('1000-01-01 00:00:00');
+        $this->testsTaken = 0;
+        $this->timeSpent = 0;
+    }
+
+    public function updateStats($time, $answers)
+    {
+        $this->timeSpent += $time->s + $time->i * 60 + $time->h * 3600;
+
+        foreach ($answers as $answer)
+        {
+            if($answer == true){
+                $this->correct++;
+            }
+
+            else{
+                $this->incorrect++;
+            }
+        }
+        $this->testsTaken++;
     }
     
     /**
@@ -462,5 +546,64 @@ class User implements UserInterface/*, \Serializable <-- del sito buna segmentat
     {
     }
 
+    /**
+     * Checks whether the user's account has expired.
+     *
+     * Internally, if this method returns false, the authentication system
+     * will throw an AccountExpiredException and prevent login.
+     *
+     * @return bool true if the user's account is non expired, false otherwise
+     *
+     * @see AccountExpiredException
+     */
+    public function isAccountNonExpired()
+    {
+        return true;
+    }
+
+    /**
+     * Checks whether the user is locked.
+     *
+     * Internally, if this method returns false, the authentication system
+     * will throw a LockedException and prevent login.
+     *
+     * @return bool true if the user is not locked, false otherwise
+     *
+     * @see LockedException
+     */
+    public function isAccountNonLocked()
+    {
+        return true;
+    }
+
+    /**
+     * Checks whether the user's credentials (password) has expired.
+     *
+     * Internally, if this method returns false, the authentication system
+     * will throw a CredentialsExpiredException and prevent login.
+     *
+     * @return bool true if the user's credentials are non expired, false otherwise
+     *
+     * @see CredentialsExpiredException
+     */
+    public function isCredentialsNonExpired()
+    {
+        return true;
+    }
+
+    /**
+     * Checks whether the user is enabled.
+     *
+     * Internally, if this method returns false, the authentication system
+     * will throw a DisabledException and prevent login.
+     *
+     * @return bool true if the user is enabled, false otherwise
+     *
+     * @see DisabledException
+     */
+    public function isEnabled()
+    {
+        return $this->active;
+    }
 }
 

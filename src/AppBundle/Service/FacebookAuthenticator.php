@@ -80,7 +80,8 @@ class FacebookAuthenticator extends SocialAuthenticator
                 ->setUsername($username)
                 ->setEmail($facebookUser->getEmail())
                 ->setName($facebookUser->getFirstName())
-                ->setSurname($facebookUser->getLastName());
+                ->setSurname($facebookUser->getLastName())
+                ->setActive(true);
 
             $this->em->persist($user);
             $this->em->flush();

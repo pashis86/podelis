@@ -5,11 +5,13 @@ namespace AppBundle\Controller;
 use AppBundle\Entity\User;
 use AppBundle\Form\ChangePasswordType;
 use AppBundle\Form\EditUserType;
+use AppBundle\Form\ResetPasswordType;
 use AppBundle\Form\UserType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 
 class SecurityController extends Controller
@@ -58,15 +60,16 @@ class SecurityController extends Controller
 
                 $password = $this->get('security.password_encoder')
                     ->encodePassword($user, $user->getPassword());
-                $user->setPassword($password);
+                $token = bin2hex(random_bytes(81));
+                $user->setPassword($password)->setToken($token);
 
                 $em = $this->getDoctrine()->getManager();
                 $em->persist($user);
                 $em->flush();
 
-                $this->get('app.send_email')->sendEmail($user);
+                $this->get('app.send_email')->registrationEmail($user);
 
-                return $this->redirectToRoute('homepage');
+                return new Response($this->renderView('@App/SuccessPages/regComplete.html.twig'));
             }
 
             return $this->render(
@@ -157,6 +160,83 @@ class SecurityController extends Controller
     }
 
     /**
+     * @Route("/activate/{token}", name="userActivation")
+     */
+    public function userActivationAction($token)
+    {
+        $repository = $this->getDoctrine()->getRepository('AppBundle:User');
+        /** @var User $user */
+        $user = $repository->findOneBy(['token' => $token]);
+        if($user){
+            $repository->activateUser($user);
+
+            return new Response($this->renderView('@App/SuccessPages/userActivated.html.twig'));
+        }
+        return $this->render('@App/Home/404.html.twig');
+    }
+
+    /**
+     * @Route("/forgot-password", name="forgotPassword")
+     */
+    public function forgotPassAction(Request $request)
+    {
+        $form = $this->createForm(ResetPasswordType::class);
+        $form->handleRequest($request);
+
+        if($form->isSubmitted() && $form->isValid()){
+            $repository = $this->getDoctrine()->getRepository('AppBundle:User');
+
+            /** @var User $user */
+            $user = $repository->findOneBy(
+                ['email' => $form['email']->getData(),
+                    'username' => $form['username']->getData()]);
+
+            if($user){
+                $plainPass = substr(md5(microtime()),rand(0,26),8);
+                $newPass = $this->get('security.password_encoder')->encodePassword($user, $plainPass);
+                $repository->resetPassword($user, $newPass);
+                $this->get('app.send_email')->passResetEmail($user, $plainPass);
+                dump($plainPass);
+                return $this->render('@App/SuccessPages/passReset.html.twig');
+            }
+            else{
+                return $this->render('@App/Home/404.html.twig');
+            }
+        }
+        return $this->render('@App/Security/forgotPassword.html.twig', ['form' => $form->createView()]);
+    }
+
+    /**
+     * @Route("/activation", name="resendActivation")
+     */
+    public function resendActivation(Request $request)
+    {
+        $form = $this->createForm(ResetPasswordType::class);
+        $form->handleRequest($request);
+
+        if($form->isSubmitted() && $form->isValid()){
+            $repository = $this->getDoctrine()->getRepository('AppBundle:User');
+            /** @var User $user */
+            $user = $repository->findOneBy(['username' => $form['username']->getData(),
+            'email' => $form['email']->getData()]);
+
+            if($user){
+                if(!$user->isActive()){
+                    $this->get('app.send_email')->registrationEmail($user);
+                    return $this->render('@App/SuccessPages/activationResent.html.twig');
+                }
+                else{
+                    $this->addFlash('error', 'This account is already activated!');
+                }
+            }
+            else{
+                return $this->render('@App/Home/404.html.twig');
+            }
+        }
+        return $this->render('@App/Security/activationRequest.html.twig', ['form' => $form->createView()]);
+    }
+
+    /**
      * @Route("/connect/facebook", name="fbConnect")
      */
     public function connectAction()
@@ -172,7 +252,7 @@ class SecurityController extends Controller
      */
     public function connectCheckAction(Request $request)
     {
-        return $this->redirectToRoute('homepage');
+        return $this->redirectToRoute('@App/Home/index.html.twig');
     }
 
 }

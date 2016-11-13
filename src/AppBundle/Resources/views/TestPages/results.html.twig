@@ -16,7 +16,7 @@
 
     {% for answer in form.answers %}
         {{ loop.index }}{{ form_widget(answer) }}
-        {{ form_label(answer)|replace({"&lt;" : "<", "&gt;" : ">"})|raw }}
+        {{ form_label(answer)|replace({"&lt;" : "<", "&gt;" : ">", "&amp;" : "&"})|raw }}
         <br>
     {% endfor %}
 

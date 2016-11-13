@@ -43,6 +43,7 @@ class HomeController extends Controller
             $session = new Session();
             $session->clear();
             $session->set('questionGroups', $questionGroups);
+            $session->set('trackResults', true);
             $testControl = $this->get('app.test_control');
 
             $session->set('endsAt', new \DateTime($testControl->setTimeLimit('+1 minute')));
@@ -51,7 +52,7 @@ class HomeController extends Controller
             return $this->redirectToRoute('question', ['id' => $questionGroups[0][0]->getId()]);
         }
 
-        return $this->render('@App/Home/test-options.html.twig', [
+        return $this->render('@App/TestPages/test-options.html.twig', [
             'form' => $form->createView(),
         ]);
     }
@@ -69,6 +70,7 @@ class HomeController extends Controller
         $session->set('questionGroups', $questions);
 
         $testControl = $this->get('app.test_control');
+        $session->set('trackResults', false);
         $session->set('started', new \DateTime());
         $session->set('endsAt', new \DateTime($testControl->setTimeLimit('+1 minute')));
         $session->set('answered', []);
@@ -114,7 +116,7 @@ class HomeController extends Controller
                 return $this->redirectToRoute('testResults', ['id' => $testControl->getQuestionGroups()[0][0]->getId()]);
             }
 
-            return $this->render('@App/Home/question.html.twig', [
+            return $this->render('@App/TestPages/question.html.twig', [
                 'form' => $form->createView(),
                 'current' => $question,
                 'index' => $testControl->getCurrentIndex($id)
@@ -172,13 +174,35 @@ class HomeController extends Controller
             if($form->get('submit')->isClicked()){
 
             }
-            return $this->render('@App/Home/results.html.twig', [
+            return $this->render('@App/TestPages/results.html.twig', [
                 'form' => $form->createView(),
                 'current' => $question,
                 'index' => $testControl->getCurrentIndex($id)
             ]);
         }
         return $this->render('@App/Home/404.html.twig');
+    }
+
+    /**
+     * @Route("/leaderboard/{page}", name="leaderboard")
+     */
+    public function leaderboardAction(Request $request, $page = 1)
+    {
+        $repository = $this->getDoctrine()->getRepository('AppBundle:User');
+
+        $best = $repository->findBest('correct', $page, $limit = 1);
+
+        $maxPages = ceil($best->count() / $limit);
+
+        if($page > $maxPages){
+            return $this->render('@App/Home/404.html.twig');
+        }
+
+        return $this->render('@App/Home/leaderboard.html.twig', [
+            'thisPage' => $page,
+            'maxPages' => $maxPages,
+            'best' => $best
+        ]);
     }
 
     /**

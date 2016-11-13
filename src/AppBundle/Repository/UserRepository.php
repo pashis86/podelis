@@ -2,6 +2,9 @@
 
 namespace AppBundle\Repository;
 
+use AppBundle\Entity\User;
+use Doctrine\ORM\Tools\Pagination\Paginator;
+
 /**
  * UserRepository
  *
@@ -10,17 +13,19 @@ namespace AppBundle\Repository;
  */
 class UserRepository extends \Doctrine\ORM\EntityRepository
 {
+    const MAX_RESULTS = 1;
     /** @param  \DateInterval $time */
-    public function addTime($time, $answers, $uId)
+   /* public function addTime($time, $answers, $uId)
     {
-        $seconds = $time->format('%Y%m%d%H%i%s');
+        $seconds = $time->s + $time->i * 60 + $time->h * 3600;
         $correct = $incorrect = 0;
-        die($seconds);
+
         foreach ($answers as $answer)
         {
             if($answer == true){
                 $correct++;
             }
+
             else{
                 $incorrect++;
             }
@@ -40,5 +45,45 @@ class UserRepository extends \Doctrine\ORM\EntityRepository
         $stmt->bindValue('correct', $correct);
         $stmt->bindValue('incorrect', $incorrect);
         $stmt->execute();
+    }*/
+
+    /** @param User $user */
+    public function activateUser($user)
+    {
+        $user->setToken(null)->setActive(true);
+
+        $this->_em->persist($user);
+        $this->_em->flush();
+    }
+
+    /** @param User $user */
+    public function resetPassword($user, $newPass)
+    {
+        $user->setPassword($newPass);
+        $this->_em->persist($user);
+        $this->_em->flush();
+    }
+
+    public function paginate($dql, $page = 1, $limit = UserRepository::MAX_RESULTS)
+    {
+        $paginator = new Paginator($dql);
+
+        $paginator->getQuery()
+            ->setFirstResult(($page - 1) * $limit)
+            ->setMaxResults($limit);
+
+        return $paginator;
+    }
+
+    public function findBest($by, $currentPage = 1, $limit)
+    {
+        $query = $this->createQueryBuilder('u')
+            ->select('u')
+            ->orderBy('u.'.$by, 'DESC')
+            ->getQuery();
+
+        $paginator = $this->paginate($query, $currentPage, $limit);
+
+        return $paginator;
     }
 }
