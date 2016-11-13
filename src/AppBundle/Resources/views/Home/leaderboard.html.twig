@@ -30,28 +30,33 @@
                </li>
            </ul>
        {% endif %}
-
        <div class="row">
            <div class="col-lg-1 col-md-1 col-sm-1 col-xs-2"><b>Rank</b></div>
            <div class="col-lg-2 col-md-2 col-sm-4 col-xs-4"><b>User</b></div>
-           <div class="col-lg-2 col-md-2 col-sm-4 col-xs-4"><b>Correct answers</b></div>
-           <div class="col-lg-2 col-md-2 col-sm-4 col-xs-4"><b>Correct answer ratio</b></div>
+           <div class="col-lg-2 col-md-2 col-sm-4 col-xs-4">
+               <b>
+                   <a href="{{ path('leaderboard', {'page' : thisPage, 'orderBy': 'correct' }) }}">
+                       Correct answers
+                   </a>
+               </b>
+           </div>
+           <div class="col-lg-2 col-md-2 col-sm-4 col-xs-4">
+               <b>
+                   <a href="{{ path('leaderboard', {'page' : thisPage, 'orderBy': 'percentage' }) }}">
+                       Correct answer ratio
+                   </a>
+               </b>
+           </div>
            <div class="col-lg-2 col-md-2 col-sm-4 col-xs-4"><b>Incorrect answers</b></div>
            <div class="col-lg-2 col-md-2 col-sm-4 col-xs-4"><b>Time spent</b></div>
        </div>
+       {% set rank = 1 * (thisPage - 1) * limit %}
        {% for user in best %}
-
-           {% if (user.correct + user.incorrect) > 0 %}
-               {% set percentage = user.correct / (user.correct + user.incorrect) * 100 %}
-           {% else %}
-               {% set percentage = 0 %}
-           {% endif %}
-
            <div class="row">
-               <div class="col-lg-1 col-md-1 col-sm-1 col-xs-2">{{ user.username }}</div>
+               <div class="col-lg-1 col-md-1 col-sm-1 col-xs-2">{{ rank + loop.index }}</div>
                <div class="col-lg-2 col-md-2 col-sm-4 col-xs-4">{{ user.username }}</div>
                <div class="col-lg-2 col-md-2 col-sm-4 col-xs-4">{{ user.correct }}</div>
-               <div class="col-lg-2 col-md-2 col-sm-4 col-xs-4">{{ percentage|number_format(2) ~ '%' }}</div>
+               <div class="col-lg-2 col-md-2 col-sm-4 col-xs-4">{{ user.percentage|number_format(2) ~ '%' }}</div>
                <div class="col-lg-2 col-md-2 col-sm-4 col-xs-4">{{ user.incorrect }}</div>
                <div class="col-lg-2 col-md-2 col-sm-4 col-xs-4">{{ user.FormatedTimeSpent }}</div>
            </div>

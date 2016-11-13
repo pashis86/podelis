@@ -14,38 +14,6 @@ use Doctrine\ORM\Tools\Pagination\Paginator;
 class UserRepository extends \Doctrine\ORM\EntityRepository
 {
     const MAX_RESULTS = 1;
-    /** @param  \DateInterval $time */
-   /* public function addTime($time, $answers, $uId)
-    {
-        $seconds = $time->s + $time->i * 60 + $time->h * 3600;
-        $correct = $incorrect = 0;
-
-        foreach ($answers as $answer)
-        {
-            if($answer == true){
-                $correct++;
-            }
-
-            else{
-                $incorrect++;
-            }
-        }
-
-        $connection = $this->_em->getConnection();
-        $sql = "UPDATE users SET 
-                time_spent = DATE_ADD(time_spent, INTERVAL :seconds SECOND),
-                 correct = correct + :correct,
-                  incorrect = incorrect + :incorrect,
-                   tests_taken = tests_taken + 1
-                   WHERE id = :id";
-
-        $stmt = $connection->prepare($sql);
-        $stmt->bindValue('seconds', $seconds);
-        $stmt->bindValue('id', $uId);
-        $stmt->bindValue('correct', $correct);
-        $stmt->bindValue('incorrect', $incorrect);
-        $stmt->execute();
-    }*/
 
     /** @param User $user */
     public function activateUser($user)
@@ -77,13 +45,26 @@ class UserRepository extends \Doctrine\ORM\EntityRepository
 
     public function findBest($by, $currentPage = 1, $limit)
     {
-        $query = $this->createQueryBuilder('u')
-            ->select('u')
-            ->orderBy('u.'.$by, 'DESC')
-            ->getQuery();
+        if($by == 'percentage') {
+            $query = $this->findByPercentage();
+        }
+        else{
+            $query = $this->createQueryBuilder('u')
+                ->select('u')
+                ->orderBy('u.'.$by, 'DESC')
+                ->getQuery();
+        }
 
         $paginator = $this->paginate($query, $currentPage, $limit);
 
         return $paginator;
+    }
+
+    public function findByPercentage()
+    {
+        return $this->_em->createQuery('SELECT u, u.correct / (u.correct + u.incorrect) AS HIDDEN percentage
+        FROM AppBundle:User u 
+        ORDER BY percentage DESC');
+
     }
 }
