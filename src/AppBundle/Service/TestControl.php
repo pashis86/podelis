@@ -169,8 +169,9 @@ class TestControl
             /** @var User $user */
             $user = $this->security->getToken()->getUser();
             if ($user != 'anon.' && $this->session->get('trackResults')) {
-                $this->em->getRepository('AppBundle:User')
-                    ->addTime($this->session->get('timeSpent'), $this->session->get('isCorrect'), $user->getId());
+                $user->updateStats($this->session->get('timeSpent'), $this->session->get('isCorrect'));
+                $this->em->persist($user);
+                $this->em->flush();
             }
         }
     }
