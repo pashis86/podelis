@@ -422,6 +422,13 @@ class User implements AdvancedUserInterface /*, \Serializable <-- del sito buna 
         return $this;
     }
 
+    public function getPercentage()
+    {
+        if($this->correct + $this->incorrect == 0)
+            return 0;
+        return $this->correct / ($this->correct + $this->incorrect) * 100;
+    }
+
     public function getFormatedTimeSpent()
     {
         $formated = "";
@@ -466,6 +473,7 @@ class User implements AdvancedUserInterface /*, \Serializable <-- del sito buna 
 
         return $formated;
     }
+
     public function __construct()
     {
         $this->active = false;
