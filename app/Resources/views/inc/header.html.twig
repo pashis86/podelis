@@ -15,8 +15,8 @@
             </div>
             <div id="navbar" class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    <li><a href="/">ZEND test</a></li>
-                    <li><a href="/">Basic test</a></li>
+                    <li><a href="{{ path('quick_test') }}">ZEND test</a></li>
+                    <li><a href="{{ path('test_options') }}">Basic test</a></li>
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Category tests <span class="caret"></span></a>
                         <ul class="dropdown-menu position-topmost">
@@ -51,4 +51,70 @@
             </div><!--/.nav-collapse -->
         </div><!--/.container-fluid -->
     </nav>
+
+    <!--login register forms-->
+    <div class="container allign-center">
+        <div class="row">
+            <div class="col-lg-4 col-lg-offset-4 col-sm-12 loginForm">
+                <div class="panel panel-success">
+                    <div class="panel-heading">
+                        Log in
+                    </div>
+                    <div class="panel-body">
+                        <form action="{{  path('login') }}" method="post" class="form-horizontal">
+                            <fieldset class="form-group">
+                                <label class="control-label label-width" for="username">User name: </label>
+                                <input type="text" id="username" name="_username" value="{# last_email #}" />
+                            </fieldset>
+                            <fieldset class="form-group">
+                                <label class="control-label label-width" for="password">Password: </label>
+                                <input type="password" id="password" name="_password" />
+                            </fieldset>
+                            <button class="btn btn-4" type="submit">Log in</button>
+                        </form>
+
+                    </div>
+                    <div class="panel-footer">
+                        <div class="text-center"><b><a href="{{ path('fbConnect') }}">Login with Facebook</a></b></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-4 col-lg-offset-4 col-sm-12 registerForm">
+                <div class="panel panel-success">
+                    <div class="panel-heading">
+                        Register
+                    </div>
+                    <div class="panel-body relative-button">
+                        <form action="{{  path('register') }}" method="post" class="form-horizontal">
+                            <fieldset class="form-group">
+                                <div><label for="user_username" class="required">Username</label><input type="text" id="user_username" name="user[username]" required="required" /></div>
+                            </fieldset>
+                            <fieldset>
+                                <div><label for="user_email" class="required">Email</label><input type="email" id="user_email" name="user[email]" required="required" /></div>
+                            </fieldset>
+                            <fieldset>
+                                <div><label for="user_name" class="required">Name</label><input type="text" id="user_name" name="user[name]" required="required" /></div>
+                            </fieldset>
+                            <fieldset>
+                                <div><label for="user_surname">Surname</label><input type="text" id="user_surname" name="user[surname]" /></div>
+                            </fieldset>
+                            <fieldset>
+                                <div><label for="user_password_first" class="required">First</label><input type="password" id="user_password_first" name="user[password][first]" required="required" /></div>
+                            </fieldset>
+                            <fieldset>
+                                <div><label for="user_password_second" class="required">Second</label><input type="password" id="user_password_second" name="user[password][second]" required="required" /></div>
+                            </fieldset>
+                            <fieldset>
+                                <div><label for="user_termsAccepted" class="required">Terms accepted</label><input type="checkbox" id="user_termsAccepted" name="user[termsAccepted]" required="required" value="1" /></div>
+                            </fieldset>
+                            <button class="btn btn-4" type="submit">Register!</button>
+
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
 </header>

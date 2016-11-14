@@ -23,5 +23,3 @@ timedCounter(75, 5, function(value){
     value = Math.floor(value);
     $('.user-count').html(value);
 });
-
-
