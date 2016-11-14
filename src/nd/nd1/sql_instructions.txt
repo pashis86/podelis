@@ -1,0 +1,73 @@
+1.mysql -u root -p
+(pass)
+CREATE DATABASE nd;
+USE nd;
+2.(renamed Books (3).sql to Books.sql in Desktop)
+SOURCE /home/pc/Desktop/Books.sql;
+
+3.a)INSERT INTO Authors (name)
+VALUES ('Tomas Tomukas');
+
+INSERT INTO Authors (name)
+VALUES ('Danielius Rasytojas');
+
+b)INSERT INTO `Books`(`authorId`, `title`, `year`) VALUES ('8', 'Ruduo', '1989');
+INSERT INTO `Books`(`authorId`, `title`, `year`) VALUES ('9', 'Ziema', '2018');
+
+c)SELECT Books.title, Authors.name
+FROM `Books` , Authors
+WHERE Books.authorId = Authors.authorId;
+
+d)UPDATE `Books` SET authorId=2
+WHERE title='Programming F# 3.0, 2nd Edition';
+
+e)SELECT Authors.name, count( Books.authorID ) 
+FROM Authors
+LEFT JOIN Books ON Authors.authorId = Books.authorID
+GROUP BY Authors.name;
+
+SELECT Authors.name, count( Books.authorID ) 
+FROM Authors
+INNER JOIN Books ON Authors.authorId = Books.authorID
+GROUP BY Authors.name;
+
+f)DELETE FROM Authors WHERE ((authorId=8) OR (authorId=9));
+
+g)DELETE FROM Books WHERE authorId IS NULL;
+
+4.a)ALTER TABLE Books
+ADD genre varchar(16);
+
+b)CREATE TABLE Written_books (
+id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+bookId INT(6),
+authorId INT(6)
+);
+
+c)UPDATE Books SET genre="Fantasy"
+WHERE bookId>7;
+
+UPDATE Books SET genre="Science"
+WHERE genre IS NULL;
+
+INSERT INTO Written_books (authorId, bookId)
+VALUES (1,1),(2,3),(2,4),(3,2),(3,5),(4,9),(5,9),(6,9),(7,10);
+
+d)SELECT Books.title, GROUP_CONCAT(Authors.name) FROM Books
+LEFT JOIN Written_books ON Books.bookId = Written_books.bookId
+LEFT JOIN Authors ON  Authors.authorId=Written_books.authorId
+GROUP BY Books.title;
+
+e)SET NAMES utf8;
+
+ALTER TABLE Books
+ADD original_name varchar(32);
+
+UPDATE Books SET original_name="F šarp programavimo pagrindai"
+WHERE title='Programming F# 3.0, 2nd Edition';
+
+5.mysqldump nd > nd.sql
+
+6.script
+
+
