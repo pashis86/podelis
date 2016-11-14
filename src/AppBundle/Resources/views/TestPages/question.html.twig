@@ -1,8 +1,14 @@
 {% extends '::base.html.twig' %}
 
+{% set charArray = {1 : 'A', 2 : 'B', 3 : 'C', 4 : 'D', 5 : 'E', 6 : 'F', 7 : 'G'}%}
+
 {% block body %}
     {% for group in app.session.get('questionGroups') %}
-        <b>{{ loop.index }}.{{ group[0].book.title }}</b><br>
+        {% if not group[0].book.title %}
+            <b>{{ loop.index ~ '. PHP Test' }}</b><br>
+        {% else %}
+            <b>{{ loop.index }}.{{ group[0].book.title }}</b><br>
+        {% endif %}
             {% for question in group %}
                 {% if question.id == current.id %}
                     <b><a title="{{ question.title }}" href="{{ path('question', {'id': question.id }) }}">{{ loop.index }}</a></b>
@@ -16,14 +22,16 @@
     {{ index ~ '.'}}{{ current.content|raw }}
 
     {% for answer in form.answers %}
-        {{ loop.index }}{{ form_widget(answer) }}
-        {{ form_label(answer)|replace({"&lt;" : "<", "&gt;" : ">", "&amp;" : "&"})|raw }}
-        <br>
+        <div class="alert">
+            {{ charArray[loop.index] }}{{  form_widget(answer) }}
+            {{ form_label(answer)|replace({"&lt;" : "<", "&gt;" : ">", "&amp;" : "&"})|raw }}
+        </div>
     {% endfor %}
 
     {{ form_widget(form.previous) }}
     {{ form_widget(form.next) }}
     {{ form_end(form) }}
+    <input type="button" id="solve" value="Solve it">
 {% endblock %}
 {% block javascripts %}
     <!-- laikinai inportinu per src -->
@@ -60,6 +68,18 @@
                 });
      /*   sendAnswer("input[name='test_question[answers]']", { path('questionChosen') }}, { current.id }});
         sendAnswers("input[name='test_question[answers]']", { path('questionChosen') }}, { current.id }});*/
+
+     $('#solve').on('click', function () {
+         $.ajax({
+             type: "POST",
+             url: '{{ path('solveIt') }}',
+             data: { 'question': {{ current.id }} },
+             success: function (data) {
+                 var correct = JSON.parse(data);
+                 console.log(correct.id);
+             }
+         });
+     });
     });
 </script>
 {% endblock %}

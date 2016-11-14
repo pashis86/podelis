@@ -1,0 +1,66 @@
+1. CREATE DATABASE books;
+
+2. mysql -u root -p root books < ~/Desktop/Downloads/Books3.sql
+
+3.a) INSERT INTO Authors (name) VALUES ('Jonas'), ('Petras');
+3.b) INSERT INTO Books (authorId, title, year) VALUES (8, 'Gera knyga', 2011), (9, 'Knyga', 2011);
+
+3.c) SELECT * FROM Books INNER JOIN Authors ON Books.authorId = Authors.authorId;
+
+3.d) UPDATE Books SET Books.authorId = 8 WHERE Books.authorId = 9;
+
+3.e) Itraukiant autorius be knygu: SELECT Authors.name, COUNT(Books.authorId) FROM `Authors` LEFT JOIN `Books` ON Authors.authorId = Books.authorId GROUP BY Books.authorId;
+
+3.e) Neitraukiant autoriu be knygu: SELECT Authors.name, COUNT(Books.authorId) FROM `Authors`, `Books` WHERE Authors.authorId = Books.authorId GROUP BY Books.authorId;
+
+3.f) DELETE FROM Authors WHERE authorId IN(8, 9);
+
+3.g) DELETE FROM Books WHERE Books.authorId IS NULL;
+
+4.a) ALTER TABLE Books ADD genre char(255);
+
+4.b) ALTER TABLE Authors ENGINE = INNODB;
+CREATE TABLE bookAuthors(
+    id INT AUTO_INCREMENT,
+    bookId INT(11),
+    authorId INT(11),
+    PRIMARY KEY (id),
+   	FOREIGN KEY (bookId) REFERENCES Books(bookId),
+	FOREIGN KEY (authorId) REFERENCES Authors(authorId));
+
+4.c) ALTER TABLE Books DROP COLUMN authorId;
+INSERT INTO bookAuthors (bookId, authorId) VALUES (1, 1), (1, 3), (2, 4), (3, 5);
+
+4.d) SELECT Books.title, Authors.name 
+	FROM Books 
+	JOIN bookAuthors ON Books.bookId = bookAuthors.bookId 
+	JOIN Authors ON Authors.authorId = bookAuthors.authorId 
+  
+4.e)ALTER TABLE Books CONVERT TO CHARACTER SET utf8 COLLATE utf8_unicode_ci;
+
+5. mysqldump -u root -p root books > books.sql
+
+6.
+INSERT INTO Authors (name) VALUES ('Jonas'), ('Petras');
+INSERT INTO Books (authorId, title, year) VALUES (8, 'Gera knyga', 2011), (9, 'Knyga', 2011);
+UPDATE Books SET Books.authorId = 8 WHERE Books.authorId = 9;
+DELETE FROM Authors WHERE authorId IN(8, 9);
+DELETE FROM Books WHERE Books.authorId IS NULL;
+
+ALTER TABLE Books ADD genre char(255);
+ALTER TABLE Authors ENGINE = INNODB;
+CREATE TABLE bookAuthors(
+    id INT AUTO_INCREMENT,
+    bookId INT(11),
+    authorId INT(11),
+    PRIMARY KEY (id),
+   	FOREIGN KEY (bookId) REFERENCES Books(bookId),
+	FOREIGN KEY (authorId) REFERENCES Authors(authorId));
+
+ALTER TABLE Books DROP COLUMN authorId;
+INSERT INTO bookAuthors (bookId, authorId) VALUES (1, 1), (1, 3), (2, 4), (3, 5);
+ALTER TABLE Books CONVERT TO CHARACTER SET utf8 COLLATE utf8_unicode_ci;
+
+
+
+

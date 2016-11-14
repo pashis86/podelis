@@ -8,6 +8,7 @@ use AppBundle\Form\TestQuestionType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\Session;
 
@@ -131,16 +132,36 @@ class HomeController extends Controller
     public function questionChosenAction(Request $request)
     {
         $session = $this->get('session');
-        $answered = $session->get('answered');
-        $repository = $this->getDoctrine()->getRepository('AppBundle:Answer');
 
         if($request->isXmlHttpRequest() && $session->get('endsAt') >= new \DateTime()){
+            $answered = $session->get('answered');
+            $repository = $this->getDoctrine()->getRepository('AppBundle:Answer');
+
             $question = $request->request->get('question');
             $answerIds = $request->request->get('answer');
 
             $answers = $repository->getAllChecked($answerIds);
             $answered[$question] = $answers;
             $session->set('answered', $answered);
+        }
+        return $this->render('@App/Home/404.html.twig');
+    }
+
+    /**
+     * @Route("/solve-it", name="solveIt")
+     */
+    public function solveItAction(Request $request)
+    {
+        $session = $this->get('session');
+
+        if($request->isXmlHttpRequest() && $session->get('endsAt') >= new \DateTime()){
+
+            $repository = $this->getDoctrine()->getRepository('AppBundle:Answer');
+
+            $question = $request->request->get('question');
+            $correct = $repository->getCorrectIds($question);
+            dump($correct);
+            return new JsonResponse(json_encode($correct));
         }
         return $this->render('@App/Home/404.html.twig');
     }
