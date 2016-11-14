@@ -1,6 +1,6 @@
 1. CREATE DATABASE books;
 
-2. mysql -u root -p root books < ~/Desktop/Downloads/Books3.sql
+2. mysql -u root -p root books < Books3.sql
 
 3.a) INSERT INTO Authors (name) VALUES ('Jonas'), ('Petras');
 3.b) INSERT INTO Books (authorId, title, year) VALUES (8, 'Gera knyga', 2011), (9, 'Knyga', 2011);
