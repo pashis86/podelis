@@ -172,7 +172,8 @@ class HomeController extends Controller
             }
 
             if($form->get('submit')->isClicked()){
-
+                $session->clear();
+                return $this->redirectToRoute('homepage');
             }
             return $this->render('@App/TestPages/results.html.twig', [
                 'form' => $form->createView(),
@@ -184,13 +185,16 @@ class HomeController extends Controller
     }
 
     /**
-     * @Route("/leaderboard/{page}/{orderBy}", name="leaderboard")
+     * @Route("/leaderboard/{page}", name="leaderboard")
      */
-    public function leaderboardAction(Request $request, $page = 1, $orderBy = 'correct')
+    public function leaderboardAction(Request $request, $page = 1)
     {
         $repository = $this->getDoctrine()->getRepository('AppBundle:User');
 
-        $best = $repository->findBest($orderBy, $page, $limit = 2);
+        $order = $request->query->get('order');
+        $order ? $order : $order = 'correct';
+
+        $best = $repository->findBest($order, $page, $limit = 2);
         $maxPages = ceil($best->count() / $limit);
 
         if($page > $maxPages){
