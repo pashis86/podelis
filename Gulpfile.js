@@ -54,7 +54,8 @@ gulp.task('background', function() {
 
 gulp.task('fonts', function() {
     gulp.src([
-        dir.npm + 'bootstrap-sass/assets/fonts/**'
+        dir.npm + 'bootstrap-sass/assets/fonts/**',
+        dir.assets + 'fonts/**'
         ])
         .pipe(gulp.dest(dir.dist + 'fonts'));
 });

@@ -10,7 +10,6 @@
     <!--login register forms-->
     <div class="container allign-center">
         <div class="row">
-
             <div class="col-lg-4 col-lg-offset-4 col-sm-12 loginForm">
                 <div class="panel panel-success">
                     <div class="panel-heading">
@@ -19,8 +18,8 @@
                     <div class="panel-body">
                         <form action="{{  path('login') }}" method="post" class="form-horizontal">
                             <fieldset class="form-group">
-                                <label class="control-label label-width" for="user_name">User name: </label>
-                                <input type="text" id="user_name" name="_username" value="{# last_email #}" />
+                                <label class="control-label label-width" for="username">User name: </label>
+                                <input type="text" id="username" name="_username" value="{# last_email #}" />
                             </fieldset>
                             <fieldset class="form-group">
                                 <label class="control-label label-width" for="password">Password: </label>
@@ -54,7 +53,7 @@
 
                             </fieldset>
                             <button class="btn btn-4" type="submit">Register!</button>
-                            <input type="hidden" id="user__token" name="user[_token]" value="DlbX6JSfHASgAlA5QuYO8wzmFCEyikq-VPzo9Edseko" />
+
                         </form>
                     </div>
                 </div>
@@ -93,9 +92,9 @@
 
                 <div class="allign-center users-count">
                     <h2 class="bungeeS boldS allign-center font-40">Over</h2>
-                        <div class="circle allignCenter">
-                            <div class="user-count font-50">0</div>
-                        </div>
+                    <div class="circle allignCenter">
+                        <div class="user-count font-50">0</div>
+                    </div>
 
                     <h2 class="bungeeS boldS allign-center">users! Join us</h2>
                 </div>

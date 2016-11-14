@@ -14,13 +14,13 @@
 }
 
 
-
 .homepage-hero-module {
   border-right: none;
   border-left: none;
   position: relative;
   padding: 0;
   margin-bottom: 0;
+  min-height: 800px !important;
 }
 .no-video .video-container video,
 .touch .video-container video {

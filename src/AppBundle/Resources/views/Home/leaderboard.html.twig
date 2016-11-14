@@ -12,21 +12,21 @@
            <ul class="pagination pagination-sm">
                {# `«` arrow  #}
                <li {{ thisPage == 1 ? 'class="disabled"' }}>
-                   <a href="{{ path('leaderboard', {page: thisPage-1 < 1 ? 1 : thisPage-1}) }}">«</a>
+                   <a href="{{ path('leaderboard', {page: thisPage-1 < 1 ? 1 : thisPage-1, order: app.request.get('order') }) }}">«</a>
                </li>
 
                {# Render each page number #}
                {% for i in 1..maxPages %}
                    {% if i - 6 < thisPage and i + 6 > thisPage %}
                    <li {{ thisPage == i ? 'class="active"' }}>
-                       <a href="{{ path('leaderboard', {page: i}) }}">{{ i }}</a>
+                       <a href="{{ path('leaderboard', {page: i, order: app.request.get('order')}) }}">{{ i }}</a>
                    </li>
                     {% endif %}
                {% endfor %}
 
                {# `»` arrow #}
                <li {{ thisPage == maxPages ? 'class="disabled"' }}>
-                   <a href="{{ path('leaderboard', {page: thisPage+1 <= maxPages ? thisPage+1 : thisPage}) }}">»</a>
+                   <a href="{{ path('leaderboard', {page: thisPage+1 <= maxPages ? thisPage+1 : thisPage, order: app.request.get('order') }) }}">»</a>
                </li>
            </ul>
        {% endif %}
@@ -35,14 +35,14 @@
            <div class="col-lg-2 col-md-2 col-sm-4 col-xs-4"><b>User</b></div>
            <div class="col-lg-2 col-md-2 col-sm-4 col-xs-4">
                <b>
-                   <a href="{{ path('leaderboard', {'page' : thisPage, 'orderBy': 'correct' }) }}">
+                   <a href="{{ path('leaderboard', {'page' : thisPage, 'order': 'correct' }) }}">
                        Correct answers
                    </a>
                </b>
            </div>
            <div class="col-lg-2 col-md-2 col-sm-4 col-xs-4">
                <b>
-                   <a href="{{ path('leaderboard', {'page' : thisPage, 'orderBy': 'percentage' }) }}">
+                   <a href="{{ path('leaderboard', {'page' : thisPage, 'order': 'percentage' }) }}">
                        Correct answer ratio
                    </a>
                </b>
