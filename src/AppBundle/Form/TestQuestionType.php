@@ -3,8 +3,6 @@
 namespace AppBundle\Form;
 
 use AppBundle\Entity\Question;
-use AppBundle\Service\QuestionChecker;
-use AppBundle\Service\QuestionSwitcher;
 use AppBundle\Service\TestControl;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;

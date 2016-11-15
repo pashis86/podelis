@@ -10,6 +10,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\Session;
 
 class HomeController extends Controller
@@ -72,6 +73,7 @@ class HomeController extends Controller
 
         $testControl = $this->get('app.test_control');
         $session->set('trackResults', false);
+        $session->set('solved', []);
         $session->set('started', new \DateTime());
         $session->set('endsAt', new \DateTime($testControl->setTimeLimit('+1 minute')));
         $session->set('answered', []);
@@ -144,7 +146,7 @@ class HomeController extends Controller
             $answered[$question] = $answers;
             $session->set('answered', $answered);
         }
-        return $this->render('@App/Home/404.html.twig');
+        return new Response();
     }
 
     /**
@@ -156,14 +158,20 @@ class HomeController extends Controller
 
         if($request->isXmlHttpRequest() && $session->get('endsAt') >= new \DateTime()){
 
-            $repository = $this->getDoctrine()->getRepository('AppBundle:Answer');
+            $id = $request->request->get('question');
 
-            $question = $request->request->get('question');
-            $correct = $repository->getCorrectIds($question);
-            dump($correct);
+            $correct = $this->getDoctrine()->getRepository('AppBundle:Answer')->getCorrectIds($id);
+
+            /** @var Question $question */
+            $question = $this->getDoctrine()->getRepository('AppBundle:Question')->findOneBy(['id' =>$id]);
+
+            $solved = $session->get('solved');
+            $solved[$id] = true;
+            $session->set('solved', $solved);
+
             return new JsonResponse(json_encode($correct));
         }
-        return $this->render('@App/Home/404.html.twig');
+        return new Response();
     }
 
     /**
@@ -182,6 +190,7 @@ class HomeController extends Controller
         {
             $form = $this->createForm(TestQuestionType::class,
                 ['question' => $question, 'answered' => $session->get('answered')]);
+
             $form->handleRequest($request);
 
             if($form->get('next')->isClicked()){
@@ -199,7 +208,8 @@ class HomeController extends Controller
             return $this->render('@App/TestPages/results.html.twig', [
                 'form' => $form->createView(),
                 'current' => $question,
-                'index' => $testControl->getCurrentIndex($id)
+                'index' => $testControl->getCurrentIndex($id),
+                'solved' => $testControl->isQuestionSolved($id)
             ]);
         }
         return $this->render('@App/Home/404.html.twig');

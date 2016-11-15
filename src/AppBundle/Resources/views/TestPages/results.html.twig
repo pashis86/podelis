@@ -2,8 +2,8 @@
 {% set charArray = {1 : 'A', 2 : 'B', 3 : 'C', 4 : 'D', 5 : 'E', 6 : 'F', 7 : 'G'}%}
 {% set correct = 0 %}
 
-
 {% block body %}
+
     {% for group in app.session.get('questionGroups') %}
         {% if not group[0].book.title %}
             <b>{{ loop.index ~ '. PHP Test' }}</b><br>
@@ -20,11 +20,20 @@
             {% endfor %}<br>
         {% endfor %}
 
-    <div class="alert-info page-header">
+    <div class="alert alert-info page-header">
         <h3>
             You've scored {{ correct ~ '/' ~ app.session.get('isCorrect')|length }}
         </h3>
     </div>
+
+    {% if solved %}
+    <div class="alert alert-warning page-header">
+        <h4>
+            You've used the "Solve it" option on this question.
+        </h4>
+    </div>
+    {% endif %}
+
     {{ form_start(form) }}
     {{ index ~ '.'}}{{ current.content|raw }}
 
