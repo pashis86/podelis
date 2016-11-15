@@ -31,7 +31,8 @@ gulp.task('scripts', function() {
             dir.assets + 'scripts/main.js',
             dir.assets + 'scripts/script.js',
             dir.assets + 'scripts.bunttons.js',
-            dir.assets + 'scripts/basic.js'
+            dir.assets + 'scripts/basic.js',
+            dir.assets + 'scripts/markup.js'
         ])
         .pipe(concat('script.js'))
         .pipe(uglify())

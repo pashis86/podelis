@@ -5,14 +5,15 @@
         <div class="container">
             {% for group in app.session.get('questionGroups') %}
                 <b>{{ loop.index }}.{{ group[0].book.title }}</b><br>
-                    {% for question in group %}
-                        {% if question.id == current.id %}
-                            <b><a title="{{ question.title }}" href="{{ path('question', {'id': question.id }) }}">{{ loop.index }}</a></b>
-                        {% else %}
-                            <a title="{{ question.title }}" href="{{ path('question', {'id': question.id }) }}">{{ loop.index }}</a>
-                        {% endif %}
-                    {% endfor %}<br>
-                {% endfor %}
+                {% for question in group %}
+                    {% if question.id == current.id %}
+                        <b><a title="{{ question.title }}" href="{{ path('question', {'id': question.id }) }}">{{ loop.index }}</a></b>
+                    {% else %}
+                        <a title="{{ question.title }}" href="{{ path('question', {'id': question.id }) }}">{{ loop.index }}</a>
+                    {% endif %}
+                {% endfor %}<br>
+            {% endfor %}
+
             <div id="clock"></div>
             {{ form_start(form) }}
             {{ index ~ '.'}}{{ current.content|raw }}
