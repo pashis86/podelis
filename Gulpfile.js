@@ -23,9 +23,9 @@ gulp.task('scripts', function() {
     gulp.src([
             //Third party assets
 
-            dir.npm + 'jquery.countdown/jquery.countdown.js',
             dir.npm + 'jquery/dist/jquery.min.js',
             dir.npm + 'bootstrap-sass/assets/javascripts/bootstrap.min.js',
+            dir.npm + 'jquery.countdown/jquery.countdown.js',
 
             // Main JS file
             dir.assets + 'scripts/main.js',
