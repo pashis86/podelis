@@ -3,6 +3,8 @@
 {% set charArray = {1 : 'A', 2 : 'B', 3 : 'C', 4 : 'D', 5 : 'E', 6 : 'F', 7 : 'G'} %}
 
 {% block body %}
+        <div class="grey-background">
+        <div class="container">
     {% for group in app.session.get('questionGroups') %}
         {% if not group[0].book.title %}
             <b>{{ loop.index ~ '. PHP Test' }}</b><br>
@@ -39,6 +41,9 @@
     {{ form_widget(form.next) }}
     {{ form_end(form) }}
     <input type="button" id="solve" value="Solve it">
+
+        </div>
+        </div>
 {% endblock %}
 {% block javascripts %}
     <script src="{{ asset('js/script.js') }}"></script>

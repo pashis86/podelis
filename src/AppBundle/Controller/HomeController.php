@@ -25,6 +25,14 @@ class HomeController extends Controller
     }
 
     /**
+     * @Route("/profile", name="user")
+     */
+    public function userAction(Request $request)
+    {
+        return $this->render('AppBundle:Home:user.html.twig', []);
+    }
+
+    /**
      * @Route("/test-options", name="test_options")
      * @Security("has_role('ROLE_USER')")
      */

@@ -44,13 +44,24 @@
                         <form action="{{  path('register') }}" method="post" class="form-horizontal">
                             <fieldset class="form-group">
                                 <div><label for="user_username" class="required">Username</label><input type="text" id="user_username" name="user[username]" required="required" /></div>
+                            </fieldset>
+                            <fieldset>
                                 <div><label for="user_email" class="required">Email</label><input type="email" id="user_email" name="user[email]" required="required" /></div>
+                            </fieldset>
+                            <fieldset>
                                 <div><label for="user_name" class="required">Name</label><input type="text" id="user_name" name="user[name]" required="required" /></div>
+                            </fieldset>
+                            <fieldset>
                                 <div><label for="user_surname">Surname</label><input type="text" id="user_surname" name="user[surname]" /></div>
+                            </fieldset>
+                            <fieldset>
                                 <div><label for="user_password_first" class="required">First</label><input type="password" id="user_password_first" name="user[password][first]" required="required" /></div>
+                            </fieldset>
+                            <fieldset>
                                 <div><label for="user_password_second" class="required">Second</label><input type="password" id="user_password_second" name="user[password][second]" required="required" /></div>
+                            </fieldset>
+                            <fieldset>
                                 <div><label for="user_termsAccepted" class="required">Terms accepted</label><input type="checkbox" id="user_termsAccepted" name="user[termsAccepted]" required="required" value="1" /></div>
-
                             </fieldset>
                             <button class="btn btn-4" type="submit">Register!</button>
 
@@ -61,7 +72,6 @@
 
         </div>
     </div>
-
 
     <!--great cover-->
     <div class="homepage-hero-module ">
@@ -76,16 +86,16 @@
                 <div class="titleN">PHP knowledge evaluation tests</div>
 
                 <div class="row bungeeS">
-                    <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12 allignCenter">
-                        <a href="/" class="btn btn-1 btn-1e boldS">Zend test</a>
+                    <div class="col-lg-4 col-md-12 col-sm-12 col-xs-12 allignCenter">
+                        <a href="{{ path('quick_test') }}" class="btn btn-1 btn-1e boldS">Zend test</a>
                     </div>
-                    <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12 allignCenter">
-                        <a href="/" class="btn btn-1 btn-1e  boldS">
+                    <div class="col-lg-4 col-md-12 col-sm-12 col-xs-12 allignCenter">
+                        <a href="{{ path('test_options') }}" class="btn btn-1 btn-1e  boldS">
                             Overal <br>
                             <span class="font-20">knowledge test</span>
                         </a>
                     </div>
-                    <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12 allignCenter">
+                    <div class="col-lg-4 col-md-12 col-sm-12 col-xs-12 allignCenter">
                         <a class="btn btn-1 btn-1e boldS formButton">Category test</a>
                     </div>
                 </div>
