@@ -19,10 +19,13 @@ function timedCounter(finalValue, seconds, callback) {
 
 }
 
-timedCounter(75, 5, function (value) {
-    value = Math.floor(value);
-    $('.user-count').html(value);
-});
+function timedCounterCall(n) {
+
+    timedCounter(n, 7, function(value){
+        value = Math.floor(value);
+        $('.user-count').html(value);
+    });
+};
 
 function sendAnswer(inputSelector, url, question) {
     $(inputSelector).on('change', function () {
