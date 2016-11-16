@@ -1,6 +1,6 @@
 {% extends '::base.html.twig' %}
 {% set charArray = {1 : 'A', 2 : 'B', 3 : 'C', 4 : 'D', 5 : 'E', 6 : 'F', 7 : 'G'}%}
-{% set correct = 0 %}
+ <!-- {% set correct = 0 %} -->
 
 {% block body %}
     <div class="grey-background">
@@ -16,9 +16,11 @@
                             {% for question in group %}
                                 {% if app.session.get('isCorrect')[question.id]  %}
                                     {% set correct = correct + 1 %}
-                                    <a class="dd66 color-background-text" title="{{ question.title }}" href="{{ path('testResults', {'id': question.id }) }}">{{ loop.index }}</a>
+                                    <a class="dd66 color-background-text" title="{{ question.title }}"
+                                       href="{{ path('testResults', {'id': question.id }) }}">{{ loop.index }}</a>
                                 {% else %}
-                                    <a class="dd66 color-background-text" title="{{ question.title }}" href="{{ path('testResults', {'id': question.id }) }}">{{ loop.index }}</a>
+                                    <a class="dd66 color-background-text" title="{{ question.title }}"
+                                       href="{{ path('testResults', {'id': question.id }) }}">{{ loop.index }}</a>
                                 {% endif %}
                             {% endfor %}<br>
                         {% endfor %}
@@ -86,14 +88,16 @@
                         {{ form_widget(form.next, {'attr': {'class': 'btn btn-3'}}) }} <br>
                     </div>
 
-                    {% if app.session.get('isCorrect')[current.id] is not defined or not app.session.get('isCorrect')[current.id] %}
+                    {% if app.session.get('isCorrect')[current.id] is not defined
+                    or not app.session.get('isCorrect')[current.id] %}
                         <p>Your choice is incorrect.</p>
                     {% else %}
                         <p>Your choice is correct!</p>
                     {% endif %}
                     <div class="visible">
                         {{ current.explanation|
-                        replace({ "<pre>" : "<pre><code class='language-php'><xmp>" , "</pre>" : "</xmp></code></pre>" })|raw }}
+                        replace({ "<pre>" : "<pre><code class='language-php'><xmp>" ,
+                            "</pre>" : "</xmp></code></pre>" })|raw }}
                     </div>
                 </div>
             </div>
