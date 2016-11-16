@@ -21,3 +21,7 @@ services:
         arguments: ["@app.test_control"]
         tags:
             - { name: form.type }
+
+    app.user:
+      class: AppBundle\Service\UserControl
+      arguments: ["@doctrine.orm.entity_manager"]

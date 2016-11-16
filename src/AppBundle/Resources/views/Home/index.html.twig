@@ -160,3 +160,7 @@
         </div>
     </div>
 {% endblock %}
+{% block javascripts %}
+    {{ parent() }}
+    <script type="text/javascript">timedCounterCall(75);</script>
+{% endblock %}
