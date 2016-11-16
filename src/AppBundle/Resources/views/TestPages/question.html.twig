@@ -33,7 +33,7 @@
 
                         {{ form_start(form) }}
                         {{ index ~ '.' }}{{ current.content|
-                        replace({ "<pre>" : "<pre><code class='language-php'><xmp>" ,
+                        replace({ "&#x3C;" : "<","<pre>" : "<pre><code class='language-php'><xmp>" ,
                             "</pre>" : "</xmp></code></pre>" })|raw }}
 
                     {% for answer in form.answers %}
