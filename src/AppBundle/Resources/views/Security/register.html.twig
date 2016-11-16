@@ -2,16 +2,32 @@
 
 {% block title %}register{% endblock %}
 
-{% block body %}
-    {{ form_start(form) }}
-    {{ form_row(form.username) }}
-    {{ form_row(form.email) }}
-    {{ form_row(form.name) }}
-    {{ form_row(form.surname) }}
-    {{ form_row(form.password.first) }}
-    {{ form_row(form.password.second) }}
-    {{ form_row(form.termsAccepted) }}
 
-    <button type="submit">Register!</button>
-    {{ form_end(form) }}
+{% form_theme form 'bootstrap_3_layout.html.twig' %}
+
+{% block body %}
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-4 col-lg-offset-4 col-sm-12">
+                <div class="panel panel-success">
+                    <div class="panel-heading">
+                        Register
+                    </div>
+                    <div class="panel-body">
+                        {{ form_start(form) }}
+                        {{ form_row(form.username) }}
+                        {{ form_row(form.email) }}
+                        {{ form_row(form.name) }}
+                        {{ form_row(form.surname) }}
+                        {{ form_row(form.password.first) }}
+                        {{ form_row(form.password.second) }}
+                        {{ form_row(form.termsAccepted) }}
+
+                        <div class="allign-center"><button class="btn btn-4" type="submit">Register</button></div>
+                        {{ form_end(form) }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 {% endblock %}

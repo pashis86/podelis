@@ -36,7 +36,7 @@
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{{ app.user.name }} <span class="caret"></span></a>
                                 <ul class="dropdown-menu position-topmost">
                                     <li><a href="{{ path('keistiDuomenis') }}">Statistics</a></li>
-                                    <li><a href="{{ path('login') }}">Edit profile</a></li>
+                                    <li><a href="{{ path('user') }}">Edit profile</a></li>
                                     <li><a href="{{ path('logout') }}">Log out</a></li>
                                 </ul>
                             </li>
@@ -44,8 +44,8 @@
                         </ul>
                     {% else %}
                         <ul class="nav navbar-nav navbar-right">
-                            <li><a class="btn loginButton">Log in</a></li>
-                            <li><a class="btn registerButton">Sign up</a></li>
+                            <li><a class="btn loginButton"{% if app.request.get('_route') != 'homepage' %}href="{{ path('login') }}"{% endif %}>Log in</a></li>
+                            <li><a class="btn registerButton" {% if app.request.get('_route') != 'homepage' %}href="{{ path('register') }}"{% endif %}>Sign up</a></li>
                         </ul>
                     {% endif %}
             </div><!--/.nav-collapse -->
