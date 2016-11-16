@@ -130,7 +130,8 @@ class HomeController extends Controller
             return $this->render('@App/TestPages/question.html.twig', [
                 'form' => $form->createView(),
                 'current' => $question,
-                'index' => $testControl->getCurrentIndex($id)
+                'index' => $testControl->getCurrentIndex($id),
+                'solved' => $testControl->isQuestionSolved($id)
             ]);
         }
         return $this->render('@App/Home/404.html.twig');
@@ -168,7 +169,7 @@ class HomeController extends Controller
 
             $id = $request->request->get('question');
 
-            $correct = $this->getDoctrine()->getRepository('AppBundle:Answer')->getCorrectIds($id);
+            $answers = $this->getDoctrine()->getRepository('AppBundle:Answer')->getCorrectAnswers($id);
 
             /** @var Question $question */
             $question = $this->getDoctrine()->getRepository('AppBundle:Question')->findOneBy(['id' =>$id]);
@@ -177,7 +178,7 @@ class HomeController extends Controller
             $solved[$id] = true;
             $session->set('solved', $solved);
 
-            return new JsonResponse(json_encode($correct));
+            return new JsonResponse(json_encode(['answers' => $answers, 'explanation' => $question->getExplanation()]));
         }
         return new Response();
     }

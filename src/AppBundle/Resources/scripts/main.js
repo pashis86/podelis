@@ -96,30 +96,77 @@ function sendAnswers(inputSelector, url, question) {
     }
 })(jQuery);
 
+/*function isSolved(question) {
 
-function solveQuestion(button, reqPath, questionId, inputElement) {
+
+}
+
+/*function solveQuestion(button, reqPath, questionId, inputElement, explanationEl) {
     button.on('click', function () {
-        $.ajax({
-            type: "POST",
-            url: reqPath,
-            data: {'question': questionId},
-            success: function (data) {
-                var answers = JSON.parse(data);
-                console.log(answers);
-                for (var i = 0; i < answers.length; i++) {
-                    answers[i] = answers[i].id;
-                }
+            $.ajax({
+                type: "POST",
+                url: reqPath,
+                data: {'question': questionId},
+                success: function (data) {
+                    var object = JSON.parse(data);
 
-                inputElement.prop('disabled', true);
-                inputElement.each(function () {
-                    for (var i = 0; i < answers.length; i++) {
-                        if (answers[i] == $(this).attr('value')) {
-                            $(this).parent().prop('class', 'alert alert-success');
-                        }
+                    for (var i = 0; i < object.length; i++) {
+                        object[i] = object[i].id;
                     }
-                });
 
+                    var explanation = object['explanation']
+                        .replace('\<pre>', '\<pre><code class=\'language-php\'><xmp>')
+                        .replace('\</pre>', '\</xmp></code></pre>');
+                    var answers = object['answers'];
+
+                    for (var i = 0; i < answers.length; i++) {
+                        answers[i] = answers[i].id;
+                    }
+
+                    inputElement.prop('disabled', true);
+                    inputElement.each(function () {
+                        for (var i = 0; i < answers.length; i++) {
+                            if (answers[i] == $(this).attr('value')) {
+                                $(this).parent().prop('class', 'alert alert-success');
+                            }
+                        }
+                    });
+                    explanationEl.html(explanation);
+                }
+            });
+    });
+}*/
+
+function solveIt(reqPath, questionId, inputElement, explanationEl) {
+    $.ajax({
+        type: "POST",
+        url: reqPath,
+        data: {'question': questionId},
+        success: function (data) {
+            var object = JSON.parse(data);
+
+            for (var i = 0; i < object.length; i++) {
+                object[i] = object[i].id;
             }
-        });
+
+            var explanation = object['explanation']
+                .replace('\<pre>', '\<pre><code class=\'language-php\'><xmp>')
+                .replace('\</pre>', '\</xmp></code></pre>');
+            var answers = object['answers'];
+
+            for (var i = 0; i < answers.length; i++) {
+                answers[i] = answers[i].id;
+            }
+
+            inputElement.prop('disabled', true);
+            inputElement.each(function () {
+                for (var i = 0; i < answers.length; i++) {
+                    if (answers[i] == $(this).attr('value')) {
+                        $(this).parent().prop('class', 'alert alert-success');
+                    }
+                }
+            });
+            explanationEl.html(explanation);
+        }
     });
 }
