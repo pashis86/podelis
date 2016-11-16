@@ -21,7 +21,7 @@ class AnswerRepository extends \Doctrine\ORM\EntityRepository
             ->getResult();
     }
 
-    public function getCorrectIds($qId)
+    public function getCorrectAnswers($qId)
     {
         return $this->createQueryBuilder('a')
             ->select('a.id')
