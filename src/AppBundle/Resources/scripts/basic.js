@@ -60,8 +60,11 @@ function countdown(seconds, minutes, hours, timestamp) {
     hours.html(pad(parseInt(sec/3600,10)));
 
     setInterval( function(){
-        seconds.html(pad(parseInt(--sec % 60)));
-        minutes.html(pad(parseInt(sec/60,10)));
-        hours.html(pad(parseInt(sec/3600,10)))
+        if(sec > 0)
+        {
+            seconds.html(pad(parseInt(--sec % 60)));
+            minutes.html(pad(parseInt(sec/60,10)));
+            hours.html(pad(parseInt(sec/3600,10)));
+        }
     }, 1000);
 }

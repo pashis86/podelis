@@ -46,7 +46,7 @@
             {{ form_widget(form.next) }}
             {{ form_end(form) }}
             <input type="button" id="solve" class="btn btn-2 btn-2a" value="Solve it">
-
+            <div id="explanation"></div>
         </div>
     </div>
 {% endblock %}
@@ -56,6 +56,24 @@
     <script type="text/javascript">
         countdown($('#seconds'), $('#minutes'), $('#hours'), '{{ app.session.get('endsAt')|date('U') }}');
         sendAnswers("input[name^='test_question[answers]']", '{{ path('questionChosen') }}', '{{ current.id }}');
-        solveQuestion($('#solve'), '{{ path('solveIt') }}', '{{ current.id }}', $('.alert input'));
+
+        {% if solved %}
+        solveIt('{{ path('solveIt') }}',
+                '{{ current.id }}',
+                $('.alert input'),
+                $('#explanation'));
+        {% endif %}
+
+        $('#solve').on('click', function () {
+            solveIt('{{ path('solveIt') }}',
+                    '{{ current.id }}',
+                    $('.alert input'),
+                    $('#explanation'));
+        });
+        /*solveQuestion($('#solve'),
+                '{ path('solveIt') }}',
+                '{ current.id }}',
+                $('.alert input'),
+                $('#explanation'));*/
     </script>
 {% endblock %}
