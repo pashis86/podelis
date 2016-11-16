@@ -3,59 +3,59 @@
 {% set charArray = {1 : 'A', 2 : 'B', 3 : 'C', 4 : 'D', 5 : 'E', 6 : 'F', 7 : 'G'} %}
 
 {% block body %}
-        <div class="grey-background">
+    <div class="grey-background">
         <div class="container">
-    {% for group in app.session.get('questionGroups') %}
-        {% if not group[0].book.title %}
-            <b>{{ loop.index ~ '. PHP Test' }}</b><br>
-        {% else %}
-            <b>{{ loop.index }}.{{ group[0].book.title }}</b><br>
-        {% endif %}
-        {% for question in group %}
-            {% if question.id == current.id %}
-                <b><a title="{{ question.title }}"
-                      href="{{ path('question', {'id': question.id }) }}">{{ loop.index }}</a></b>
-            {% else %}
-                <a title="{{ question.title }}" href="{{ path('question', {'id': question.id }) }}">{{ loop.index }}</a>
-            {% endif %}
-        {% endfor %}<br>
-    {% endfor %}
 
-    <div id="countdown">
-        <p class="hours">00</p>
-        <p class="minutes">00</p>
-        <p class="seconds">00</p>
+            {% for group in app.session.get('questionGroups') %}
+                {% if not group[0].book.title %}
+                    <b>{{ loop.index ~ '. PHP Test' }}</b><br>
+                {% else %}
+                    <b>{{ loop.index }}.{{ group[0].book.title }}</b><br>
+                {% endif %}
+
+                {% for question in group %}
+                    {% if question.id == current.id %}
+                        <b><a title="{{ question.title }}"
+                             href="{{ path('question', {'id': question.id }) }}">{{ loop.index }}</a></b>
+                    {% else %}
+                        <a title="{{ question.title }}"
+                            href="{{ path('question', {'id': question.id }) }}">{{ loop.index }}</a>
+                    {% endif %}
+                {% endfor %}<br>
+            {% endfor %}
+
+            <div id="countdown">
+                <p id="hours">00</p>
+                <p id="minutes">00</p>
+                <p id="seconds">00</p>
+            </div>
+
+                {{ form_start(form) }}
+                {{ index ~ '.' }}{{ current.content|
+                replace({ "<pre>" : "<pre><code class='language-php'><xmp>" ,
+                    "</pre>" : "</xmp></code></pre>" })|raw }}
+
+            {% for answer in form.answers %}
+                <div class="alert">
+                    {{ charArray[loop.index] }}{{ form_widget(answer) }}
+                    {{ form_label(answer)|raw}}
+                </div>
+            {% endfor %}
+
+            {{ form_widget(form.previous) }}
+            {{ form_widget(form.next) }}
+            {{ form_end(form) }}
+            <input type="button" id="solve" class="btn btn-2 btn-2a" value="Solve it">
+
+        </div>
     </div>
-
-    {{ form_start(form) }}
-    {{ index ~ '.' }}{{ current.content|raw }}
-
-    {% for answer in form.answers %}
-        <div class="alert">
-            {{ charArray[loop.index] }}{{ form_widget(answer) }}
-            {{ form_label(answer)|replace({"&lt;" : "<", "&gt;" : ">", "&amp;" : "&"})|raw }}
-        </div>
-    {% endfor %}
-
-    {{ form_widget(form.previous) }}
-    {{ form_widget(form.next) }}
-    {{ form_end(form) }}
-    <input type="button" id="solve" value="Solve it">
-
-        </div>
-        </div>
 {% endblock %}
 {% block javascripts %}
     <script src="{{ asset('js/script.js') }}"></script>
 
     <script type="text/javascript">
-
-        $("#countdown").countdown({
-            date: "{{ app.session.get('endsAt')|date('Y/m/d/H:i:s') }}",
-            format: "on"
-        });
+        countdown($('#seconds'), $('#minutes'), $('#hours'), '{{ app.session.get('endsAt')|date('U') }}');
         sendAnswers("input[name^='test_question[answers]']", '{{ path('questionChosen') }}', '{{ current.id }}');
         solveQuestion($('#solve'), '{{ path('solveIt') }}', '{{ current.id }}', $('.alert input'));
-
     </script>
 {% endblock %}

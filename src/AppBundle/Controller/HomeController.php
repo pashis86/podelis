@@ -230,10 +230,9 @@ class HomeController extends Controller
     {
         $repository = $this->getDoctrine()->getRepository('AppBundle:User');
 
-        $order = $request->query->get('order');
-        $order ? $order : $order = 'correct';
+        $orderParams = $request->query->all();
 
-        $best = $repository->findBest($order, $page, $limit = 2);
+        $best = $repository->findBest($orderParams, $page, $limit = 2);
         $maxPages = ceil($best->count() / $limit);
 
         if($page > $maxPages){
