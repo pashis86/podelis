@@ -1,70 +1,61 @@
 {% extends '::base.html.twig' %}
 
+{% set charArray = {1 : 'A', 2 : 'B', 3 : 'C', 4 : 'D', 5 : 'E', 6 : 'F', 7 : 'G'} %}
+
 {% block body %}
     <div class="grey-background">
         <div class="container">
+
             {% for group in app.session.get('questionGroups') %}
-                <b>{{ loop.index }}.{{ group[0].book.title }}</b><br>
+                {% if not group[0].book.title %}
+                    <b>{{ loop.index ~ '. PHP Test' }}</b><br>
+                {% else %}
+                    <b>{{ loop.index }}.{{ group[0].book.title }}</b><br>
+                {% endif %}
+
                 {% for question in group %}
                     {% if question.id == current.id %}
-                        <b><a title="{{ question.title }}" href="{{ path('question', {'id': question.id }) }}">{{ loop.index }}</a></b>
+                        <b><a title="{{ question.title }}"
+                             href="{{ path('question', {'id': question.id }) }}">{{ loop.index }}</a></b>
                     {% else %}
-                        <a title="{{ question.title }}" href="{{ path('question', {'id': question.id }) }}">{{ loop.index }}</a>
+                        <a title="{{ question.title }}"
+                            href="{{ path('question', {'id': question.id }) }}">{{ loop.index }}</a>
                     {% endif %}
                 {% endfor %}<br>
             {% endfor %}
 
-            <div id="clock"></div>
-            {{ form_start(form) }}
-            {{ index ~ '.'}}{{ current.content|raw }}
+            <div id="countdown">
+                <p id="hours">00</p>
+                <p id="minutes">00</p>
+                <p id="seconds">00</p>
+            </div>
+
+                {{ form_start(form) }}
+                {{ index ~ '.' }}{{ current.content|
+                replace({ "<pre>" : "<pre><code class='language-php'><xmp>" ,
+                    "</pre>" : "</xmp></code></pre>" })|raw }}
 
             {% for answer in form.answers %}
-                {{ loop.index }}{{ form_widget(answer) }}
-                {{ form_label(answer)|replace({"&lt;" : "<", "&gt;" : ">", "&amp;" : "&"})|raw }}
-                <br>
+                <div class="alert">
+                    {{ charArray[loop.index] }}{{ form_widget(answer) }}
+                    {{ form_label(answer)|raw}}
+                </div>
             {% endfor %}
 
             {{ form_widget(form.previous) }}
             {{ form_widget(form.next) }}
             {{ form_end(form) }}
+            <input type="button" id="solve" class="btn btn-2 btn-2a" value="Solve it">
+
         </div>
     </div>
 {% endblock %}
 {% block javascripts %}
-    <!-- laikinai inportinu per src -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
-    <script src="{{ asset('js/jquery.countdown.min.js') }}"></script>
+    <script src="{{ asset('js/script.js') }}"></script>
 
-<script type="text/javascript">
-    $(document).ready(function () {
-        $("input[name='test_question[answers]']").on('change', function () {
-            var answer = $("input[name='test_question[answers]']:checked").val();
-            $.ajax({
-                type: "POST",
-                url: '{{ path('questionChosen') }}',
-                data: { 'question': {{ current.id }}, 'answer': answer }
-            });
-        });
-
-        $("input[name='test_question[answers][]']").on('change', function () {
-            var answers = [];
-            $("input[name='test_question[answers][]']:checked").each(function () {
-                answers.push($(this).val());
-            });
-            $.ajax({
-                type: "POST",
-                url: '{{ path('questionChosen') }}',
-                data: { 'question': {{ current.id }}, 'answer': answers }
-            });
-        });
-
-        $("#clock").countdown('{{ app.session.get('endsAt')|date('Y/m/d/H:i:s') }}', function(event) {
-                    $(this).text(
-                            event.strftime('%H:%M:%S')
-                    );
-                });
-     /*   sendAnswer("input[name='test_question[answers]']", { path('questionChosen') }}, { current.id }});
-        sendAnswers("input[name='test_question[answers]']", { path('questionChosen') }}, { current.id }});*/
-    });
-</script>
+    <script type="text/javascript">
+        countdown($('#seconds'), $('#minutes'), $('#hours'), '{{ app.session.get('endsAt')|date('U') }}');
+        sendAnswers("input[name^='test_question[answers]']", '{{ path('questionChosen') }}', '{{ current.id }}');
+        solveQuestion($('#solve'), '{{ path('solveIt') }}', '{{ current.id }}', $('.alert input'));
+    </script>
 {% endblock %}

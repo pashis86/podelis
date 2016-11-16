@@ -476,7 +476,7 @@ class User implements AdvancedUserInterface /*, \Serializable <-- del sito buna 
 
     public function __construct()
     {
-        $this->active = false;
+        $this->active = true;
         $this->createdAt = new \DateTime('now');
         $this->updatedAt = new \DateTime('now');
         $this->level = 1;

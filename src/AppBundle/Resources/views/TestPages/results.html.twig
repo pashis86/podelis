@@ -1,23 +1,81 @@
 {% extends '::base.html.twig' %}
+{% set charArray = {1 : 'A', 2 : 'B', 3 : 'C', 4 : 'D', 5 : 'E', 6 : 'F', 7 : 'G'}%}
+{% set correct = 0 %}
 
 {% block body %}
+
     {% for group in app.session.get('questionGroups') %}
-        <b>{{ loop.index }}.{{ group[0].book.title }}</b><br>
+        {% if not group[0].book.title %}
+            <b>{{ loop.index ~ '. PHP Test' }}</b><br>
+        {% else %}
+            <b>{{ loop.index }}.{{ group[0].book.title }}</b><br>
+        {% endif %}
             {% for question in group %}
                 {% if app.session.get('isCorrect')[question.id]  %}
+                    {% set correct = correct + 1 %}
                     <a style="color: #66dd66" title="{{ question.title }}" href="{{ path('testResults', {'id': question.id }) }}">{{ loop.index }}</a>
                 {% else %}
                     <a style="color: #C82829" title="{{ question.title }}" href="{{ path('testResults', {'id': question.id }) }}">{{ loop.index }}</a>
                 {% endif %}
             {% endfor %}<br>
         {% endfor %}
+
+    <div class="alert alert-info page-header">
+        <h3>
+            You've scored {{ correct ~ '/' ~ app.session.get('isCorrect')|length }}
+        </h3>
+    </div>
+
+    {% if solved %}
+    <div class="alert alert-warning page-header">
+        <h4>
+            You've used the "Solve it" option on this question.
+        </h4>
+    </div>
+    {% endif %}
+
     {{ form_start(form) }}
-    {{ index ~ '.'}}{{ current.content|raw }}
+    {{ index ~ '.'}}{{ current.content|replace({ "<pre>" : "<pre><code class='language-php'><xmp>" ,
+    "</pre>" : "</xmp></code></pre>" })|raw }}
 
     {% for answer in form.answers %}
-        {{ loop.index }}{{ form_widget(answer) }}
-        {{ form_label(answer)|replace({"&lt;" : "<", "&gt;" : ">", "&amp;" : "&"})|raw }}
-        <br>
+        {% if answer.vars.checked %}
+            {% for option in current.answers %}
+                {% if option.id == answer.vars.value and option.correct %}
+                    <div class="alert alert-success">
+                        {{ charArray[loop.index] }}{{ form_widget(answer, {disabled : 'true'}) }}
+                        {{ form_label(answer)|
+                        replace({ "<pre>" : "<pre><code class='language-php'><xmp>" ,
+                            "</pre>" : "</xmp></code></pre>" })|raw }}
+                    </div>
+                {% elseif option.id == answer.vars.value and not option.correct %}
+                    <div class="alert alert-danger">
+                        {{ charArray[loop.index] }}{{ form_widget(answer, {disabled : 'true'}) }}
+                        {{ form_label(answer)|
+                        replace({ "<pre>" : "<pre><code class='language-php'><xmp>" ,
+                            "</pre>" : "</xmp></code></pre>" })|raw }}
+                    </div>
+                {% endif %}
+            {% endfor %}
+        {% else %}
+            {% for option in current.answers %}
+                {% if option.id == answer.vars.value and option.correct %}
+                    <div class="alert alert-success">
+                        {{ charArray[loop.index] }}{{ form_widget(answer, {disabled : 'true'}) }}
+                        {{ form_label(answer)|
+                        replace({ "<pre>" : "<pre><code class='language-php'><xmp>" ,
+                            "</pre>" : "</xmp></code></pre>" })|raw }}
+                    </div>
+                {% elseif option.id == answer.vars.value and not option.correct %}
+                    <div class="alert">
+                        {{ charArray[loop.index] }}{{ form_widget(answer, {disabled : 'true'}) }}
+                        {{ form_label(answer)|
+                        replace({ "<pre>" : "<pre><code class='language-php'><xmp>" ,
+                            "</pre>" : "</xmp></code></pre>" })|raw }}
+                    </div>
+                {% endif %}
+            {% endfor %}
+        {% endif %}
     {% endfor %}
 
     {{ form_widget(form.previous) }}
@@ -26,13 +84,11 @@
 
     {% if app.session.get('isCorrect')[current.id] is not defined or not app.session.get('isCorrect')[current.id] %}
         <p>Your choice is incorrect.</p>
-        <div class="visible">
-            {{ current.explanation|raw }}
-        </div>
     {% else %}
         <p>Your choice is correct!</p>
-        <div class="hidden">
-            {{ current.explanation|raw }}
-        </div>
     {% endif %}
+    <div class="visible">
+        {{ current.explanation|
+        replace({ "<pre>" : "<pre><code class='language-php'><xmp>" , "</pre>" : "</xmp></code></pre>" })|raw }}
+    </div>
 {% endblock %}

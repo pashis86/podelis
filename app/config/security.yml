@@ -27,10 +27,16 @@ security:
             pattern:    ^/
             http_basic: ~
             provider: db_provider
+            remember_me:
+                secret: '%%secret%'
+                lifetime: 604800
+                path: /
+
             form_login:
                 username_parameter: _username
                 login_path: /login
                 check_path: /login
+                csrf_token_generator: security.csrf.token_manager
             guard:
                 authenticators:
                     - app.facebook_authenticator

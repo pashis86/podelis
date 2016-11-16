@@ -222,7 +222,7 @@ $(document).ready(function(){
 
         var button = this.first();
 
-        button.trigger('progress',[val])
+        button.trigger('progress',[val]);
 
         return this;
     };
@@ -268,16 +268,6 @@ $(document).ready(function(){
     };
 
 })(jQuery);
-
-
-
-
-
-
-
-
-
-
 
 
 //BACKGROUND

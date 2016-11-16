@@ -92,8 +92,6 @@ class SecurityController extends Controller
         if(($securityContext->isGranted('IS_AUTHENTICATED_FULLY') ||
             $securityContext->isGranted('IS_AUTHENTICATED_REMEMBERED')) && !$user->getFacebookId()) {
 
-          //  $edit = new EditUser($user);
-
             $form = $this->createForm(EditUserType::class, $user);
             $form->handleRequest($request);
 
@@ -101,7 +99,6 @@ class SecurityController extends Controller
 
                 if($form->isValid()) {
 
-                 //   $user->editUser($user);
                     $user->setUpdatedAt(new \DateTime('now'));
                     $em = $this->getDoctrine()->getManager();
                     $em->persist($user);
@@ -196,7 +193,7 @@ class SecurityController extends Controller
                 $newPass = $this->get('security.password_encoder')->encodePassword($user, $plainPass);
                 $repository->resetPassword($user, $newPass);
                 $this->get('app.send_email')->passResetEmail($user, $plainPass);
-                dump($plainPass);
+
                 return $this->render('@App/SuccessPages/passReset.html.twig');
             }
             else{
@@ -230,7 +227,7 @@ class SecurityController extends Controller
                 }
             }
             else{
-                return $this->render('@App/Home/404.html.twig');
+                $this->addFlash('error', 'Such user doesn\'t exist!');
             }
         }
         return $this->render('@App/Security/activationRequest.html.twig', ['form' => $form->createView()]);

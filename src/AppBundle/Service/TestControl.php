@@ -12,6 +12,7 @@ namespace AppBundle\Service;
 use AppBundle\Entity\Answer;
 use AppBundle\Entity\Question;
 use AppBundle\Entity\User;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityManager;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorage;
@@ -80,6 +81,7 @@ class TestControl
             $answered[$id] = $answer;
             $this->session->set('answered', $answered);
         }
+
     }
 
     public function submit($id, $answer)
@@ -141,12 +143,13 @@ class TestControl
                 $ended = $this->session->get('endsAt');
             }
             $started = $this->session->get('started');
+
             $this->session->set('isCorrect', []);
             $this->session->set('timeSpent', date_diff($ended, $started));
             $this->session->set('endsAt', new \DateTime());
 
             foreach ($this->questions as $question) {
-                $qAnswers = $this->em->getRepository('AppBundle:Answer')
+                $correctAns = $this->em->getRepository('AppBundle:Answer')
                     ->findBy(['question' => $question, 'correct' => true]);
 
                 $pickedAnswers = (array_key_exists($question, $this->answers) ? $this->answers[$question] : null);
@@ -158,7 +161,7 @@ class TestControl
 
                 $isCorrect = $this->session->get('isCorrect');
 
-                if ($this->array_equal($qAnswers, $pickedAnswers)) {
+                if ($this->array_equal($correctAns, $pickedAnswers) && !$this->isQuestionSolved($question)) {
                     $isCorrect[$question] = true;
                     $this->session->set('isCorrect', $isCorrect);
                 } else {
@@ -181,22 +184,37 @@ class TestControl
     {
         $checkedAnswers = (array_key_exists($id, $answered) ? $answered[$id] : null);
 
-        if (!is_array($checkedAnswers)) {
-            $checkedAnswers = [$checkedAnswers];
-        }
+        if ($checkedAnswers == null)
+            return $checkedAnswers;
 
-        if ($checkedAnswers != null) {
+        if ($checkedAnswers instanceof ArrayCollection) {
+
             foreach ($checkedAnswers as $key => $answer) {
-                if ($answer != null) {
+
+                if ($answer instanceof Answer) {
                     $checkedAnswers[$key] = $this->em->merge($answer);
                 }
+                else{
+                    continue;
+                }
             }
+            return $checkedAnswers;
         }
-        if (!$question->getCheckboxAnswers()) {
-            $checkedAnswers = $checkedAnswers[0];
-        }
+        else{
 
-        return $checkedAnswers;
+            return $this->em->merge($checkedAnswers);
+        }
+    }
+
+    public function isQuestionSolved($id)
+    {
+        $solved = $this->session->get('solved');
+        foreach ($solved as $key => $value)
+        {
+            if($key == $id && $value == true)
+                return true;
+        }
+        return false;
     }
 
     /**

@@ -8,7 +8,9 @@ use AppBundle\Form\TestQuestionType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\Session;
 
 class HomeController extends Controller
@@ -79,6 +81,7 @@ class HomeController extends Controller
 
         $testControl = $this->get('app.test_control');
         $session->set('trackResults', false);
+        $session->set('solved', []);
         $session->set('started', new \DateTime());
         $session->set('endsAt', new \DateTime($testControl->setTimeLimit('+1 minute')));
         $session->set('answered', []);
@@ -139,10 +142,11 @@ class HomeController extends Controller
     public function questionChosenAction(Request $request)
     {
         $session = $this->get('session');
-        $answered = $session->get('answered');
-        $repository = $this->getDoctrine()->getRepository('AppBundle:Answer');
 
         if($request->isXmlHttpRequest() && $session->get('endsAt') >= new \DateTime()){
+            $answered = $session->get('answered');
+            $repository = $this->getDoctrine()->getRepository('AppBundle:Answer');
+
             $question = $request->request->get('question');
             $answerIds = $request->request->get('answer');
 
@@ -150,7 +154,32 @@ class HomeController extends Controller
             $answered[$question] = $answers;
             $session->set('answered', $answered);
         }
-        return $this->render('@App/Home/404.html.twig');
+        return new Response();
+    }
+
+    /**
+     * @Route("/solve-it", name="solveIt")
+     */
+    public function solveItAction(Request $request)
+    {
+        $session = $this->get('session');
+
+        if($request->isXmlHttpRequest() && $session->get('endsAt') >= new \DateTime()){
+
+            $id = $request->request->get('question');
+
+            $correct = $this->getDoctrine()->getRepository('AppBundle:Answer')->getCorrectIds($id);
+
+            /** @var Question $question */
+            $question = $this->getDoctrine()->getRepository('AppBundle:Question')->findOneBy(['id' =>$id]);
+
+            $solved = $session->get('solved');
+            $solved[$id] = true;
+            $session->set('solved', $solved);
+
+            return new JsonResponse(json_encode($correct));
+        }
+        return new Response();
     }
 
     /**
@@ -169,6 +198,7 @@ class HomeController extends Controller
         {
             $form = $this->createForm(TestQuestionType::class,
                 ['question' => $question, 'answered' => $session->get('answered')]);
+
             $form->handleRequest($request);
 
             if($form->get('next')->isClicked()){
@@ -186,7 +216,8 @@ class HomeController extends Controller
             return $this->render('@App/TestPages/results.html.twig', [
                 'form' => $form->createView(),
                 'current' => $question,
-                'index' => $testControl->getCurrentIndex($id)
+                'index' => $testControl->getCurrentIndex($id),
+                'solved' => $testControl->isQuestionSolved($id)
             ]);
         }
         return $this->render('@App/Home/404.html.twig');
@@ -199,10 +230,9 @@ class HomeController extends Controller
     {
         $repository = $this->getDoctrine()->getRepository('AppBundle:User');
 
-        $order = $request->query->get('order');
-        $order ? $order : $order = 'correct';
+        $orderParams = $request->query->all();
 
-        $best = $repository->findBest($order, $page, $limit = 2);
+        $best = $repository->findBest($orderParams, $page, $limit = 2);
         $maxPages = ceil($best->count() / $limit);
 
         if($page > $maxPages){

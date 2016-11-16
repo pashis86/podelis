@@ -13,7 +13,7 @@ use Doctrine\ORM\Tools\Pagination\Paginator;
  */
 class UserRepository extends \Doctrine\ORM\EntityRepository
 {
-    const MAX_RESULTS = 1;
+    const MAX_RESULTS = 10;
 
     /** @param User $user */
     public function activateUser($user)
@@ -43,15 +43,18 @@ class UserRepository extends \Doctrine\ORM\EntityRepository
         return $paginator;
     }
 
-    public function findBest($by, $currentPage = 1, $limit)
+    public function findBest($orderParams, $currentPage = 1, $limit)
     {
-        if($by == 'percentage') {
+        $orderBy = (isset($orderParams['order'])) ? $orderParams['order'] : 'correct';
+        $direction = (isset($orderParams['direction'])) ? $orderParams['direction'] : 'DESC';
+
+        if($orderBy == 'percentage') {
             $query = $this->findByPercentage();
         }
         else{
             $query = $this->createQueryBuilder('u')
                 ->select('u')
-                ->orderBy('u.'.$by, 'DESC')
+                ->orderBy('u.'.$orderBy, $direction)
                 ->getQuery();
         }
 
