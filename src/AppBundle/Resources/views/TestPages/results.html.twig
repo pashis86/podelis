@@ -18,19 +18,19 @@
                                     {% set correct = correct + 1 %}
                                     <a class="dd66 color-background-text" title="{{ question.title }}" href="{{ path('testResults', {'id': question.id }) }}">{{ loop.index }}</a>
                                 {% else %}
-                                    <a class="dd66 color-background-text" title="{{ question.title }}" href="{{ path('testResults', {'id': question.id }) }}">{{ loop.index }}</a>
+                                    <a class="dd77 color-background-text" title="{{ question.title }}" href="{{ path('testResults', {'id': question.id }) }}">{{ loop.index }}</a>
                                 {% endif %}
                             {% endfor %}<br>
                         {% endfor %}
 
-                    <div class="alert alert-info page-header">
+                    <div class="alert alert-info ">
                         <h3>
                             You've scored {{ correct ~ '/' ~ app.session.get('isCorrect')|length }}
                         </h3>
                     </div>
 
                     {% if solved %}
-                    <div class="alert alert-warning page-header">
+                    <div class="alert alert-warning">
                         <h4>
                             You've used the "Solve it" option on this question.
                         </h4>

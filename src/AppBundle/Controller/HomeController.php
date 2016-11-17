@@ -21,14 +21,19 @@ class HomeController extends Controller
      */
     public function indexAction(Request $request)
     {
-        return $this->render('AppBundle:Home:index.html.twig', []);
+        $usercount=$this->get('app.user')->userCount();
+        return $this->render('AppBundle:Home:index.html.twig', [
+            'usercount' => $usercount
+        ]);
     }
 
     /**
      * @Route("/profile", name="user")
+
      */
     public function userAction(Request $request)
     {
+        //* @Security("has_role('ROLE_USER')")
         return $this->render('AppBundle:Home:user.html.twig', []);
     }
 

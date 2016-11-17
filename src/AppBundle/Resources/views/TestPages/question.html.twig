@@ -33,7 +33,7 @@
 
                         {{ form_start(form) }}
                         {{ index ~ '.' }}{{ current.content|
-                        replace({ "&#x3C;" : "<","<pre>" : "<pre><code class='language-php'><xmp>" ,
+                        replace({ "<pre>" : "<pre><code class='language-php'><xmp>" ,
                             "</pre>" : "</xmp></code></pre>" })|raw }}
 
                     {% for answer in form.answers %}
@@ -51,8 +51,14 @@
                     </div>
                 </div>
             </div>
+            <div class="row">
+                <div class="col-lg-6 col-lg-offset-3 col-md-6 col-md-offset-3 col-sm-12">
+                    <div id="explanation"></div>
+                </div>
+            </div>
         </div>
     </div>
+
 {% endblock %}
 {% block javascripts %}
     {{ parent() }}
