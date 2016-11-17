@@ -68,6 +68,11 @@ class UserRepository extends \Doctrine\ORM\EntityRepository
         return $this->_em->createQuery('SELECT u, u.correct / (u.correct + u.incorrect) AS HIDDEN percentage
         FROM AppBundle:User u 
         ORDER BY percentage DESC');
+    }
 
+    public function userCount()
+    {
+        return $this->_em->createQuery('SELECT COUNT(u)
+        FROM AppBundle:User u');
     }
 }
