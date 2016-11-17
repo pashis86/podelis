@@ -23,6 +23,14 @@
                             <label class="control-label label-width" for="password">Password: </label>
                             <input type="password" id="password" name="_password" />
                         </fieldset>
+                        <fieldset>
+                            <label for="remember_me">Remember me</label>
+                            <input type="checkbox" id="remember_me" name="_remember_me" />
+                        </fieldset>
+
+                        <input type="hidden" name="_csrf_token"
+                               value="{{ csrf_token('authenticate') }}">
+
                         <button class="btn btn-4" type="submit">Log in</button>
                     </form>
 
