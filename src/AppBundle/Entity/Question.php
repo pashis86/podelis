@@ -93,7 +93,7 @@ class Question
     }
 
     /**
-     * @return mixed
+     * @return Book
      */
     public function getBook()
     {
@@ -101,7 +101,7 @@ class Question
     }
 
     /**
-     * @param mixed $book
+     * @param Book $book
      * @return Question
      */
     public function setBook($book)

@@ -60,7 +60,7 @@ class TestController extends Controller
     /**
      * @Route("/quick-test", name="quick_test")
      */
-    public function quickTestAction(Request $request)
+    public function quickTestAction()
     {
         $qRepository = $this->getDoctrine()->getRepository('AppBundle:Question');
         $questions = $qRepository->getRandomQuestions(10);
@@ -77,6 +77,31 @@ class TestController extends Controller
         $session->set('answered', []);
 
         return $this->redirectToRoute('question', ['id' => $questions[0][0]->getId()]);
+    }
+
+    /**
+     * @Route("/category-test/{id}", name="categoryTest")
+     */
+    public function categoryTestAction($id)
+    {
+        $questions = $this->getDoctrine()->getRepository('AppBundle:Question')->getCategoryQuestions($id);
+        if($questions)
+        {
+            $session = new Session();
+            $session->clear();
+
+            $session->set('questionGroups', $questions);
+            $testControl = $this->get('app.test_control');
+
+            $session->set('trackResults', true);
+            $session->set('solved', []);
+            $session->set('started', new \DateTime());
+            $session->set('endsAt', new \DateTime($testControl->setTimeLimit('+1 minute')));
+            $session->set('answered', []);
+
+            return $this->redirectToRoute('question', ['id' => $questions[0][0]->getId()]);
+        }
+        return $this->render('@App/Home/404.html.twig');
     }
 
     /**
