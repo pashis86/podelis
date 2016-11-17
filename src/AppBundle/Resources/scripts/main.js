@@ -11,7 +11,7 @@ function timedCounter(finalValue, seconds, callback) {
         if (value >= finalValue)
             value = finalValue;
         else
-            setTimeout(update, 250);
+            setTimeout(update, 200);
 
         callback && callback(value);
 
@@ -23,6 +23,15 @@ timedCounter(75, 5, function (value) {
     value = Math.floor(value);
     $('.user-count').html(value);
 });
+
+
+
+
+
+
+
+
+
 
 function sendAnswer(inputSelector, url, question) {
     $(inputSelector).on('change', function () {

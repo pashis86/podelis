@@ -291,7 +291,7 @@ $( document ).ready(function() {
 
 function scaleVideoContainer() {
 
-    var height = $(window).height()/ 2;
+    var height = $(window).height() - 50;
     var unitHeight = parseInt(height) + 'px';
     $('.homepage-hero-module').css('height',unitHeight);
 
