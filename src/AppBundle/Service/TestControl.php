@@ -74,11 +74,11 @@ class TestControl
         return false;
     }
 
-    public function addAnswer($id, $answer)
+    public function addAnswer($questionId, $answer)
     {
         if ($this->session->get('endsAt') >= new \DateTime()) {
             $answered = $this->session->get('answered');
-            $answered[$id] = $answer;
+            $answered[$questionId] = $answer;
             $this->session->set('answered', $answered);
         }
 
@@ -93,22 +93,9 @@ class TestControl
 
             $this->session->set('answered', $answered);
             $this->checkAnswers();
-        }
-
-        else {
+        } else {
             $this->checkAnswers();
         }
-    }
-
-    public function setTimeLimit($timePerQuestion)
-    {
-        if (preg_match('#[0-9]+#', $timePerQuestion, $time)) {
-            $time = intval($time);
-            $time = $time * count($this->questions);
-
-            return preg_replace('#[0-9]+#', $time, $timePerQuestion);
-        }
-        throw new \Exception('Invalid argument %s', $timePerQuestion);
     }
 
     public function getCurrentIndex($currentQ)
@@ -143,7 +130,6 @@ class TestControl
                 $ended = $this->session->get('endsAt');
             }
             $started = $this->session->get('started');
-
             $this->session->set('isCorrect', []);
             $this->session->set('timeSpent', date_diff($ended, $started));
             $this->session->set('endsAt', new \DateTime());
@@ -179,8 +165,7 @@ class TestControl
         }
     }
 
-    /** @param Question $question */
-    public function prepareSelectedOptions($question, $answered, $id)
+    public function prepareSelectedOptions($answered, $id)
     {
         $checkedAnswers = (array_key_exists($id, $answered) ? $answered[$id] : null);
 
@@ -193,14 +178,12 @@ class TestControl
 
                 if ($answer instanceof Answer) {
                     $checkedAnswers[$key] = $this->em->merge($answer);
-                }
-                else{
+                } else{
                     continue;
                 }
             }
             return $checkedAnswers;
-        }
-        else{
+        } else{
 
             return $this->em->merge($checkedAnswers);
         }
@@ -209,10 +192,12 @@ class TestControl
     public function isQuestionSolved($id)
     {
         $solved = $this->session->get('solved');
-        foreach ($solved as $key => $value)
-        {
-            if($key == $id && $value == true)
-                return true;
+        if(is_array($solved)){
+            foreach ($solved as $key => $value)
+            {
+                if($key == $id && $value == true)
+                    return true;
+            }
         }
         return false;
     }

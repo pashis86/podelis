@@ -40,15 +40,7 @@ class TestController extends Controller
                 'amount' => $form['amount']->getData()
             ]);
 
-            $session = new Session();
-            $session->clear();
-            $session->set('questionGroups', $questionGroups);
-            $session->set('trackResults', true);
-            $testControl = $this->get('app.test_control');
-
-            $session->set('endsAt', new \DateTime($testControl->setTimeLimit('+1 minute')));
-            $session->set('started', new \DateTime());
-            $session->set('answered', []);
+            $this->get('app.test_starter')->startTest($questionGroups, '+1 minute', true);
             return $this->redirectToRoute('question', ['id' => $questionGroups[0][0]->getId()]);
         }
 
@@ -64,17 +56,8 @@ class TestController extends Controller
     {
         $qRepository = $this->getDoctrine()->getRepository('AppBundle:Question');
         $questions = $qRepository->getRandomQuestions(10);
-        $session = new Session();
-        $session->clear();
 
-        $session->set('questionGroups', $questions);
-
-        $testControl = $this->get('app.test_control');
-        $session->set('trackResults', false);
-        $session->set('solved', []);
-        $session->set('started', new \DateTime());
-        $session->set('endsAt', new \DateTime($testControl->setTimeLimit('+1 minute')));
-        $session->set('answered', []);
+        $this->get('app.test_starter')->startTest($questions, '+2 minutes', false);
 
         return $this->redirectToRoute('question', ['id' => $questions[0][0]->getId()]);
     }
@@ -87,18 +70,7 @@ class TestController extends Controller
         $questions = $this->getDoctrine()->getRepository('AppBundle:Question')->getCategoryQuestions($id);
         if($questions)
         {
-            $session = new Session();
-            $session->clear();
-
-            $session->set('questionGroups', $questions);
-            $testControl = $this->get('app.test_control');
-
-            $session->set('trackResults', true);
-            $session->set('solved', []);
-            $session->set('started', new \DateTime());
-            $session->set('endsAt', new \DateTime($testControl->setTimeLimit('+1 minute')));
-            $session->set('answered', []);
-
+            $this->get('app.test_starter')->startTest($questions, '+1 minute,', true);
             return $this->redirectToRoute('question', ['id' => $questions[0][0]->getId()]);
         }
         return $this->render('@App/Home/404.html.twig');
@@ -160,15 +132,13 @@ class TestController extends Controller
         $session = $this->get('session');
 
         if($request->isXmlHttpRequest() && $session->get('endsAt') >= new \DateTime()){
-            $answered = $session->get('answered');
             $repository = $this->getDoctrine()->getRepository('AppBundle:Answer');
 
-            $question = $request->request->get('question');
+            $questionId = $request->request->get('question');
             $answerIds = $request->request->get('answer');
 
             $answers = $repository->getAllChecked($answerIds);
-            $answered[$question] = $answers;
-            $session->set('answered', $answered);
+            $this->get('app.test_control')->addAnswer($questionId, $answers);
         }
         return new Response();
     }

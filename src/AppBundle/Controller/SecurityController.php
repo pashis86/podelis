@@ -23,8 +23,8 @@ class SecurityController extends Controller
     {
         $securityContext = $this->get('security.authorization_checker');
 
-        if(!$securityContext->isGranted('IS_AUTHENTICATED_FULLY') ||
-                !$securityContext->isGranted('IS_AUTHENTICATED_REMEMBERED'))
+        if(!$securityContext->isGranted('IS_AUTHENTICATED_FULLY') &&
+            !$securityContext->isGranted('IS_AUTHENTICATED_REMEMBERED'))
         {
             $authenticationUtils = $this->get('security.authentication_utils');
 
@@ -33,7 +33,7 @@ class SecurityController extends Controller
 
             // last username entered by the user
             $lastUsername = $authenticationUtils->getLastUsername();
-            //  die($lastEmail);
+
             return $this->render('@App/Security/login.html.twig', [
                 'last_username' => $lastUsername,
                 'error'         => $error,
@@ -49,7 +49,7 @@ class SecurityController extends Controller
     {
         $securityContext = $this->get('security.authorization_checker');
 
-        if(!$securityContext->isGranted('IS_AUTHENTICATED_FULLY') ||
+        if(!$securityContext->isGranted('IS_AUTHENTICATED_FULLY') &&
             !$securityContext->isGranted('IS_AUTHENTICATED_REMEMBERED'))
         {
             $user = new User();

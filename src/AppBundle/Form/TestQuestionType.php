@@ -26,7 +26,7 @@ class TestQuestionType extends AbstractType
         $question = $options['data']['question'];
         $answered = $options['data']['answered'];
         $id = $question->getId();
-        $checkedAnswers = $this->testControl->prepareSelectedOptions($question, $answered, $id);
+        $checkedAnswers = $this->testControl->prepareSelectedOptions($answered, $id);
 
         $builder->add('answers', EntityType::class, [
             'class' => 'AppBundle\Entity\Answer',
