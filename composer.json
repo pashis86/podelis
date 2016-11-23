@@ -26,7 +26,10 @@
         "league/oauth2-client": "~1.0@dev",
         "league/oauth2-facebook": "^1.4",
         "knpuniversity/oauth2-client-bundle": "^1.4",
-        "symfony/assetic-bundle": "^2.8"
+        "symfony/assetic-bundle": "^2.8",
+        "hwi/oauth-bundle": "^0.5.1",
+        "codeception/codeception": "^2.2",
+        "friendsofsymfony/user-bundle": "~2.0@dev"
     },
     "require-dev": {
         "fzaninotto/faker": "*",

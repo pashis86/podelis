@@ -18,7 +18,7 @@ class UserRepository extends \Doctrine\ORM\EntityRepository
     /** @param User $user */
     public function activateUser($user)
     {
-        $user->setToken(null)->setActive(true);
+        $user->setConfirmationToken(null)->setEnabled(true);
 
         $this->_em->persist($user);
         $this->_em->flush();
@@ -74,5 +74,15 @@ class UserRepository extends \Doctrine\ORM\EntityRepository
     {
         return $this->_em->createQuery('SELECT COUNT(u)
         FROM AppBundle:User u');
+    }
+
+    public function loadUserByUsername($username)
+    {
+        return $this->createQueryBuilder('u')
+            ->select('u')
+            ->where('u.username = :username')
+            ->setParameter('username', $username)
+            ->getQuery()
+            ->getResult();
     }
 }

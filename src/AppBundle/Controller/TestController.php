@@ -63,9 +63,21 @@ class TestController extends Controller
     }
 
     /**
-     * @Route("/category-test/{id}", name="categoryTest")
+     * @Route("/categories", name="test_categories")
+     * @Security("has_role('ROLE_USER')")
      */
-    public function categoryTestAction($id)
+    public function categoryTestAction()
+    {
+        $categories = $this->getDoctrine()->getRepository('AppBundle:Book')->findAll();
+
+        return $this->render('@App/TestPages/categories.html.twig', ['categories' => $categories]);
+    }
+
+    /**
+     * @Route("/category-test/{id}-{slug}", name="categoryTest")
+     * @Security("has_role('ROLE_USER')")
+     */
+    public function categoryTestAction1($id)
     {
         $questions = $this->getDoctrine()->getRepository('AppBundle:Question')->getCategoryQuestions($id);
         if($questions)

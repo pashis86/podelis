@@ -8,9 +8,9 @@ services:
         class: AppBundle\Service\EmailSender
         arguments: ["@mailer", "@templating"]
 
-    app.facebook_authenticator:
-        class: AppBundle\Service\FacebookAuthenticator
-        arguments: ["@oauth2.registry", "@doctrine.orm.entity_manager", "@router"]
+#    app.facebook_authenticator:
+#        class: AppBundle\Service\FacebookAuthenticator
+#        arguments: ["@oauth2.registry", "@doctrine.orm.entity_manager", "@router"]
 
     app.test_control:
         class: AppBundle\Service\TestControl
@@ -29,3 +29,18 @@ services:
     app.test_starter:
         class: AppBundle\Service\TestStarter
         arguments: ["@session"]
+
+    my_user_provider:
+        class: AppBundle\Service\FOSUBUserProvider
+        arguments: ["@fos_user.user_manager", {facebook: facebook_id, google: google_id}]
+
+    app.form.registration:
+        class: AppBundle\Form\UserType
+        tags:
+            - { name: form.type, alias: app_user_registration }
+
+    app.user.redirect.listener:
+        class: AppBundle\EventListener\RedirectUserListener
+        arguments: ["@security.token_storage", "@router"]
+        tags:
+            - { name: kernel.event_listener, event: kernel.request, method: onKernelRequest }
