@@ -52,7 +52,7 @@ class RedirectUserListener
     {
         return in_array(
             $currentRoute,
-            ['fos_user_security_login', 'fos_user_resetting_request', 'app_user_registration']
+            ['fos_user_security_login', 'fos_user_resetting_request', 'app_user_registration', 'hwi_oauth_service_redirect']
         );
     }
 }
