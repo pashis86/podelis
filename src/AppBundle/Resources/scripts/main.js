@@ -11,7 +11,7 @@ function timedCounter(finalValue, seconds, callback) {
         if (value >= finalValue)
             value = finalValue;
         else
-            setTimeout(update, 200);
+            setTimeout(update, 75);
 
         callback && callback(value);
 
@@ -21,7 +21,8 @@ function timedCounter(finalValue, seconds, callback) {
 
 function timedCounterCall(n) {
 
-    timedCounter(n, 7, function(value){
+    
+    timedCounter(n, 1.5, function(value){
         value = Math.floor(value);
         $('.user-count').html(value);
     });

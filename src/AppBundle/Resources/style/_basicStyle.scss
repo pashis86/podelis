@@ -86,10 +86,11 @@ body {
 
 .btnY{
   width: 90%;
-  border: 2px ridge white;
+  border: 2px ridge white !important;
   border-radius: 5px;
   color: black;
   font-weight: bold;
+  white-space: pre-wrap !important;
 }
 
 .btnY:hover {
@@ -164,4 +165,8 @@ body {
 }
 .color-background-text:hover{
   background-color: yellow;
+}
+
+.margin-0{
+  margin: 0 !important;
 }
