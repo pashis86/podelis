@@ -1,6 +1,8 @@
 <?php
 
 namespace AppBundle\Repository;
+use AppBundle\Entity\Question;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * QuestionRepository
@@ -46,5 +48,15 @@ class QuestionRepository extends \Doctrine\ORM\EntityRepository
 
         array_push($questions, $results);
         return $questions;
+    }
+
+    public function getCategoryQuestions($categoryId)
+    {
+      return [0 => $questions = $this->createQueryBuilder('q')
+            ->select('q')
+            ->where('q.book = :categoryId')
+            ->setParameter('categoryId', $categoryId)
+            ->getQuery()
+            ->getResult()];
     }
 }

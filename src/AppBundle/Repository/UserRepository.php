@@ -69,5 +69,10 @@ class UserRepository extends \Doctrine\ORM\EntityRepository
         FROM AppBundle:User u 
         ORDER BY percentage DESC');
     }
-    
+
+    public function userCount()
+    {
+        return $this->_em->createQuery('SELECT COUNT(u)
+        FROM AppBundle:User u');
+    }
 }
