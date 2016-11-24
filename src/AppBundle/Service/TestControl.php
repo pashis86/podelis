@@ -10,7 +10,9 @@ namespace AppBundle\Service;
 
 
 use AppBundle\Entity\Answer;
+use AppBundle\Entity\Book;
 use AppBundle\Entity\Question;
+use AppBundle\Entity\Test;
 use AppBundle\Entity\User;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityManager;
@@ -158,8 +160,11 @@ class TestControl
             /** @var User $user */
             $user = $this->security->getToken()->getUser();
             if ($user != 'anon.' && $this->session->get('trackResults')) {
-                $user->updateStats($this->session->get('timeSpent'), $this->session->get('isCorrect'));
-                $this->em->persist($user);
+
+                /** @var Book $book */
+                $book = $this->em->getRepository('AppBundle:Book')->findOneBy(['id' =>$this->questionGroups[0][0]->getBook()->getId()]);
+                $test = new Test($user, $this->session->get('timeSpent'), $this->session->get('isCorrect'), $book);
+                $this->em->persist($test);
                 $this->em->flush();
             }
         }

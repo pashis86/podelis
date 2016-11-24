@@ -46,18 +46,19 @@ class FOSUBUserProvider extends BaseClass
     {
         $username = $response->getUsername();
         $user = $this->userManager->findUserBy(array($this->getProperty($response) => $username));
-        //when the user is registrating
+
         if (null === $user) {
             $service = $response->getResourceOwner()->getName();
             $setter = 'set'.ucfirst($service);
             $setter_id = $setter.'Id';
             $setter_token = $setter.'AccessToken';
 
-            //dump($response);die; // nera emailo kazkodel
+            //dump($response);
 
             $user = new User();
             $user->$setter_id($username)
                 ->$setter_token($response->getAccessToken())
+                ->setAvatar($response->getProfilePicture())
                 ->setUsername($response->getUsername())
                 ->setEmail($response->getUsername())
                 ->setPassword(md5((uniqid())))

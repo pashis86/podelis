@@ -31,7 +31,7 @@ class User extends BaseUser
      * @var string
      * @Assert\NotBlank()
      * @Assert\Length(min="3", max="30")
-     * @ORM\Column(name="name", type="string", length=255, nullable=true)
+     * @ORM\Column(name="name", type="string", length=255)
      */
     protected $name;
 
@@ -72,33 +72,46 @@ class User extends BaseUser
     /** @ORM\Column(name="google_access_token", type="string", length=255, nullable=true) */
     protected $google_access_token;
 
+    // ---------------------------------------------------------------------
     /**
      * @var integer
      *
-     * @ORM\Column(name="tests_taken", type="integer", nullable=true)
+     * @ORM\Column(name="tests_taken", type="integer")
      */
     protected $testsTaken;
 
     /**
      * @var integer
      *
-     * @ORM\Column(name="correct", type="integer", nullable=true)
+     * @ORM\Column(name="correct", type="integer")
      */
     protected $correct;
 
     /**
      * @var integer
      *
-     * @ORM\Column(name="incorrect", type="integer", nullable=true)
+     * @ORM\Column(name="incorrect", type="integer")
      */
     protected $incorrect;
 
     /**
      * @var int
      *
-     * @ORM\Column(name="time_spent", type="integer", nullable=true)
+     * @ORM\Column(name="time_spent", type="integer")
      */
     protected $timeSpent;
+
+    /**
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Test", mappedBy="userId")
+     */
+    protected $tests;
+    // ---------------------------------------------------------------------
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="avatar", type="string", nullable=true)
+     */
+    protected $avatar;
 
     /**
      * @return string
@@ -117,6 +130,25 @@ class User extends BaseUser
         $this->name = $name;
         return $this;
     }
+
+    /**
+     * @return string
+     */
+    public function getAvatar()
+    {
+        return $this->avatar;
+    }
+
+    /**
+     * @param string $avatar
+     * @return User
+     */
+    public function setAvatar($avatar)
+    {
+        $this->avatar = $avatar;
+        return $this;
+    }
+
 
     public function getSurname()
     {
@@ -399,6 +431,7 @@ class User extends BaseUser
         $this->incorrect = 0;
         $this->testsTaken = 0;
         $this->timeSpent = 0;
+        $this->avatar = 'http://www.iconsdb.com/icons/preview/black/guest-xxl.png';
     }
 
     public function updateStats($time, $answers)
@@ -417,6 +450,25 @@ class User extends BaseUser
         }
         $this->testsTaken++;
     }
+
+    /**
+     * @return mixed
+     */
+    public function getTests()
+    {
+        return $this->tests;
+    }
+
+    /**
+     * @param mixed $tests
+     * @return User
+     */
+    public function setTests($tests)
+    {
+        $this->tests = $tests;
+        return $this;
+    }
+
     
     /**
      * @return (Role|string)[] The user roles

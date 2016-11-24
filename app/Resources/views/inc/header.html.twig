@@ -33,7 +33,13 @@
                     {%  if app.user %}
                         <ul class="nav navbar-nav navbar-right">
                             <li class="dropdown">
-                                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{{ app.user.name }} <span class="caret"></span></a>
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{{ app.user.name }}<span class="caret"></span>
+                                        <div class="col-xs-3 col-md-3">
+                                            <a href="#" class="thumbnail">
+                                                <img src="{{ app.user.avatar }}">
+                                            </a>
+                                        </div>
+                                </a>
                                 <ul class="dropdown-menu position-topmost">
                                     <li><a href="{{ path('keistiDuomenis') }}">Statistics</a></li>
                                     <li><a href="{{ path('user') }}">Edit profile</a></li>
@@ -44,8 +50,8 @@
                         </ul>
                     {% else %}
                         <ul class="nav navbar-nav navbar-right">
-                            <li><a class="btn margin-0 loginButton"{% if app.request.get('_route') != 'homepage' %}href="{ path('login') }}"{% endif %}>Log in</a></li>
-                            <li><a class="btn margin-0 registerButton" {% if app.request.get('_route') != 'homepage' %}href="{ path('register') }}"{% endif %}>Sign up</a></li>
+                            <li><a class="btn margin-0 loginButton"{% if app.request.get('_route') != 'homepage' %}href="{{  path('login') }}"{% endif %}>Log in</a></li>
+                            <li><a class="btn margin-0 registerButton" {% if app.request.get('_route') != 'homepage' %}href="{{  path('register') }}"{% endif %}>Sign up</a></li>
                         </ul>
                     {% endif %}
             </div><!--/.nav-collapse -->
