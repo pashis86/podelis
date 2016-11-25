@@ -60,10 +60,6 @@ security:
         - { path: ^/register, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/resetting, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/admin/, role: ROLE_ADMIN }
-        - { path: ^/login/check-facebook, roles: IS_AUTHENTICATED_ANONYMOUSLY }
-        - { path: ^/login, allow_if: "not has_role('ROLE_USER')" }
-        - { path: ^/login/facebook, allow_if: "!has_role('ROLE_USER')" }
-        - { path: ^/login/check-facebook, allow_if: "!has_role('ROLE_USER')" }
             # activate different ways to authenticate
 
             # http_basic: ~

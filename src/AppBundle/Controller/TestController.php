@@ -10,6 +10,8 @@ namespace AppBundle\Controller;
 
 
 use AppBundle\Entity\Question;
+use AppBundle\Entity\QuestionReport;
+use AppBundle\Form\QuestionReportType;
 use AppBundle\Form\QuestionType;
 use AppBundle\Form\TestQuestionType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
@@ -219,5 +221,46 @@ class TestController extends Controller
             ]);
         }
         return $this->render('@App/Home/404.html.twig');
+    }
+
+    /**
+     * @Route("/report-submit", name="report")
+     */
+    public function questionReportAction(Request $request, $allow = false)
+    {
+        $report = new QuestionReport();
+        $form = $this->createForm(QuestionReportType::class, $report);
+
+        if(!$allow){
+            return new Response();
+        }
+
+        if($request->isXmlHttpRequest() && $request->isMethod('POST'))
+        {
+            $form->handleRequest($request);
+            $response = new JsonResponse();
+
+            if($form->isSubmitted() && $form->isValid()){
+
+                $question = $this->getDoctrine()
+                    ->getRepository('AppBundle:Question')
+                    ->find($request->request->get('questionId'));
+
+                $report->setUserId($this->getUser())
+                    ->setQuestionId($question)
+                    ->setCreatedAt(new \DateTime())
+                    ->setUpdatedAt(new \DateTime());
+                $em = $this->getDoctrine()->getManager();
+                $em->persist($report);
+                $em->flush();
+
+                $response->setStatusCode(200, 'success');
+
+            } else{
+                $response->setStatusCode(400, 'error');
+            }
+            return $response;
+        }
+        return $this->render('@App/TestPages/reportQuestion.html.twig', ['report' => $form->createView()]);
     }
 }

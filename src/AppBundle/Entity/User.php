@@ -114,6 +114,11 @@ class User extends BaseUser
     protected $avatar;
 
     /**
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\QuestionReport", mappedBy="userId")
+     */
+    protected $reports;
+
+    /**
      * @return string
      */
     public function getName()
@@ -164,6 +169,25 @@ class User extends BaseUser
         $this->surname = $surname;
         return $this;
     }
+
+    /**
+     * @return mixed
+     */
+    public function getReports()
+    {
+        return $this->reports;
+    }
+
+    /**
+     * @param mixed $reports
+     * @return User
+     */
+    public function setReports($reports)
+    {
+        $this->reports = $reports;
+        return $this;
+    }
+
 
 
     /**

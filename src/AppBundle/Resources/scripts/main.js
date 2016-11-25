@@ -27,26 +27,6 @@ function timedCounterCall(n) {
     });
 };
 
-
-
-
-
-
-
-
-
-
-function sendAnswer(inputSelector, url, question) {
-    $(inputSelector).on('change', function () {
-        var answer = $(inputSelector.checked).val();
-        $.ajax({
-            type: "POST",
-            url: url,
-            data: {'question': question, 'answer': answer}
-        });
-    });
-}
-
 function sendAnswers(inputSelector, url, question) {
     $(inputSelector).on('change', function () {
         var answers = [];
@@ -139,5 +119,32 @@ function solveIt(reqPath, questionId, inputElement, explanationEl) {
             });
             explanationEl.html(explanation);
         }
+    });
+}
+
+function reportQuestion(form, url, questionId) {
+
+    form.submit(function(e){
+        $('#submitReport').attr('disabled', true);
+        e.preventDefault();
+        var formSerialize = $(this).serialize() + "&questionId=" + questionId;
+
+        $.ajax({
+            type: "POST",
+            url: url,
+            data: formSerialize,
+            success: function () {
+                 $('#reportBtn')
+                     .removeClass('btn-danger')
+                     .addClass('btn-success')
+                     .attr('value', 'Report submitted!')
+                     .trigger("click")
+                     .attr('disabled', true);
+
+            },
+            error: function () {
+                $('#reportBtn').attr('value', 'Something went wrong!').trigger("click");
+            }
+        })
     });
 }

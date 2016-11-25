@@ -30,7 +30,7 @@
                         <p id="minutes">00</p>
                         <p id="seconds">00</p>
                     </div>
-
+                    <input type="button" id="reportBtn" class="btn btn-danger btn-lg" data-toggle="modal" data-target="#questionReport" value="Invalid question">
                         {{ form_start(form) }}
                         {{ index ~ '.' }}{{ current.content|
                         replace({ "<pre>" : "<pre><code class='language-php'><xmp>" ,
@@ -47,6 +47,7 @@
                         {{ form_widget(form.previous, {'attr': {'class': 'btn btn-3'}}) }} &nbsp;
                         {{ form_widget(form.next, {'attr': {'class': 'btn btn-3'}}) }} <br>
                         {{ form_widget(form.submit, {'attr': {'class': 'btn btn-3'}}) }} <br>
+                        {{ form_end(form) }}
                         <input type="button" id="solve" class="btn btn-2 btn-2a" value="Solve it">
                     </div>
                 </div>
@@ -59,6 +60,19 @@
         </div>
     </div>
 
+    <div class="modal fade" id="questionReport" tabindex="-1" role="dialog" aria-labelledby="Report this question" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header bg-danger">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h4 class="modal-title" id="myModalLabel">Report this question</h4>
+                </div>
+                    {{ render(controller('AppBundle:Test:questionReport', {'allow' : true})) }}
+            </div>
+        </div>
+    </div>
 {% endblock %}
 {% block javascripts %}
     {{ parent() }}
@@ -72,5 +86,8 @@
         $('#solve').on('click', function () {
             solveIt('{{ path('solveIt') }}', '{{ current.id }}',$('.alert input'), $('#explanation'));
         });
+
+        reportQuestion($("form[name='question_report']"), '{{ path('report') }}', '{{ current.id }}');
+
     </script>
 {% endblock %}

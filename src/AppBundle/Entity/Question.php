@@ -78,6 +78,11 @@ class Question
      */
     private $updatedAt;
 
+    /**
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\QuestionReport", mappedBy="questionId")
+     */
+    private $reports;
+
 
     public function __construct()
     {
@@ -91,6 +96,24 @@ class Question
     {
         return $this->id;
     }
+
+    /**
+     * @return mixed
+     */
+    public function getReports()
+    {
+        return $this->reports;
+    }
+
+    /**
+     * @param mixed $reports
+     */
+    public function setReports($reports)
+    {
+        $this->reports = $reports;
+    }
+
+
 
     /**
      * @return Book

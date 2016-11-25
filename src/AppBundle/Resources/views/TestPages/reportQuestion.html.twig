@@ -1,0 +1,9 @@
+{{ form_start(report) }}
+    <div class="modal-body">
+        {{ form_row(report.reason) }}
+    </div>
+    <div class="modal-footer">
+        <input type="submit" class="btn btn-secondary" value="Report" id="submitReport">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+    </div>
+{{ form_end(report) }}
