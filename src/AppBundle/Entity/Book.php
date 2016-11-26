@@ -81,8 +81,6 @@ class Book
         return $this;
     }
 
-
-
     /**
      * Set title
      *
@@ -196,6 +194,14 @@ class Book
     public function getUpdatedAt()
     {
         return $this->updatedAt;
+    }
+
+    public function slugify()
+    {
+        return preg_replace(
+            '/[^a-z0-9]/',
+            '-',
+            strtolower(trim(strip_tags($this->title))));
     }
 }
 

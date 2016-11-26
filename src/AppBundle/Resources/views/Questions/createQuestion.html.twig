@@ -1,0 +1,24 @@
+{% extends "::base.html.twig" %}
+
+{% block title %}Create a new question - {{ parent() }}{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+{% endblock %}
+
+{% block body %}
+{{ form_start(form) }}
+    {{ form_row(form.title) }}
+    {{ form_row(form.book) }}
+    {{ form_row(form.content) }}
+        <ul class="answers" data-prototype="{{ form_widget(form.answers.vars.prototype)|e('html_attr') }}"></ul>
+    {{ form_row(form.explanation) }}
+    <input type="submit" value="Add question">
+    {{ form_end(form) }}
+{% endblock %}
+
+
+{% block javascripts %}
+    {{ parent() }}
+
+{% endblock %}

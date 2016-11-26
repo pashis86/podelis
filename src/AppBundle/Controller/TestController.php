@@ -9,7 +9,10 @@
 namespace AppBundle\Controller;
 
 
+use AppBundle\Entity\Answer;
 use AppBundle\Entity\Question;
+use AppBundle\Entity\QuestionReport;
+use AppBundle\Form\QuestionReportType;
 use AppBundle\Form\QuestionType;
 use AppBundle\Form\TestQuestionType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
@@ -28,7 +31,7 @@ class TestController extends Controller
      */
     public function testOptionsAction(Request $request)
     {
-        $question = new Question();
+    /*    $question = new Question();
         $form = $this->createForm(QuestionType::class, $question);
         $form->handleRequest($request);
 
@@ -40,21 +43,13 @@ class TestController extends Controller
                 'amount' => $form['amount']->getData()
             ]);
 
-            $session = new Session();
-            $session->clear();
-            $session->set('questionGroups', $questionGroups);
-            $session->set('trackResults', true);
-            $testControl = $this->get('app.test_control');
-
-            $session->set('endsAt', new \DateTime($testControl->setTimeLimit('+1 minute')));
-            $session->set('started', new \DateTime());
-            $session->set('answered', []);
+            $this->get('app.test_starter')->startTest($questionGroups, '+1 minute', true);
             return $this->redirectToRoute('question', ['id' => $questionGroups[0][0]->getId()]);
         }
 
         return $this->render('@App/TestPages/test-options.html.twig', [
             'form' => $form->createView(),
-        ]);
+        ]);*/
     }
 
     /**
@@ -64,41 +59,33 @@ class TestController extends Controller
     {
         $qRepository = $this->getDoctrine()->getRepository('AppBundle:Question');
         $questions = $qRepository->getRandomQuestions(10);
-        $session = new Session();
-        $session->clear();
 
-        $session->set('questionGroups', $questions);
-
-        $testControl = $this->get('app.test_control');
-        $session->set('trackResults', false);
-        $session->set('solved', []);
-        $session->set('started', new \DateTime());
-        $session->set('endsAt', new \DateTime($testControl->setTimeLimit('+1 minute')));
-        $session->set('answered', []);
+        $this->get('app.test_starter')->startTest($questions, '+2 minutes', false);
 
         return $this->redirectToRoute('question', ['id' => $questions[0][0]->getId()]);
     }
 
     /**
-     * @Route("/category-test/{id}", name="categoryTest")
+     * @Route("/categories", name="test_categories")
+     * @Security("has_role('ROLE_USER')")
      */
-    public function categoryTestAction($id)
+    public function categoryTestAction()
+    {
+        $categories = $this->getDoctrine()->getRepository('AppBundle:Book')->findAll();
+
+        return $this->render('@App/TestPages/categories.html.twig', ['categories' => $categories]);
+    }
+
+    /**
+     * @Route("/category-test/{id}-{slug}", name="categoryTest")
+     * @Security("has_role('ROLE_USER')")
+     */
+    public function categoryTestAction1($id)
     {
         $questions = $this->getDoctrine()->getRepository('AppBundle:Question')->getCategoryQuestions($id);
         if($questions)
         {
-            $session = new Session();
-            $session->clear();
-
-            $session->set('questionGroups', $questions);
-            $testControl = $this->get('app.test_control');
-
-            $session->set('trackResults', true);
-            $session->set('solved', []);
-            $session->set('started', new \DateTime());
-            $session->set('endsAt', new \DateTime($testControl->setTimeLimit('+1 minute')));
-            $session->set('answered', []);
-
+            $this->get('app.test_starter')->startTest($questions, '+1 minute,', true);
             return $this->redirectToRoute('question', ['id' => $questions[0][0]->getId()]);
         }
         return $this->render('@App/Home/404.html.twig');
@@ -160,15 +147,13 @@ class TestController extends Controller
         $session = $this->get('session');
 
         if($request->isXmlHttpRequest() && $session->get('endsAt') >= new \DateTime()){
-            $answered = $session->get('answered');
             $repository = $this->getDoctrine()->getRepository('AppBundle:Answer');
 
-            $question = $request->request->get('question');
+            $questionId = $request->request->get('question');
             $answerIds = $request->request->get('answer');
 
             $answers = $repository->getAllChecked($answerIds);
-            $answered[$question] = $answers;
-            $session->set('answered', $answered);
+            $this->get('app.test_control')->addAnswer($questionId, $answers);
         }
         return new Response();
     }
@@ -238,4 +223,46 @@ class TestController extends Controller
         }
         return $this->render('@App/Home/404.html.twig');
     }
+
+    /**
+     * @Route("/report-submit", name="report")
+     */
+    public function questionReportAction(Request $request, $allow = false)
+    {
+        $report = new QuestionReport();
+        $form = $this->createForm(QuestionReportType::class, $report);
+
+        if(!$request->isXmlHttpRequest() && !$allow){
+            return new Response();
+        }
+
+        if($request->isXmlHttpRequest() && $request->isMethod('POST'))
+        {
+            $form->handleRequest($request);
+            $response = new JsonResponse();
+
+            if($form->isSubmitted() && $form->isValid()){
+
+                $question = $this->getDoctrine()
+                    ->getRepository('AppBundle:Question')
+                    ->find($request->request->get('questionId'));
+
+                $report->setCreatedBy($this->getUser())
+                    ->setQuestionId($question)
+                    ->setCreatedAt(new \DateTime())
+                    ->setUpdatedAt(new \DateTime());
+                $em = $this->getDoctrine()->getManager();
+                $em->persist($report);
+                $em->flush();
+
+                $response->setStatusCode(200, 'success');
+
+            } else{
+                $response->setStatusCode(400, 'error');
+            }
+            return $response;
+        }
+        return $this->render('@App/TestPages/reportQuestion.html.twig', ['report' => $form->createView()]);
+    }
+
 }
