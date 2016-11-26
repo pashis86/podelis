@@ -114,9 +114,14 @@ class User extends BaseUser
     protected $avatar;
 
     /**
-     * @ORM\OneToMany(targetEntity="AppBundle\Entity\QuestionReport", mappedBy="userId")
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\QuestionReport", mappedBy="created_by")
      */
     protected $reports;
+
+    /**
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Question", mappedBy="created_by")
+     */
+    protected $questions_created;
 
     /**
      * @return string
@@ -509,5 +514,25 @@ class User extends BaseUser
     {
         return null;
     }
+
+    /**
+     * @return mixed
+     */
+    public function getQuestionsCreated()
+    {
+        return $this->questions_created;
+    }
+
+    /**
+     * @param mixed $questions_created
+     * @return User
+     */
+    public function setQuestionsCreated($questions_created)
+    {
+        $this->questions_created = $questions_created;
+        return $this;
+    }
+
+
 }
 

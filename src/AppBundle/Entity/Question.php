@@ -32,7 +32,7 @@ class Question
     /**
      * @var ArrayCollection
      *
-     * @ORM\OneToMany(targetEntity="Answer", mappedBy="question")
+     * @ORM\OneToMany(targetEntity="Answer", mappedBy="question", cascade={"persist", "remove"})
      */
     private $answers;
 
@@ -83,12 +83,37 @@ class Question
      */
     private $reports;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\User", inversedBy="questions_created")
+     * @ORM\JoinColumn(name="created_by", referencedColumnName="id")
+     */
+    private $created_by;
+
+    /**
+     * @ORM\Column(type="string", columnDefinition="ENUM('Submitted', 'Approved', 'Denied', 'Added')")
+     */
+    private $status;
+
 
     public function __construct()
     {
         $this->answers = new ArrayCollection();
+        $this->status = 'Submitted';
     }
 
+    public function addAnswer(Answer $answer)
+    {
+        $answer->setQuestion($this);
+        $this->answers[] = $answer;
+
+        return $this;
+    }
+
+    public function removeAnswer(Answer $answer)
+    {
+        $this->answers->removeElement($answer);
+        return $this;
+    }
     /**
      * @return int
      */
@@ -130,14 +155,6 @@ class Question
     public function setBook($book)
     {
         $this->book = $book;
-        return $this;
-    }
-
-    public function addAnswer(Answer $answer)
-    {
-        $this->answers[] = $answer;
-        $answer->setQuestion($this);
-
         return $this;
     }
 
@@ -303,6 +320,44 @@ class Question
     {
         return $this->updatedAt;
     }
+
+    /**
+     * @return mixed
+     */
+    public function getCreatedBy()
+    {
+        return $this->created_by;
+    }
+
+    /**
+     * @param mixed $created_by
+     * @return Question
+     */
+    public function setCreatedBy($created_by)
+    {
+        $this->created_by = $created_by;
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getStatus()
+    {
+        return $this->status;
+    }
+
+    /**
+     * @param mixed $status
+     * @return Question
+     */
+    public function setStatus($status)
+    {
+        $this->status = $status;
+        return $this;
+    }
+
+
 
     public function slugify()
     {

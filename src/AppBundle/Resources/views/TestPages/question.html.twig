@@ -59,7 +59,6 @@
             </div>
         </div>
     </div>
-
     <div class="modal fade" id="questionReport" tabindex="-1" role="dialog" aria-labelledby="Report this question" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
@@ -69,7 +68,16 @@
                     </button>
                     <h4 class="modal-title" id="myModalLabel">Report this question</h4>
                 </div>
+    {% if app.user %}
                     {{ render(controller('AppBundle:Test:questionReport', {'allow' : true})) }}
+        {% else %}
+            <div class="modal-body">
+                <h3>Only registered users can use this!</h3>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+    {% endif %}
             </div>
         </div>
     </div>
@@ -88,6 +96,5 @@
         });
 
         reportQuestion($("form[name='question_report']"), '{{ path('report') }}', '{{ current.id }}');
-
     </script>
 {% endblock %}

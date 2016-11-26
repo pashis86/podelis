@@ -34,9 +34,9 @@ class QuestionReport
      * @var int
      *
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\User", inversedBy="reports")
-     * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
+     * @ORM\JoinColumn(name="created_by", referencedColumnName="id")
      */
-    private $userId;
+    private $created_by;
 
     /**
      * @var string
@@ -46,7 +46,7 @@ class QuestionReport
     private $reason;
 
     /**
-     * @Enum({"Submitted", "Approved", "Denied"})
+     * @ORM\Column(type="string", columnDefinition="ENUM('Submitted', 'Approved', 'Denied')")
      */
     private $status;
 
@@ -104,28 +104,23 @@ class QuestionReport
     }
 
     /**
-     * Set userId
-     *
-     * @param integer $userId
-     *
-     * @return QuestionReport
+     * @return int
      */
-    public function setUserId($userId)
+    public function getCreatedBy(): int
     {
-        $this->userId = $userId;
-
-        return $this;
+        return $this->created_by;
     }
 
     /**
-     * Get userId
-     *
-     * @return int
+     * @param int $created_by
+     * @return QuestionReport
      */
-    public function getUserId()
+    public function setCreatedBy(int $created_by): QuestionReport
     {
-        return $this->userId;
+        $this->created_by = $created_by;
+        return $this;
     }
+
 
     /**
      * @return mixed

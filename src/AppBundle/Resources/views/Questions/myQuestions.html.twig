@@ -1,0 +1,27 @@
+{% extends "::base.html.twig" %}
+
+{% block title %}My questions - {{ parent() }}{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+{% endblock %}
+
+{% block body %}
+
+<table>
+    {% for question in questions %}
+        <tr>
+            <td><a href="{{ path('editQuestion',{id: question.id, slug : question.slugify}) }}">{{ question.title }}</a></td>
+            <td><a href="{{ path('editQuestion',{id: question.id, slug : question.slugify}) }}">{{ question.book }}</a></td>
+            <td><a href="{{ path('editQuestion',{id: question.id, slug : question.slugify}) }}"> {{ question.createdAt|date('Y/m/d H:i:s') }}</a></td>
+            <td><a href="{{ path('editQuestion',{id: question.id, slug : question.slugify}) }}">{{ question.updatedAt|date('Y/m/d H:i:s') }}</a></td>
+            <td><a href="{{ path('editQuestion',{id: question.id, slug : question.slugify}) }}">{{ question.status }}</a></td>
+        </tr>
+    {% endfor %}
+</table>
+    {% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+
+{% endblock %}

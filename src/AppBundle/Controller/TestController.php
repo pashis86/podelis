@@ -9,6 +9,7 @@
 namespace AppBundle\Controller;
 
 
+use AppBundle\Entity\Answer;
 use AppBundle\Entity\Question;
 use AppBundle\Entity\QuestionReport;
 use AppBundle\Form\QuestionReportType;
@@ -30,7 +31,7 @@ class TestController extends Controller
      */
     public function testOptionsAction(Request $request)
     {
-        $question = new Question();
+    /*    $question = new Question();
         $form = $this->createForm(QuestionType::class, $question);
         $form->handleRequest($request);
 
@@ -48,7 +49,7 @@ class TestController extends Controller
 
         return $this->render('@App/TestPages/test-options.html.twig', [
             'form' => $form->createView(),
-        ]);
+        ]);*/
     }
 
     /**
@@ -231,7 +232,7 @@ class TestController extends Controller
         $report = new QuestionReport();
         $form = $this->createForm(QuestionReportType::class, $report);
 
-        if(!$allow){
+        if(!$request->isXmlHttpRequest() && !$allow){
             return new Response();
         }
 
@@ -246,7 +247,7 @@ class TestController extends Controller
                     ->getRepository('AppBundle:Question')
                     ->find($request->request->get('questionId'));
 
-                $report->setUserId($this->getUser())
+                $report->setCreatedBy($this->getUser())
                     ->setQuestionId($question)
                     ->setCreatedAt(new \DateTime())
                     ->setUpdatedAt(new \DateTime());
@@ -263,4 +264,5 @@ class TestController extends Controller
         }
         return $this->render('@App/TestPages/reportQuestion.html.twig', ['report' => $form->createView()]);
     }
+
 }

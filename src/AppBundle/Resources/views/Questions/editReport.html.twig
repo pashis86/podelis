@@ -1,0 +1,21 @@
+{% extends "::base.html.twig" %}
+
+{% block title %}Edit report - {{ parent() }}{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+{% endblock %}
+
+{% block body %}
+    {{ form_start(form) }}
+    {{ form_row(form.reason) }}
+    <input type="submit" value="Edit report">
+    {{ form_end(form) }}
+{% endblock %}
+
+
+{% block javascripts %}
+    {{ parent() }}
+
+{% endblock %}
+
