@@ -20,3 +20,5 @@
 /web/fonts
 /node_modules
 tests/_output/*
+/tests/selenium-server-standalone-3.0.1.jar
+/tests/geckodriver
