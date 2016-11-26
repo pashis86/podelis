@@ -23,7 +23,7 @@ class Answer
 
     /**
      * @ORM\ManyToOne(targetEntity="Question", inversedBy="answers")
-     * @ORM\JoinColumn(name="question_id", referencedColumnName="id")
+     * @ORM\JoinColumn(name="question_id", referencedColumnName="id", onDelete="CASCADE")
      */
     private $question;
 
@@ -54,6 +54,7 @@ class Answer
      * @ORM\Column(name="updated_at", type="datetime")
      */
     private $updatedAt;
+
 
     public function __toString()
     {
@@ -182,6 +183,12 @@ class Answer
     public function getUpdatedAt()
     {
         return $this->updatedAt;
+    }
+
+    public function __construct()
+    {
+        $this->createdAt = new \DateTime();
+        $this->updatedAt = new \DateTime();
     }
 }
 

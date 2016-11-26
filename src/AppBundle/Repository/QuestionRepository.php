@@ -21,7 +21,9 @@ class QuestionRepository extends \Doctrine\ORM\EntityRepository
             $results = $this->createQueryBuilder('q')
                 ->select('q')
                 ->where('q.book = :book')
+                ->andWhere('q.status = :status')
                 ->setParameter('book', $book)
+                ->setParameter('status', 'Added')
                 ->addSelect('RAND() as HIDDEN rand')
                 ->orderBy('rand')
                 ->setMaxResults($options['amount'])
@@ -39,8 +41,10 @@ class QuestionRepository extends \Doctrine\ORM\EntityRepository
 
         $results = $this->createQueryBuilder('q')
             ->select('q')
+            ->where('q.status = :status')
             ->addSelect('RAND() as HIDDEN rand')
             ->orderBy('rand')
+            ->setParameter('status', 'Added')
             ->setMaxResults($limit)
             ->distinct()
             ->getQuery()
@@ -55,7 +59,9 @@ class QuestionRepository extends \Doctrine\ORM\EntityRepository
       return [0 => $questions = $this->createQueryBuilder('q')
             ->select('q')
             ->where('q.book = :categoryId')
+            ->andWhere('q.status = :status')
             ->setParameter('categoryId', $categoryId)
+            ->setParameter('status', 'Added')
             ->getQuery()
             ->getResult()];
     }

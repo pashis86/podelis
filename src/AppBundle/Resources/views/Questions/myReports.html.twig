@@ -1,0 +1,27 @@
+{% extends "::base.html.twig" %}
+
+{% block title %}My questions - {{ parent() }}{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+{% endblock %}
+
+{% block body %}
+
+<table>
+    {% for report in reports %}
+        <tr>
+            {#<td><a href="{{ path('editReport',{id: report.id}) }}">{{ report.questionId }}</a></td>#}
+            <td><a href="{{ path('editReport',{id: report.id}) }}">{{ report.reason }}</a></td>
+            <td><a href="{{ path('editReport',{id: report.id}) }}"> {{ report.createdAt|date('Y/m/d H:i:s') }}</a></td>
+            <td><a href="{{ path('editReport',{id: report.id}) }}">{{ report.updatedAt|date('Y/m/d H:i:s') }}</a></td>
+            <td><a href="{{ path('editReport',{id: report.id}) }}">{{ report.status }}</a></td>
+        </tr>
+    {% endfor %}
+</table>
+    {% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+
+{% endblock %}

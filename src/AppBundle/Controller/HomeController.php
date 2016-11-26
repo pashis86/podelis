@@ -14,7 +14,7 @@ class HomeController extends Controller
      */
     public function indexAction(Request $request)
     {
-        $usercount=$this->get('app.user')->userCount();
+        $usercount = $this->get('app.user')->userCount();
         return $this->render('AppBundle:Home:index.html.twig', [
             'usercount' => $usercount
         ]);
