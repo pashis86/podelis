@@ -225,27 +225,6 @@ class TestController extends Controller
     }
 
     /**
-     * @Route("/api/user/data", name="user-data")
-     */
-    public function userDataAction(Request $request)
-    {
-        $securityContext = $this->get('security.authorization_checker');
-        /** @var User $user */
-        $user = $this->getUser();
-
-        if ($securityContext->isGranted('IS_AUTHENTICATED_FULLY') ||
-            $securityContext->isGranted('IS_AUTHENTICATED_REMEMBERED')
-        ) {
-
-
-            return new JsonResponse(json_encode(['id' => $user->getId()]));
-
-        } else {
-            return $this->redirectToRoute('homepage');
-        }
-    }
-
-    /**
      * @Route("/report-submit", name="report")
      */
     public function questionReportAction(Request $request, $allow = false)
