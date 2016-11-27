@@ -68,15 +68,23 @@ class QuestionController extends Controller
     public function deletePanelAction(Request $request)
     {
         if ($request->isXmlHttpRequest()) {
-            $entity = $request->request->get('entity');
+            $repository = $request->request->get('repository');
             $id = $request->get('id');
 
-            if ($entity == 'question')
-                $this->deleteAction('AppBundle:Question', $id);
-            else if ($entity == 'report')
-                $this->deleteAction('AppBundle:QuestionReport', $id);
-            else
-                return new JsonResponse(400, 'error');
+            $em = $this->getDoctrine()->getManager();
+            $entity = $em->getRepository('AppBundle:' . $repository)
+                ->findOneBy(['id' => $id, 'created_by' => $this->getUser()->getId()]);
+            $response = new JsonResponse();
+
+            if ($entity) {
+                $em->remove($entity);
+                $em->flush();
+
+                $response->setStatusCode(200, 'success');
+            } else {
+                $response->setStatusCode(400, 'error');
+            }
+            return $response;
         }
         return new Response();
     }

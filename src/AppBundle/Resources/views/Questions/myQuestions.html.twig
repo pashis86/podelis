@@ -23,5 +23,7 @@
 
 {% block javascripts %}
     {{ parent() }}
-
+<script>
+    deleteRecord('{{ path('delete') }}', 'Question');
+</script>
 {% endblock %}
