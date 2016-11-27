@@ -49,32 +49,6 @@
 {% block javascripts %}
     {{ parent() }}
 <script>
-    $('#removeModal').on('show.bs.modal', function (event) {
-        var button = $(event.relatedTarget);
-        var id = button.data('id');
-        var name = button.data('name');
-        var modal = $(this);
-
-        modal.find('.modal-body').text('Question: ' + name);
-        $('#delete').on('click', function () {
-
-           // $('#delete').attr('disabled', true);
-            $.ajax({
-                type: "POST",
-                url: '{{ path('delete') }}',
-                data: 'repository=Question&id=' + id,
-                success: function () {
-                    button.trigger("click");
-                    $('#delete').attr('disabled', false);
-                    alert('deleted');
-
-                },
-                error: function () {
-                    button.trigger("click");
-                    $('#delete').attr('disabled', false);
-                }
-            })
-        });
-    });
+    deleteRecord('{{ path('delete') }}', 'Question');
 </script>
 {% endblock %}

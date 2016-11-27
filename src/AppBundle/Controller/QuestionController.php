@@ -77,9 +77,8 @@ class QuestionController extends Controller
             $response = new JsonResponse();
 
             if ($entity) {
-             /*   $em->remove($entity);
-                $em->flush();*/
-
+                $em->remove($entity);
+                $em->flush();
 
                 $response->setStatusCode(200, 'success');
             } else {

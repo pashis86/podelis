@@ -112,10 +112,10 @@ class QuestionReport
     }
 
     /**
-     * @param int $created_by
+     * @param User $created_by
      * @return QuestionReport
      */
-    public function setCreatedBy(int $created_by): QuestionReport
+    public function setCreatedBy($created_by): QuestionReport
     {
         $this->created_by = $created_by;
         return $this;
