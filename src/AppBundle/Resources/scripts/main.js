@@ -123,6 +123,20 @@ function solveIt(reqPath, questionId, inputElement, explanationEl) {
     });
 }
 
+function dataCharts(reqPath, idEl) {
+    $.ajax({
+        type: "POST",
+        url: reqPath,
+        dataType: 'json',
+        success: function (data) {
+            var obj = JSON.parse(data);
+            $(idEl).html(obj.id);
+        }
+    });
+}
+
+
+
 function reportQuestion(form, url, questionId) {
 
     form.one('submit', function(e){
