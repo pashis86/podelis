@@ -32,17 +32,20 @@
                 </ul>
                     {%  if app.user %}
                         <ul class="nav navbar-nav navbar-right">
+                            <li>
+                                <a href="#" class="thumbnail mg10">
+                                    <img src="{{ app.user.avatar }}">
+                                </a>
+                            </li>
+                        </ul>
+                        <ul class="nav navbar-nav navbar-right">
                             <li class="dropdown">
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{{ app.user.name }}<span class="caret"></span>
-                                        <div class="col-xs-3 col-md-3">
-                                            <a href="#" class="thumbnail">
-                                                <img src="{{ app.user.avatar }}">
-                                            </a>
-                                        </div>
                                 </a>
+
                                 <ul class="dropdown-menu position-topmost">
-                                    <li><a href="{{ path('keistiDuomenis') }}">Statistics</a></li>
-                                    <li><a href="{{ path('user') }}">Edit profile</a></li>
+                                    <li><a href="{{ path('user') }}">Statistics</a></li>
+                                    <li><a href="{{ path('keistiDuomenis') }}">Edit profile</a></li>
                                     <li><a href="{{ path('logout') }}">Log out</a></li>
                                 </ul>
                             </li>
@@ -50,11 +53,36 @@
                         </ul>
                     {% else %}
                         <ul class="nav navbar-nav navbar-right">
-                            <li><a class="btn margin-0 loginButton"{% if app.request.get('_route') != 'homepage' %}href=""{% endif %}>Log in</a></li>
-                            <li><a class="btn margin-0 registerButton" {% if app.request.get('_route') != 'homepage' %}href="{{  path('register') }}"{% endif %}>Sign up</a></li>
+                            <li><a class="btn margin-0 loginButton">Log in</a></li>
                         </ul>
                     {% endif %}
             </div><!--/.nav-collapse -->
         </div><!--/.container-fluid -->
     </nav>
+    <!--login register forms-->
+    <div class="container allign-center">
+        <div class="row">
+            <div class="col-lg-4 col-lg-offset-4 col-sm-12 loginForm">
+                <div class="panel panel-success">
+                    <div class="panel-heading">
+                        Log in
+                    </div>
+                    <div class="panel-body">
+                        <fieldset class="form-group">
+                            <a href="{{ path('hwi_oauth_service_redirect', {'service': 'facebook' }) }}" alt="Sign in with Facebook"><button class="btn btn-4 btn-4e"> Sign in with Facebook</button></a><br>
+
+                        </fieldset>
+                        <fieldset class="form-group">
+                            <a href="{{ path('hwi_oauth_service_redirect', {'service': 'google' }) }}" alt="Sign in with Google"><button class="btn btn-4 btn-4e">Sign in with Google</button></a>
+                        </fieldset>
+
+                    </div>
+                    <div class="panel-footer">
+                        <a href="">Forgotten password?</a>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
 </header>

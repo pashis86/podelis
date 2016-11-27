@@ -11,7 +11,7 @@ function timedCounter(finalValue, seconds, callback) {
         if (value >= finalValue)
             value = finalValue;
         else
-            setTimeout(update, 200);
+            setTimeout(update, 75);
 
         callback && callback(value);
 
@@ -21,7 +21,8 @@ function timedCounter(finalValue, seconds, callback) {
 
 function timedCounterCall(n) {
 
-    timedCounter(n, 7, function(value){
+    
+    timedCounter(n, 1.5, function(value){
         value = Math.floor(value);
         $('.user-count').html(value);
     });
@@ -122,10 +123,24 @@ function solveIt(reqPath, questionId, inputElement, explanationEl) {
     });
 }
 
+function dataCharts(reqPath, idEl) {
+    $.ajax({
+        type: "POST",
+        url: reqPath,
+        dataType: 'json',
+        success: function (data) {
+            var obj = JSON.parse(data);
+            $(idEl).html(obj.id);
+        }
+    });
+}
+
+
+
 function reportQuestion(form, url, questionId) {
 
-    form.submit(function(e){
-        $('#submitReport').attr('disabled', true);
+    form.one('submit', function(e){
+
         e.preventDefault();
         var formSerialize = $(this).serialize() + "&questionId=" + questionId;
 
@@ -140,6 +155,7 @@ function reportQuestion(form, url, questionId) {
                      .attr('value', 'Report submitted!')
                      .trigger("click")
                      .attr('disabled', true);
+                $('#submitReport').attr('disabled', true);
 
             },
             error: function () {
@@ -209,5 +225,32 @@ function addAnswerForm($collectionHolder, $newLinkLi) {
             $('.remove-tag').attr('disabled', true);
         }
         return false;
+    });
+}
+
+function deleteRecord(url, entity) {
+    $('#removeModal').on('show.bs.modal', function (event) {
+        var button = $(event.relatedTarget);
+        var id = button.data('id');
+        var name = button.data('name');
+        var modal = $(this);
+
+        modal.find('.modal-body').text('Question: ' + name);
+        $('#delete').one('click', function () {
+
+            // $('#delete').attr('disabled', true);
+            $.ajax({
+                type: "POST",
+                url: url,
+                data: 'repository=' + entity + '&id=' + id,
+                success: function () {
+                    button.trigger("click");
+//                    button.parent().parent().hide();
+                },
+                error: function () {
+                    button.trigger("click");
+                }
+            })
+        });
     });
 }
