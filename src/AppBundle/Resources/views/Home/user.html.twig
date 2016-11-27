@@ -4,32 +4,6 @@
 
 {% block stylesheets %}
     {{ parent() }}
-    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-    <script type="text/javascript">
-        google.charts.load('current', {packages: ['corechart']});
-        google.charts.setOnLoadCallback(drawChart);
-
-        function drawChart() {
-            // Define the chart to be drawn.
-            var data = google.visualization.arrayToDataTable([
-                ['Test', 'Results', { role: 'style' } ],
-                ['2010', 10, 'color: gray'],
-                ['2020', 14, 'color: #76A7FA'],
-                ['2030', 16, 'opacity: 0.2'],
-                ['2040', 22, 'stroke-color: #703593; stroke-width: 4; fill-color: #C5A5CF'],
-                ['2050', 28, 'stroke-color: #871B47; stroke-opacity: 0.6; stroke-width: 8; fill-color: #BC5679; fill-opacity: 0.2']
-            ]);
-            var options = {'title':'Test results',
-                'height':300,
-                'width':400,
-                bar: {groupWidth: "95%"},
-                legend: { position: 'bottom' }
-            };
-            // Instantiate and draw the chart.
-            var chart = new google.visualization.ColumnChart(document.getElementById('myPieChart'));
-            chart.draw(data, options);
-        }
-    </script>
 {% endblock %}
 
 {% block body %}
@@ -37,17 +11,62 @@
         <div class="container">
             <h1>Hello, {{ app.user.name }}</h1>
             <div id="data"></div>
+            <div id="chart_div"></div>
         </div>
-        <div id="myPieChart"></div>
 
     </div>
 {% endblock %}
 
 {% block javascripts %}
     {{ parent() }}
-
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
     <script type="text/javascript">
+
+        function dataCharts(reqPath, idEl) {
+            $.ajax({
+                type: "POST",
+                url: reqPath,
+                dataType: 'json',
+                success: function (data) {
+                    var obj = JSON.parse(data);
+
+                    //$(idEl).html(obj.data);
+
+                    /*for (i = 0; i < obj.data.length; i++) {
+                        $(idEl).append("<br>", obj.data[i]);
+                    }
+
+                    obj.data = eval(obj.data);*/
+
+                    google.charts.setOnLoadCallback(drawChart);
+
+                    function drawChart() {
+                        console.log(obj.data);
+                        obj.data = eval(obj.data);
+                        var options = {
+                            title: 'Category results',
+                            hAxis: {
+                                title: 'Category'
+                            },
+                            vAxis: {
+                                title: '% results'
+                            },
+                            bar: {groupWidth: "90%"},
+                            legend: { 'legend':'left' }
+                        };
+
+                        var chart = new google.visualization.ColumnChart(
+                                document.getElementById('chart_div'));
+
+                        chart.draw(data, options);
+                    }
+                }
+
+            });
+        }
+
         $( document ).ready(function() {
+            google.charts.load('current', {packages: ['corechart', 'bar']});
             dataCharts('{{ path('user-data') }}', $('#data'));
         });
     </script>
