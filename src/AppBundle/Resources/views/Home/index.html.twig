@@ -55,18 +55,9 @@
                 <div class="panel-body">
                     <div class="row">
                         <div class="col-lg-6 col-md-6 col-lg-offset-3 col-md-offset-3 col-sm-12 col-xs-12">
-                            <a href="/login"><button type="submit" class="btn btnY btn-3">Functions and arrays</button></a>
-                            <a href="/login"><button type="submit" class="btn btnY btn-3">Object oriented programming</button></a>
-                            <a href="/login"><button type="submit" class="btn btnY btn-3">Security</button></a>
-                            <a href="/login"><button type="submit" class="btn btnY btn-3">Data format & types</button></a>
-                            <a href="/login"><button type="submit" class="btn btnY btn-3">String and patterns</button></a>
-                            <a href="/login"><button type="submit" class="btn btnY btn-3">Databases and SQL</button></a>
-                            <a href="/login"><button type="submit" class="btn btnY btn-3">Web feateures</button></a>
-                            <a href="/login"><button type="submit" class="btn btnY btn-3">INPUT/OUTPUT</button></a>
-                            <a href="/login"><button type="submit" class="btn btnY btn-3">Basic 1</button></a>
-                            <a href="/login"><button type="submit" class="btn btnY btn-3">Arrays 1</button></a>
-                            <a href="/login"><button type="submit" class="btn btnY btn-3">Strings 1</button></a>
-                            <a href="/login"><button type="submit" class="btn btnY btn-3">Web features 1</button></a>
+                            {% for category in categories %}
+                                <a href="{{ path('categoryTest',{'id': category.id, 'slug': category.slugify}) }}"><button type="submit" class="btn btnY btn-3">{{ category.title }}</button></a>
+                            {% endfor %}
                         </div>
                     </div>
                 </div>
