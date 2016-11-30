@@ -232,7 +232,6 @@ class User extends BaseUser
     }
 
 
-
     /**
      * @return string
      */
@@ -455,7 +454,7 @@ class User extends BaseUser
      //   $this->active = true;
         $this->createdAt = new \DateTime('now');
         $this->updatedAt = new \DateTime('now');
-    //    $this->level = 1;
+        $this->addRole('ROLE_USER');
         $this->correct = 0;
         $this->incorrect = 0;
         $this->testsTaken = 0;
@@ -504,7 +503,17 @@ class User extends BaseUser
      */
     public function getRoles()
     {
-        return ['ROLE_USER'];
+        return $this->roles;
+    }
+
+    public function addRole($role)
+    {
+        $this->roles[] = $role;
+    }
+
+    public function setRoles(array $roles)
+    {
+        $this->roles = $roles;
     }
 
     /**

@@ -106,7 +106,7 @@ class QuestionReport
     /**
      * @return int
      */
-    public function getCreatedBy(): int
+    public function getCreatedBy()
     {
         return $this->created_by;
     }
@@ -141,9 +141,9 @@ class QuestionReport
     }
 
     /**
-     * @return \DateTime
+     * @return \DateTime|null
      */
-    public function getCreatedAt(): \DateTime
+    public function getCreatedAt()
     {
         return $this->created_at;
     }
@@ -159,9 +159,9 @@ class QuestionReport
     }
 
     /**
-     * @return \DateTime
+     * @return \DateTime|null
      */
-    public function getUpdatedAt(): \DateTime
+    public function getUpdatedAt()
     {
         return $this->updated_at;
     }
@@ -196,6 +196,11 @@ class QuestionReport
      * @return string
      */
     public function getReason()
+    {
+        return $this->reason;
+    }
+
+    public function __toString()
     {
         return $this->reason;
     }
