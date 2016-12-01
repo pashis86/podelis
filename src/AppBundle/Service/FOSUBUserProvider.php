@@ -62,6 +62,7 @@ class FOSUBUserProvider extends BaseClass
                 ->setEnabled(true)
                 ->setName($response->getFirstName())
                 ->setSurname($response->getLastName());
+            
             if ($service === 'facebook') {
                 $user->setAvatar('https://graph.facebook.com/'.$user->getUsername().'/picture?type=large');
             } else {
