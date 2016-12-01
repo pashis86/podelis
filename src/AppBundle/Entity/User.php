@@ -15,6 +15,10 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @UniqueEntity(fields="username", message="Username already taken")
  * @UniqueEntity(fields="email", message="Email already taken")
  * @ORM\Entity(repositoryClass="AppBundle\Repository\UserRepository")
+ * @ORM\AttributeOverrides({
+ *      @ORM\AttributeOverride(name="email", column=@ORM\Column(type="string", name="email", length=255, unique=false, nullable=true)),
+ *      @ORM\AttributeOverride(name="emailCanonical", column=@ORM\Column(type="string", name="email_canonical", length=255, unique=false, nullable=true))
+ * })
  */
 class User extends BaseUser
 {
