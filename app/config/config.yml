@@ -120,7 +120,7 @@ easy_admin:
             - label: 'Question Reports'
               children: ['Report', 'Approved', 'Deniend']
             - label: 'Questions'
-              children: ['Question', 'Added', 'Deniend', 'Reported']
+              children: ['Question', 'Added', 'Deniend_Questions', 'Reported']
             - label: 'Users'
               children: ['User', 'Disabled', 'Admin']
             - label: 'Answer'
@@ -216,7 +216,7 @@ easy_admin:
                      - answers
                      - { property: 'status', type: 'choice', type_options: { multiple: false, choices: { 'Submitted': 'Submitted', 'Added': 'Added', 'Denied': 'Denied' } } }
 
-        Deniend:
+        Deniend_Questions:
             disabled_actions: ['new']
             class: AppBundle\Entity\Question
             label: 'Deniend Questions'
@@ -255,6 +255,7 @@ easy_admin:
         User:
             class: AppBundle\Entity\User
             label: 'Active Users'
+            disabled_actions: ['delete']
             list:
                 title: 'Active users'
                 fields:
@@ -272,6 +273,7 @@ easy_admin:
         Admin:
             class: AppBundle\Entity\User
             label: 'Administrators'
+            disabled_actions: ['delete']
             list:
                 title: 'Administrators'
                 fields:
@@ -286,7 +288,7 @@ easy_admin:
                     - { property: 'roles', type: 'choice', type_options: { multiple: true, expanded: true, choices: { 'ROLE_USER': 'ROLE_USER', 'ROLE_ADMIN': 'ROLE_ADMIN' } } }
                     - enabled
         Disabled:
-            disabled_actions: ['new']
+            disabled_actions: ['new', 'delete']
             class: AppBundle\Entity\User
             label: 'Disabled Users'
             list:
