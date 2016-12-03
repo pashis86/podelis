@@ -2,10 +2,12 @@
 
 namespace AppBundle\Controller;
 
+use AppBundle\Entity\Answer;
 use AppBundle\Entity\Question;
 use AppBundle\Entity\QuestionReport;
 use AppBundle\Form\QuestionReportType;
 use AppBundle\Form\QuestionType;
+use Doctrine\ORM\PersistentCollection;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\BrowserKit\Response;
@@ -23,6 +25,7 @@ class QuestionController extends Controller
     public function addQuestionAction(Request $request)
     {
         $question = new Question();
+        $question->prepareAnswerFields(4);
         $form = $this->createForm(QuestionType::class, $question);
 
         $form->handleRequest($request);
@@ -31,7 +34,8 @@ class QuestionController extends Controller
             $question->setCreatedBy($this->getUser())
                 ->setCheckboxAnswers(false)
                 ->setCreatedAt(new \DateTime())
-                ->setUpdatedAt(new \DateTime());
+                ->setUpdatedAt(new \DateTime())
+                ->isCheckboxType();
 
             $em = $this->getDoctrine()->getManager();
 
@@ -105,7 +109,14 @@ class QuestionController extends Controller
             $form->handleRequest($request);
 
             if ($form->isSubmitted() && $form->isValid()) {
-                $question->setUpdatedAt(new \DateTime());
+                $em->getRepository('AppBundle:Answer')->removeAnswers($question->getId());
+                /** @var PersistentCollection $answers */
+                $answers = $form['answers']->getData();
+
+                $question->setUpdatedAt(new \DateTime())
+                    ->setAnswers($answers->map(function ($answer) {return $answer; }))
+                    ->isCheckboxType();
+
                 $em->flush();
 
                 $this->addFlash('success', 'Your question has been updated!');
@@ -116,7 +127,6 @@ class QuestionController extends Controller
             ]);
         }
         return $this->render('AppBundle:Home:404.html.twig');
-        /// abc
     }
 
     /**

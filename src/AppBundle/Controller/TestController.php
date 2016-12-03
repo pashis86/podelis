@@ -26,7 +26,7 @@ use Symfony\Component\HttpFoundation\Session\Session;
 class TestController extends Controller
 {
     /**
-     * @Route("/test-options", name="test_options")
+     * @Route("/work", name="test_options")
      * @Security("has_role('ROLE_USER')")
      */
     public function testOptionsAction(Request $request)

@@ -7,7 +7,7 @@
 {% endblock %}
 
 {% block body %}
-
+    {% if questions %}
 <table>
     {% for question in questions %}
         <tr>
@@ -24,7 +24,9 @@
         </tr>
     {% endfor %}
 </table>
-
+{% else %}
+<div><h3>You haven't submitted any question suggestions.</h3></div>
+{% endif %}
     <div class="modal fade" id="removeModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
