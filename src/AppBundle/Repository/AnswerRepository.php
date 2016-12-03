@@ -31,4 +31,19 @@ class AnswerRepository extends \Doctrine\ORM\EntityRepository
             ->getQuery()
             ->getResult();
     }
+
+    public function removeAnswers($questionId)
+    {
+        $answers = $this->createQueryBuilder('a')
+            ->select('a')
+            ->where('a.question = :question')
+            ->setParameter('question', $questionId)
+            ->getQuery()
+            ->getResult();
+
+        foreach ($answers as $answer) {
+            $this->_em->remove($answer);
+        }
+        $this->_em->flush();
+    }
 }

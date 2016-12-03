@@ -62,6 +62,8 @@ class QuestionRepository extends \Doctrine\ORM\EntityRepository
             ->andWhere('q.status = :status')
             ->setParameter('categoryId', $categoryId)
             ->setParameter('status', 'Added')
+            ->addSelect('RAND() as HIDDEN rand')
+            ->orderBy('rand')
             ->getQuery()
             ->getResult()];
     }

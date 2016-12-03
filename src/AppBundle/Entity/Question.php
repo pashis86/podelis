@@ -365,6 +365,24 @@ class Question
         return $this->id.'. '.$this->title;
     }
 
+    public function prepareAnswerFields($numOfFields)
+    {
+        for ($i = 0; $i < $numOfFields; $i++) {
+            $this->addAnswer(new Answer());
+        }
+    }
+
+    public function isCheckboxType()
+    {
+        $correct = 0;
+        /** @var Answer $answer */
+        foreach ($this->answers as $answer) {
+            if ($answer->getCorrect()) {
+                $correct++;
+            }
+        }
+        $correct > 1 ? $this->setCheckboxAnswers(true) : $this->setCheckboxAnswers(false);
+    }
 
     public function slugify()
     {
