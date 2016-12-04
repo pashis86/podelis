@@ -7,6 +7,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 class HomeController extends Controller
 {
@@ -38,27 +39,17 @@ class HomeController extends Controller
 
 
     /**
-     * @Route("/leaderboard/{page}", name="leaderboard")
+     * @Route("/leaderboard", name="leaderboard")
      */
-    public function leaderboardAction(Request $request, $page = 1)
+    public function leaderboardAction(Request $request)
     {
-        $repository = $this->getDoctrine()->getRepository('AppBundle:User');
+        if ($request->isXmlHttpRequest()) {
+            $repository = $this->getDoctrine()->getRepository('AppBundle:User');
+            $best = $repository->getLeaderBoard($request->request);
 
-        $orderParams = $request->query->all();
-
-        $best = $repository->findBest($orderParams, $page, $limit = 2);
-        $maxPages = ceil($best->count() / $limit);
-
-        if($page > $maxPages){
-            return $this->render('@App/Home/404.html.twig');
+            return new JsonResponse(json_encode($best), 200, array(), true);
         }
-
-        return $this->render('@App/Home/leaderboard.html.twig', [
-            'thisPage' => $page,
-            'maxPages' => $maxPages,
-            'best' => $best,
-            'limit' => $limit
-        ]);
+        return $this->render('@App/Home/leaderboard.html.twig', []);
     }
 
     /**

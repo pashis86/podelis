@@ -20,20 +20,23 @@ function timedCounter(finalValue, seconds, callback) {
 }
 
 function timedCounterCall(n) {
-
-    
     timedCounter(n, 1.5, function(value){
         value = Math.floor(value);
         $('.user-count').html(value);
     });
-};
+}
 
 function sendAnswers(inputSelector, url, question) {
     $(inputSelector).on('change', function () {
         var answers = [];
-        $(inputSelector.checked).each(function () {
-            answers.push($(this).val());
+        $(inputSelector).each(function () {
+            if ($(this).is(':checked')) {
+                console.log(1);
+                answers.push($(this).val());
+            }
         });
+        console.log(answers);
+
         $.ajax({
             type: "POST",
             url: url,
@@ -211,5 +214,50 @@ function deleteRecord(url, entity) {
                 }
             })
         });
+    });
+}
+
+function leaderboard(path, element) {
+    element.DataTable({
+        bProcessing: true,
+        bServerSide: true,
+        bPaginate: true,
+        bFilter: false,
+        order: [[2, 'desc']],
+        columnDefs: [
+            { orderSequence: [ "desc", "asc"], targets: [ 1, 2, 3, 4, 5, 6 ] }
+        ],
+        ajax:  {
+            url: path,
+            method: 'post',
+            datatype: 'json'
+        },
+        columns: [
+            {
+                data: 'avatar',
+                orderable: false,
+                render: function(data) {
+                    return '<img src="'+data+'" />';
+                }
+            },
+            {
+                data: 'name'
+            },
+            {
+                data: 'correct'
+            },
+            {
+                data: 'incorrect'
+            },
+            {
+                data: 'testsTaken'
+            },
+            {
+                data: 'percentage'
+            },
+            {
+                data: 'timeSpent'
+            }
+        ]
     });
 }
