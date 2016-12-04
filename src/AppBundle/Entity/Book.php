@@ -57,6 +57,15 @@ class Book
      */
     private $updatedAt;
 
+    /**
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Test", mappedBy="category")
+     */
+    private $tests;
+
+    public function __construct()
+    {
+        $this->tests = new ArrayCollection();
+    }
 
     public function __toString()
     {
@@ -195,6 +204,26 @@ class Book
     {
         return $this->updatedAt;
     }
+
+    /**
+     * @return ArrayCollection
+     */
+    public function getTests()
+    {
+        return $this->tests;
+    }
+
+    /**
+     * @param ArrayCollection $tests
+     * @return Book
+     */
+    public function setTests($tests)
+    {
+        $this->tests = $tests;
+        return $this;
+    }
+
+
 
     public function slugify()
     {

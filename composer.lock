@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "a63038915123485e2bd91630df824e79",
-    "content-hash": "40d76067ab4cdc538c5b8e232bd16991",
+    "hash": "3c88e1cf5485761316087705524b133e",
+    "content-hash": "52f0e7bb56a2568f8c79abc6607df793",
     "packages": [
         {
             "name": "behat/gherkin",
@@ -978,12 +978,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/FriendsOfSymfony/FOSUserBundle.git",
-                "reference": "507ae09e95788d23e8cdbd1b3c23b5c46dc8b5a1"
+                "reference": "7261f7aa143b4bfdb0b7ddc5df208067fa7be698"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/FriendsOfSymfony/FOSUserBundle/zipball/507ae09e95788d23e8cdbd1b3c23b5c46dc8b5a1",
-                "reference": "507ae09e95788d23e8cdbd1b3c23b5c46dc8b5a1",
+                "url": "https://api.github.com/repos/FriendsOfSymfony/FOSUserBundle/zipball/7261f7aa143b4bfdb0b7ddc5df208067fa7be698",
+                "reference": "7261f7aa143b4bfdb0b7ddc5df208067fa7be698",
                 "shasum": ""
             },
             "require": {
@@ -1045,7 +1045,7 @@
             "keywords": [
                 "User management"
             ],
-            "time": "2016-12-02 11:20:52"
+            "time": "2016-12-03 17:42:44"
         },
         {
             "name": "guzzlehttp/guzzle",
@@ -2366,16 +2366,16 @@
         },
         {
             "name": "phpunit/phpunit",
-            "version": "5.7.1",
+            "version": "5.7.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "0158307fae98f8013eeac2ff2803fe8d4f6bc1a0"
+                "reference": "336aff0ac52e306c98e7455bc3e8d7b0bf777a5e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/0158307fae98f8013eeac2ff2803fe8d4f6bc1a0",
-                "reference": "0158307fae98f8013eeac2ff2803fe8d4f6bc1a0",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/336aff0ac52e306c98e7455bc3e8d7b0bf777a5e",
+                "reference": "336aff0ac52e306c98e7455bc3e8d7b0bf777a5e",
                 "shasum": ""
             },
             "require": {
@@ -2444,7 +2444,7 @@
                 "testing",
                 "xunit"
             ],
-            "time": "2016-12-02 12:03:05"
+            "time": "2016-12-03 08:33:00"
         },
         {
             "name": "phpunit/phpunit-mock-objects",

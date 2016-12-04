@@ -11,7 +11,13 @@
     {{ form_row(form.title) }}
     {{ form_row(form.book) }}
     {{ form_row(form.content) }}
-    <ul class="answers" data-prototype="{{ form_widget(form.answers.vars.prototype)|e('html_attr') }}"></ul>
+    <div id="answers" data-prototype="{{ form_widget(form.answers.vars.prototype)|e('html_attr') }}">
+        <a class="btn-add" data-target="answers">Add tag</a>
+         {% for answer in form.answers %}
+            {{ form_row(answer) }}
+        {% endfor %}
+    </div>
+
     {{ form_row(form.explanation) }}
     <input type="submit" value="Edit question">
     {{ form_end(form) }}
@@ -20,6 +26,9 @@
 
 {% block javascripts %}
     {{ parent() }}
+    <script>
+questionFormCollection()
+    </script>
 
 {% endblock %}
 

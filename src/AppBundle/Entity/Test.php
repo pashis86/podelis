@@ -24,7 +24,8 @@ class Test
     /**
      * @var string
      *
-     * @ORM\Column(name="category", type="string", length=255)
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Book", inversedBy="tests")
+     * @ORM\JoinColumn(name="book_id", referencedColumnName="id")
      */
     private $category;
 

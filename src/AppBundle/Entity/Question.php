@@ -11,6 +11,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  *
  * @ORM\Table(name="questions")
  * @ORM\Entity(repositoryClass="AppBundle\Repository\QuestionRepository")
+ * @Assert\Callback({"AppBundle\Validator\AnswersCollection", "hasCorrectAnswer"})
  */
 class Question
 {
@@ -32,7 +33,7 @@ class Question
     /**
      * @var ArrayCollection
      *
-     * @ORM\OneToMany(targetEntity="Answer", mappedBy="question", cascade={"persist", "remove"})
+     * @ORM\OneToMany(targetEntity="Answer", mappedBy="question", cascade={"all"})
      */
     private $answers;
 
@@ -79,7 +80,7 @@ class Question
     private $updatedAt;
 
     /**
-     * @ORM\OneToMany(targetEntity="AppBundle\Entity\QuestionReport", mappedBy="questionId")
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\QuestionReport", mappedBy="question")
      */
     private $reports;
 
@@ -94,11 +95,17 @@ class Question
      */
     private $status;
 
+    /**
+     * @ORM\ManyToMany(targetEntity="AppBundle\Entity\User", mappedBy="questionsContributed", cascade={"remove", "persist"})
+     */
+    private $contributors;
+
 
     public function __construct()
     {
         $this->answers = new ArrayCollection();
         $this->reports = new ArrayCollection();
+        $this->contributors = new ArrayCollection();
         $this->status  = 'Submitted';
     }
 
@@ -360,11 +367,74 @@ class Question
         return $this;
     }
 
+    /**
+     * @return ArrayCollection
+     */
+    public function getContributors()
+    {
+        return $this->contributors;
+    }
+
+    /**
+     * @param User $contributors
+     * @return Question
+     */
+    public function addContributors($contributors)
+    {
+        $this->contributors->add($contributors);
+        return $this;
+    }
+
+    /**
+     * @param User $contributors
+     * @return Question
+     */
+    public function removeContributors($contributors)
+    {
+        if ($this->contributors->contains($contributors)) {
+            $this->contributors->remove($contributors);
+        }
+        return $this;
+    }
+
     public function __toString()
     {
         return $this->id.'. '.$this->title;
     }
 
+    public function prepareAnswerFields($numOfFields)
+    {
+        for ($i = 0; $i < $numOfFields; $i++) {
+            $this->addAnswer(new Answer());
+        }
+    }
+
+    /**
+     * @return $this
+     */
+    public function isCheckboxType()
+    {
+        $correct = 0;
+        /** @var Answer $answer */
+        foreach ($this->answers as $answer) {
+            if ($answer->getCorrect()) {
+                $correct++;
+            }
+        }
+        $correct > 1 ? $this->setCheckboxAnswers(true) : $this->setCheckboxAnswers(false);
+        return $this;
+    }
+
+    /**
+     * @return $this
+     */
+    public function updateAnswers()
+    {
+        /** @var Answer $answer */
+        foreach ($this->answers as $answer)
+            $answer->setUpdatedAt(new \DateTime());
+        return $this;
+    }
 
     public function slugify()
     {

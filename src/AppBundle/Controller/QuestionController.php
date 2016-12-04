@@ -2,10 +2,12 @@
 
 namespace AppBundle\Controller;
 
+use AppBundle\Entity\Answer;
 use AppBundle\Entity\Question;
 use AppBundle\Entity\QuestionReport;
 use AppBundle\Form\QuestionReportType;
 use AppBundle\Form\QuestionType;
+use Doctrine\ORM\PersistentCollection;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\BrowserKit\Response;
@@ -23,6 +25,7 @@ class QuestionController extends Controller
     public function addQuestionAction(Request $request)
     {
         $question = new Question();
+        $question->prepareAnswerFields(4);
         $form = $this->createForm(QuestionType::class, $question);
 
         $form->handleRequest($request);
@@ -31,7 +34,8 @@ class QuestionController extends Controller
             $question->setCreatedBy($this->getUser())
                 ->setCheckboxAnswers(false)
                 ->setCreatedAt(new \DateTime())
-                ->setUpdatedAt(new \DateTime());
+                ->setUpdatedAt(new \DateTime())
+                ->isCheckboxType();
 
             $em = $this->getDoctrine()->getManager();
 
@@ -65,7 +69,7 @@ class QuestionController extends Controller
      * @Route("/delete", name="delete")
      * @Security("has_role('ROLE_USER')")
      */
-    public function deletePanelAction(Request $request)
+    public function deleteAction(Request $request)
     {
         if ($request->isXmlHttpRequest()) {
             $repository = $request->request->get('repository');
@@ -89,7 +93,6 @@ class QuestionController extends Controller
         return new Response();
     }
 
-
     /**
      * @Route("/edit-question/{id}-{slug}", name="editQuestion")
      * @Security("has_role('ROLE_USER')")
@@ -106,7 +109,15 @@ class QuestionController extends Controller
             $form->handleRequest($request);
 
             if ($form->isSubmitted() && $form->isValid()) {
-                $question->setUpdatedAt(new \DateTime());
+                /** @var PersistentCollection $answers */
+                $answers = $form['answers']->getData();
+
+                $question->setUpdatedAt(new \DateTime())
+                    ->setAnswers($answers->map(function ($answer) {return $answer; }))
+                    ->isCheckboxType()
+                    ->updateAnswers();
+
+                $em->getRepository('AppBundle:Answer')->removeAnswers($question->getId(), $question->getAnswers());
                 $em->flush();
 
                 $this->addFlash('success', 'Your question has been updated!');
@@ -117,7 +128,6 @@ class QuestionController extends Controller
             ]);
         }
         return $this->render('AppBundle:Home:404.html.twig');
-        /// abc
     }
 
     /**
@@ -164,19 +174,4 @@ class QuestionController extends Controller
         return $this->render('AppBundle:Home:404.html.twig');
     }
 
-    public function deleteAction($repository, $id)
-    {
-        $em = $this->getDoctrine()->getManager();
-        $entity = $em->getRepository($repository)
-            ->findOneBy(['id' => $id, 'created_by' => $this->getUser()->getId()]);
-
-        if ($entity) {
-            $em->remove($entity);
-            $em->flush();
-
-            return new JsonResponse(200, 'success');
-        } else {
-            return new JsonResponse(400, 'error');
-        }
-    }
 }
