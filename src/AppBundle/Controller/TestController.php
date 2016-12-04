@@ -69,7 +69,6 @@ class TestController extends Controller
 
     /**
      * @Route("/categories", name="test_categories")
-     * @Security("has_role('ROLE_USER')")
      */
     public function categoryListAction()
     {
@@ -80,7 +79,6 @@ class TestController extends Controller
 
     /**
      * @Route("/category-test/{id}-{slug}", name="categoryTest")
-     * @Security("has_role('ROLE_USER')")
      */
     public function categoryTestAction($id)
     {

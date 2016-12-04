@@ -2,7 +2,6 @@
 $I = new AcceptanceTester($scenario);
 $I->wantTo('Perform actions and see result.');
 
-
 $I->amOnPage('/');
 $I->see('Log in');
 $I->click('Log in');
@@ -17,6 +16,7 @@ $I->wait(1);
 $I->click('Submit');
 $I->wait(1);
 $I->see("You've scored");
+
 /*$I->click('Create a new post');
 $I->fillField('post[title]', 'NFQ Akademija title');
 $I->fillField('post[summary]', 'NFQ Akademija summary');
