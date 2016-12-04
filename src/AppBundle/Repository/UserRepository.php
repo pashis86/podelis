@@ -2,12 +2,7 @@
 
 namespace AppBundle\Repository;
 
-use AppBundle\Entity\Test;
 use AppBundle\Entity\User;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\ORM\PersistentCollection;
-use Doctrine\ORM\Query;
-use Doctrine\ORM\Tools\Pagination\Paginator;
 use Symfony\Component\HttpFoundation\ParameterBag;
 
 /**
