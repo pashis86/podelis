@@ -32,7 +32,7 @@ class AnswersCollection
         }
 
        $correctAnswers == 0 ? $context->buildViolation('At least one answer has to be correct!')
-            ->atPath('answers')
+            ->atPath('title')
             ->addViolation() : null;
     }
 }
