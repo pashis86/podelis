@@ -23,12 +23,11 @@ class QuestionReport
     private $id;
 
     /**
-     * @var int
      *
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Question", inversedBy="reports")
      * @ORM\JoinColumn(name="question_id", referencedColumnName="id")
      */
-    private $questionId;
+    private $question;
 
     /**
      * @var int
@@ -80,27 +79,27 @@ class QuestionReport
     }
 
     /**
-     * Set questionId
+     * Set question
      *
-     * @param integer $questionId
+     * @param Question $question
      *
      * @return QuestionReport
      */
-    public function setQuestionId($questionId)
+    public function setQuestionI($question)
     {
-        $this->questionId = $questionId;
+        $this->question = $question;
 
         return $this;
     }
 
     /**
-     * Get questionId
+     * Get question
      *
-     * @return int
+     * @return Question
      */
-    public function getQuestionId()
+    public function getQuestion()
     {
-        return $this->questionId;
+        return $this->question;
     }
 
     /**

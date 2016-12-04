@@ -119,7 +119,7 @@ easy_admin:
 #   TODO:         favicon: '/assets/backend/favicon.png'
         menu:
             - label: 'Question Reports'
-              children: ['Report', 'Approved', 'Deniend']
+              children: ['Report', 'Deniend']
             - label: 'Questions'
               children: ['Question', 'Added', 'Deniend_Questions', 'Reported']
             - label: 'Users'
@@ -134,44 +134,44 @@ easy_admin:
             label: 'Submitted Reports'
             list:
                 title: 'Submitted question reports'
-                fields: ['id', 'questionId', 'created_by', 'updated_at', 'status']
+                fields: ['id', 'question', 'created_by', 'updated_at', 'status']
                 dql_filter: 'entity.status = 1'
             new:
                 fields:
                     - reason
             edit:
                 fields:
-                    - questionId
+                    - question
                     - reason
                     - created_by
                     - { property: 'status', type: 'choice', type_options: { multiple: false, choices: { 'Submitted': 'Submitted', 'Approved': 'Approved', 'Denied': 'Denied' } } }
-        Approved:
-            disabled_actions: ['new']
-            class:  AppBundle\Entity\QuestionReport
-            label: 'Approved Reports'
-            list:
-                title: 'Approved question reports'
-                fields: ['id', 'questionId', 'created_by', 'updated_at', 'status']
-                dql_filter: 'entity.status = 2'
-            edit:
-                title: 'Edit report'
-                fields:
-                    - questionId
-                    - reason
-                    - created_by
-                    - { property: 'status', type: 'choice', type_options: { multiple: false, choices: { 'Submitted': 'Submitted', 'Approved': 'Approved', 'Denied': 'Denied' } } }
+#        Approved:
+#            disabled_actions: ['new']
+#            class:  AppBundle\Entity\QuestionReport
+#            label: 'Approved Reports'
+#            list:
+#                title: 'Approved question reports'
+#                fields: ['id', 'question', 'created_by', 'updated_at', 'status']
+#                dql_filter: 'entity.status = 2'
+#            edit:
+#                title: 'Edit report'
+#                fields:
+#                    - question
+#                    - reason
+#                    - created_by
+#                    - { property: 'status', type: 'choice', type_options: { multiple: false, choices: { 'Submitted': 'Submitted', 'Approved': 'Approved', 'Denied': 'Denied' } } }
         Deniend:
             disabled_actions: ['new']
             class:  AppBundle\Entity\QuestionReport
             label: 'Deniend Reports'
             list:
                 title: 'Deniend question reports'
-                fields: ['id', 'questionId', 'created_by', 'updated_at', 'status']
+                fields: ['id', 'question', 'created_by', 'updated_at', 'status']
                 dql_filter: 'entity.status = 3'
             edit:
                 title: 'Edit report'
                 fields:
-                    - questionId
+                    - question
                     - reason
                     - created_by
                     - { property: 'status', type: 'choice', type_options: { multiple: false, choices: { 'Submitted': 'Submitted', 'Approved': 'Approved', 'Denied': 'Denied' } } }

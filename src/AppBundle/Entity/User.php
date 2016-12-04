@@ -2,6 +2,7 @@
 
 namespace AppBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use FOS\UserBundle\Model\User as BaseUser;
@@ -129,6 +130,28 @@ class User extends BaseUser
      * @ORM\OneToMany(targetEntity="AppBundle\Entity\Question", mappedBy="created_by")
      */
     protected $questions_created;
+
+    /**
+     * @ORM\ManyToMany(targetEntity="AppBundle\Entity\Question", inversedBy="contributors", indexBy="id", cascade={"persist", "remove"})
+     * @ORM\JoinTable(name="contributors")
+     */
+    protected $questionsContributed;
+
+    public function __construct()
+    {
+        parent::__construct();
+
+        $this->publicProfile = true;
+        $this->createdAt = new \DateTime('now');
+        $this->updatedAt = new \DateTime('now');
+        $this->addRole('ROLE_USER');
+        $this->correct = 0;
+        $this->incorrect = 0;
+        $this->testsTaken = 0;
+        $this->timeSpent = 0;
+        $this->avatar = 'http://www.iconsdb.com/icons/preview/black/guest-xxl.png';
+        $this->questionsContributed = new ArrayCollection();
+    }
 
     /**
      * @return string
@@ -470,21 +493,6 @@ class User extends BaseUser
         return $formated;
     }
 
-    public function __construct()
-    {
-        parent::__construct();
-
-        $this->publicProfile = true;
-        $this->createdAt = new \DateTime('now');
-        $this->updatedAt = new \DateTime('now');
-        $this->addRole('ROLE_USER');
-        $this->correct = 0;
-        $this->incorrect = 0;
-        $this->testsTaken = 0;
-        $this->timeSpent = 0;
-        $this->avatar = 'http://www.iconsdb.com/icons/preview/black/guest-xxl.png';
-    }
-
     public function updateStats($time, $answers)
     {
         $this->timeSpent += $time->s + $time->i * 60 + $time->h * 3600;
@@ -565,6 +573,36 @@ class User extends BaseUser
         return $this;
     }
 
+    /**
+     * @return ArrayCollection
+     */
+    public function getQuestionsContributed()
+    {
+        return $this->questionsContributed;
+    }
 
+    /**
+     * @param Question $questionsContributed
+     * @return User
+     */
+    public function addQuestionsContributed($questionsContributed)
+    {
+        if (!$this->questionsContributed->contains($questionsContributed)) {
+            $this->questionsContributed->add($questionsContributed);
+        }
+        return $this;
+    }
+
+    /**
+     * @param Question $questionsContributed
+     * @return User
+     */
+    public function removeQuestionsContributed($questionsContributed)
+    {
+        if ($this->questionsContributed->contains($questionsContributed)) {
+            $this->questionsContributed->remove($questionsContributed);
+        }
+        return $this;
+    }
 }
 

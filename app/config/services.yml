@@ -8,10 +8,6 @@ services:
         class: AppBundle\Service\EmailSender
         arguments: ["@mailer", "@templating"]
 
-#    app.facebook_authenticator:
-#        class: AppBundle\Service\FacebookAuthenticator
-#        arguments: ["@oauth2.registry", "@doctrine.orm.entity_manager", "@router"]
-
     app.test_control:
         class: AppBundle\Service\TestControl
         arguments: ["@session", "@security.token_storage", "@doctrine.orm.entity_manager"]
@@ -44,3 +40,8 @@ services:
         arguments: ["@security.token_storage", "@router"]
         tags:
             - { name: kernel.event_listener, event: kernel.request, method: onKernelRequest }
+
+    app.contribution.listener:
+        class: AppBundle\EventListener\AddContribution
+        tags:
+            - { name: doctrine.event_listener, event: postUpdate, method: postUpdate }
