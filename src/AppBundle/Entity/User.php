@@ -76,7 +76,6 @@ class User extends BaseUser
     /** @ORM\Column(name="google_access_token", type="string", length=255, nullable=true) */
     protected $google_access_token;
 
-    // ---------------------------------------------------------------------
     /**
      * @var integer
      *
@@ -109,7 +108,11 @@ class User extends BaseUser
      * @ORM\OneToMany(targetEntity="AppBundle\Entity\Test", mappedBy="userId")
      */
     protected $tests;
-    // ---------------------------------------------------------------------
+
+    /**
+     * @ORM\Column(name="public_profile", type="boolean")
+     */
+    protected $publicProfile;
     /**
      * @var string
      *
@@ -215,6 +218,22 @@ class User extends BaseUser
     {
         $this->createdAt = $createdAt;
         return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getPublicProfile()
+    {
+        return $this->publicProfile;
+    }
+
+    /**
+     * @param mixed $publicProfile
+     */
+    public function setPublicProfile($publicProfile)
+    {
+        $this->publicProfile = $publicProfile;
     }
 
     /**

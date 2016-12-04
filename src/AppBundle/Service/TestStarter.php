@@ -9,6 +9,7 @@
 namespace AppBundle\Service;
 
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\HttpFoundation\Session\Session;
 
 class TestStarter

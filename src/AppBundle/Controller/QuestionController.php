@@ -109,14 +109,15 @@ class QuestionController extends Controller
             $form->handleRequest($request);
 
             if ($form->isSubmitted() && $form->isValid()) {
-                $em->getRepository('AppBundle:Answer')->removeAnswers($question->getId());
                 /** @var PersistentCollection $answers */
                 $answers = $form['answers']->getData();
 
                 $question->setUpdatedAt(new \DateTime())
                     ->setAnswers($answers->map(function ($answer) {return $answer; }))
-                    ->isCheckboxType();
+                    ->isCheckboxType()
+                    ->updateAnswers();
 
+                $em->getRepository('AppBundle:Answer')->removeAnswers($question->getId(), $question->getAnswers());
                 $em->flush();
 
                 $this->addFlash('success', 'Your question has been updated!');

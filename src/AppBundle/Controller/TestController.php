@@ -61,7 +61,7 @@ class TestController extends Controller
         $questions = $qRepository->getRandomQuestions(20);
 
         if (!empty($questions[0][0])) {
-            $this->get('app.test_starter')->startTest($questions, '+2 minute,', true);
+            $this->get('app.test_starter')->startTest($questions, '+2 minute,', false);
             return $this->redirectToRoute('question', ['id' => $questions[0][0]->getId()]);
         }
         return $this->render('@App/Home/404.html.twig');
@@ -71,7 +71,7 @@ class TestController extends Controller
      * @Route("/categories", name="test_categories")
      * @Security("has_role('ROLE_USER')")
      */
-    public function categoryTestAction()
+    public function categoryListAction()
     {
         $categories = $this->getDoctrine()->getRepository('AppBundle:Book')->findAll();
 
@@ -82,7 +82,7 @@ class TestController extends Controller
      * @Route("/category-test/{id}-{slug}", name="categoryTest")
      * @Security("has_role('ROLE_USER')")
      */
-    public function categoryTestAction1($id)
+    public function categoryTestAction($id)
     {
         $questions = $this->getDoctrine()->getRepository('AppBundle:Question')->getCategoryQuestions($id);
 

@@ -11,6 +11,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  *
  * @ORM\Table(name="questions")
  * @ORM\Entity(repositoryClass="AppBundle\Repository\QuestionRepository")
+ * @Assert\Callback({"AppBundle\Validator\AnswersCollection", "hasCorrectAnswer"})
  */
 class Question
 {
@@ -32,7 +33,7 @@ class Question
     /**
      * @var ArrayCollection
      *
-     * @ORM\OneToMany(targetEntity="Answer", mappedBy="question", cascade={"persist", "remove"})
+     * @ORM\OneToMany(targetEntity="Answer", mappedBy="question", cascade={"all"})
      */
     private $answers;
 
@@ -372,6 +373,9 @@ class Question
         }
     }
 
+    /**
+     * @return $this
+     */
     public function isCheckboxType()
     {
         $correct = 0;
@@ -382,6 +386,18 @@ class Question
             }
         }
         $correct > 1 ? $this->setCheckboxAnswers(true) : $this->setCheckboxAnswers(false);
+        return $this;
+    }
+
+    /**
+     * @return $this
+     */
+    public function updateAnswers()
+    {
+        /** @var Answer $answer */
+        foreach ($this->answers as $answer)
+            $answer->setUpdatedAt(new \DateTime());
+        return $this;
     }
 
     public function slugify()
