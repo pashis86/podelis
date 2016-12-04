@@ -474,7 +474,7 @@ class User extends BaseUser
     {
         parent::__construct();
 
-     //   $this->active = true;
+        $this->publicProfile = true;
         $this->createdAt = new \DateTime('now');
         $this->updatedAt = new \DateTime('now');
         $this->addRole('ROLE_USER');
