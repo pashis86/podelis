@@ -13,8 +13,9 @@ var dir = {
 };
 
 gulp.task('sass', function() {
-    gulp.src(
-        dir.assets + 'style/main.scss')
+    gulp.src([
+            dir.assets + 'style/main.scss'
+        ])
         .pipe(sass({ outputStyle: 'compressed' , includePaths:[dir.npm] }).on('error', sass.logError))
         .pipe(concat('style.css'))
         .pipe(gulp.dest(dir.dist + 'css'));
@@ -33,7 +34,7 @@ gulp.task('scripts', function() {
             dir.assets + 'scripts.bunttons.js',
             dir.assets + 'scripts/basic.js',
             dir.assets + 'scripts/markup.js',
-            dir.assets + 'scripts/dataTables.js'
+            dir.assets + 'scripts/codester/*'
         ])
         .pipe(concat('script.js'))
         .pipe(uglify())

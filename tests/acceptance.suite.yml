@@ -9,5 +9,5 @@ modules:
     enabled:
         - WebDriver:
             url: http://localhost:8000
-            browser: firefox
+            browser: chrome
         - \Helper\Acceptance

@@ -10,23 +10,25 @@
                     <span class="icon-bar"></span>
                 </button>
                 <a class="navbar-brand latoS" href="/">
-                    <img src="{{ asset('images/php.png') }}" alt="Logo!" width="50px" align="left"/> &nbsp PHP tests
+                    <img src="{{ asset('images/php.png') }}" alt="Logo!" width="50px" align="left"/> &nbsp { testify }
                 </a>
             </div>
             <div id="navbar" class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    <li><a href="{{ path('quick_test') }}">ZEND test</a></li>
-                    <li><a href="{{ path('test_options') }}">Basic test</a></li>
+                    <li><a href="{{ path('quick_test') }}">Quick test</a></li>
+                    <li><a href="{{ path('test_options') }}">Overal test</a></li>
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Category tests <span class="caret"></span></a>
                         <ul class="dropdown-menu position-topmost">
-                            <li><a href="/customTest/1">List</a></li>
-                            <li><a href="/">String</a></li>
-                            <li><a href="/">Something else here</a></li>
-                            <li role="separator" class="divider"></li>
-                            <li class="dropdown-header">Atskiriklis</li>
-                            <li><a href="/">Separated link</a></li>
-                            <li><a href="/">One more separated link</a></li>
+                            <li><a href="/category-test/1-php-basics">PHP Basics</a></li>
+                            <li><a href="/category-test/2-functions-and-arrays">Functions and Arrays</a></li>
+                            <li><a href="/category-test/3-object-oriented-programming">Object Oriented Programming</a></li>
+                            <li><a href="/category-test/4-security">Security</a></li>
+                            <li><a href="/category-test/5-data-format-and-types">Data format and Types</a></li>
+                            <li><a href="/category-test/6-string-and-patterns">String and Patterns</a></li>
+                            <li><a href="/category-test/7-database-and-sql">Database and SQL</a></li>
+                            <li><a href="/category-test/8-web-features">Web features</a></li>
+                            <li><a href="/category-test/9-input-and-output">INPUT and OUTPUT</a></li>
                         </ul>
                     </li>
                 </ul>
@@ -57,36 +59,13 @@
                         </ul>
                     {% else %}
                         <ul class="nav navbar-nav navbar-right">
-                            <li><a class="btn margin-0 loginButton">Log in</a></li>
+                            <div class="list-social">
+                                <li><a class="icon-4" href="{{ path('hwi_oauth_service_redirect', {'service': 'google' }) }}" alt="Sign in with Google"></a></li>
+                                <li><a class="icon-1" href="{{ path('hwi_oauth_service_redirect', {'service': 'facebook' }) }}" alt="Sign in with Facebook"></a></li>
+                            </div>
                         </ul>
                     {% endif %}
             </div><!--/.nav-collapse -->
         </div><!--/.container-fluid -->
     </nav>
-    <!--login register forms-->
-    <div class="container allign-center">
-        <div class="row">
-            <div class="col-lg-4 col-lg-offset-4 col-sm-12 loginForm">
-                <div class="panel panel-success">
-                    <div class="panel-heading">
-                        Log in
-                    </div>
-                    <div class="panel-body">
-                        <fieldset class="form-group">
-                            <a href="{{ path('hwi_oauth_service_redirect', {'service': 'facebook' }) }}" alt="Sign in with Facebook"><button class="btn btn-4 btn-4e"> Sign in with Facebook</button></a><br>
-
-                        </fieldset>
-                        <fieldset class="form-group">
-                            <a href="{{ path('hwi_oauth_service_redirect', {'service': 'google' }) }}" alt="Sign in with Google"><button class="btn btn-4 btn-4e">Sign in with Google</button></a>
-                        </fieldset>
-
-                    </div>
-                    <div class="panel-footer">
-                        <a href="">Forgotten password?</a>
-                    </div>
-                </div>
-            </div>
-
-        </div>
-    </div>
 </header>

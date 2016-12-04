@@ -3,7 +3,7 @@
 {% set charArray = {1 : 'A', 2 : 'B', 3 : 'C', 4 : 'D', 5 : 'E', 6 : 'F', 7 : 'G'} %}
 
 {% block body %}
-    <div class="grey-background">
+    <div class="black-background orange-text">
         <div class="container">
             <div class="row">
                 <div class="col-lg-12">
@@ -41,7 +41,7 @@
                         <p id="seconds">00</p>
                     </div>
                     <input type="button" id="reportBtn" class="btn btn-danger btn-lg" data-toggle="modal" data-target="#questionReport" value="Invalid question">
-                        {{ form_start(form) }}
+                        {{ form_start(form, { 'attr' : {'class': 'alert'}}) }}
                         {{ index ~ '.' }}{{ current.content|
                         replace({ "<pre>" : "<pre><code class='language-php'><xmp>" ,
                             "</pre>" : "</xmp></code></pre>" })|raw }}
@@ -55,10 +55,10 @@
 
                     <div class="allignCenter">
                         {{ form_widget(form.previous, {'attr': {'class': 'btn btn-3'}}) }} &nbsp;
+                        {{ form_widget(form.submit, {'attr': {'class': 'btn btn-3'}}) }} &nbsp;
                         {{ form_widget(form.next, {'attr': {'class': 'btn btn-3'}}) }} <br>
-                        {{ form_widget(form.submit, {'attr': {'class': 'btn btn-3'}}) }} <br>
                         {{ form_end(form) }}
-                        <input type="button" id="solve" class="btn btn-2 btn-2a" value="Solve it">
+                        <input type="button" id="solve" class="btn btn-2" value="Solve it">
                     </div>
                 </div>
             </div>
