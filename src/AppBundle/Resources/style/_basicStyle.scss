@@ -19,12 +19,63 @@ body {
   background-image: url("../images/seigaiha.png");
 }
 
-.sand-background {
-  background-color: antiquewhite;
+.list-social a {
+  width: 30px;
+  height: 30px;
+  margin: 10px;
+  -webkit-transition: all 0.2s linear;
+  -moz-transition: all 0.2s linear;
+  -o-transition: all 0.2s linear;
+  transition: all 0.2s linear;
+  background-position: 0 0;
+  background-repeat: no-repeat;
 }
 
-.grey-background {
-  background-color: rgb(220,220,220);
+.list-social {
+  list-style: none outside none;
+  overflow: hidden;
+  margin: 0;
+}
+
+.list-social li {
+  float: left;
+  margin-left: 5px;
+}
+.list-social a:hover {
+  background-position: 0 bottom;
+}
+
+.list-social a.icon-1 {
+  background-image: url("../images/soc-icon-1.png");
+}
+
+.list-social a.icon-4 {
+  background-image: url("../images/soc-icon-4.png");
+}
+
+.list-social {
+  float: none !important;
+}
+
+.black-background {
+  min-height: calc(100vh - 80px) !important;
+  background-image: url("../images/black.jpg");
+}
+
+.white-text{
+  color: white;
+}
+
+.dark-text{
+  color:  #241C1A;
+}
+
+.orange-text{
+  color:  #F25C27;
+}
+
+.orange-background {
+  background-color: #F25C27;
 }
 
 .footer {
@@ -183,3 +234,4 @@ a:hover{
   margin-top:10px;
   margin-bottom: 10px;
 }
+
