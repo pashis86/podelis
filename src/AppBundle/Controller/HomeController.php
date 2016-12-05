@@ -3,6 +3,8 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Entity\User;
+use AppBundle\Repository\NotificationRepository;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -24,6 +26,48 @@ class HomeController extends Controller
             'usercount' => $usercount,
             'categories' => $categories
         ]);
+    }
+
+    /**
+     * @Route("/my-messages/{page}", name="messages")
+     * @Security("has_role('ROLE_USER')")
+     */
+    public function messageListAction($page = 1)
+    {
+        $repository = $this->getDoctrine()->getRepository('AppBundle:Notification');
+        $notifications = $repository->getNotifications($page, $this->getUser()->getId());
+        $maxPages = ceil($notifications->count() / NotificationRepository::MAX_RESULTS);
+
+        if ($page > $maxPages) {
+            return $this->render('@App/Home/404.html.twig');
+        }
+        return $this->render('@App/Home/messages.html.twig', [
+            'thisPage' => $page,
+            'maxPages' => $maxPages,
+            'notifications' => $notifications,
+            'limit' => NotificationRepository::MAX_RESULTS
+        ]);
+    }
+
+    /**
+     * @Route("/my-messages/message/{id}-{slug}", name="viewMessage")
+     * @Security("has_role('ROLE_USER')")
+     */
+    public function messageAction($id)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $message = $em->getRepository('AppBundle:Notification')->findOneBy([
+            'id'    => $id,
+            'user'  => $this->getUser()->getId()
+        ]);
+
+        if ($message) {
+            $message->setSeen(true);
+            $em->persist($message);
+            $em->flush();
+            return $this->render('@App/Home/viewMessage.html.twig', ['message' => $message]);
+        }
+        return $this->render('AppBundle:Home:404.html.twig');
     }
 
     /**

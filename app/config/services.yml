@@ -42,6 +42,7 @@ services:
             - { name: kernel.event_listener, event: kernel.request, method: onKernelRequest }
 
     app.contribution.listener:
-        class: AppBundle\EventListener\AddContribution
+        class: AppBundle\EventListener\NotificationListener
         tags:
             - { name: doctrine.event_listener, event: postUpdate, method: postUpdate }
+            - { name: doctrine.event_listener, event: postPersist, method: postPersist }

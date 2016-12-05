@@ -132,10 +132,15 @@ class User extends BaseUser
     protected $questions_created;
 
     /**
-     * @ORM\ManyToMany(targetEntity="AppBundle\Entity\Question", inversedBy="contributors", indexBy="id", cascade={"persist", "remove"})
+     * @ORM\ManyToMany(targetEntity="AppBundle\Entity\Question", inversedBy="contributors", indexBy="id", cascade={"remove"})
      * @ORM\JoinTable(name="contributors")
      */
     protected $questionsContributed;
+
+    /**
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Notification", mappedBy="user", cascade={"remove"})
+     */
+    protected $notifications;
 
     public function __construct()
     {
@@ -603,6 +608,45 @@ class User extends BaseUser
             $this->questionsContributed->remove($questionsContributed);
         }
         return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getNotifications()
+    {
+        return $this->notifications;
+    }
+
+    /**
+     * @param mixed $notifications
+     * @return User
+     */
+    public function setNotifications($notifications)
+    {
+        $this->notifications = $notifications;
+        return $this;
+    }
+
+
+    public function getFullName()
+    {
+        return $this->getSurname() ? $this->getName().' '.$this->getSurname() : $this->getName();
+    }
+
+    /**
+     * @return int
+     */
+    public function getUnseenCount()
+    {
+        $counter = 0;
+        /** @var Notification $notification */
+        foreach ($this->notifications as $notification) {
+            if (!$notification->getSeen()) {
+                $counter++;
+            }
+        }
+        return $counter;
     }
 }
 

@@ -144,4 +144,14 @@ class UserRepository extends \Doctrine\ORM\EntityRepository
             'draw'              => $draw
         ];
     }
+
+    public function findByRole($role)
+    {
+        return $this->createQueryBuilder('u')
+            ->select('u')
+            ->where('u.roles LIKE :role')
+            ->setParameter('role', '%'.$role.'%')
+            ->getQuery()
+            ->getResult();
+    }
 }
