@@ -16,12 +16,12 @@ class HomeController extends Controller
      */
     public function indexAction(Request $request)
     {
-        $usercount = $this->get('app.user')->userCount();
+        $usercount  = $this->get('app.user')->userCount();
         $categories = $this->getDoctrine()->getRepository('AppBundle:Book')->findAll();
 
         return $this->render('AppBundle:Home:index.html.twig', [
-            'usercount' => $usercount,
-            'categories' => $categories
+            'usercount'     => $usercount,
+            'categories'    => $categories
         ]);
     }
 
@@ -32,7 +32,7 @@ class HomeController extends Controller
     {
         if ($request->isXmlHttpRequest()) {
             $repository = $this->getDoctrine()->getRepository('AppBundle:User');
-            $best = $repository->getLeaderBoard($request->request);
+            $best       = $repository->getLeaderBoard($request->request);
 
             return new JsonResponse(json_encode($best), 200, array(), true);
         }

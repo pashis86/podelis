@@ -3,6 +3,7 @@
 namespace AppBundle\Repository;
 use AppBundle\Entity\Question;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\ORM\Tools\Pagination\Paginator;
 
 /**
  * QuestionRepository
@@ -66,5 +67,38 @@ class QuestionRepository extends \Doctrine\ORM\EntityRepository
             ->orderBy('rand')
             ->getQuery()
             ->getResult()];
+    }
+
+    const MAX_RESULTS = 20;
+
+    public function paginate($dql, $page = 1, $limit = NotificationRepository::MAX_RESULTS)
+    {
+        $paginator = new Paginator($dql);
+
+        $paginator->getQuery()
+            ->setFirstResult(($page - 1) * $limit)
+            ->setMaxResults($limit);
+
+        return $paginator;
+    }
+
+    /**
+     * @param int $currentPage
+     * @param int $userId
+     * @param int $limit
+     * @return Paginator
+     */
+    public function getPaginatedQuestions($currentPage = 1, $userId, $limit = NotificationRepository::MAX_RESULTS)
+    {
+        $query = $this->createQueryBuilder('n')
+            ->select('n')
+            ->where('n.created_by = :userId')
+            ->setParameter('userId', $userId)
+            ->orderBy('n.createdAt', 'desc')
+            ->getQuery();
+
+        $paginator = $this->paginate($query, $currentPage, $limit);
+
+        return $paginator;
     }
 }

@@ -24,16 +24,13 @@ class UserController extends Controller
         $form = $this->createForm(EditUserType::class, $user);
         $form->handleRequest($request);
 
-        if($form->isSubmitted()) {
+        if ($form->isSubmitted() && $form->isValid()) {
+            $user->setUpdatedAt(new \DateTime('now'));
+            $em = $this->getDoctrine()->getManager();
 
-            if($form->isValid()) {
-
-                $user->setUpdatedAt(new \DateTime('now'));
-                $em = $this->getDoctrine()->getManager();
-                $em->persist($user);
-                $em->flush();
-                $this->addFlash('success', 'Duomenys sėkmingai pakeisti!');
-            }
+            $em->persist($user);
+            $em->flush();
+            $this->addFlash('success', 'Duomenys sėkmingai pakeisti!');
         }
         return $this->render('@App/User/editUser.html.twig', array(
             'form' => $form->createView()
@@ -55,18 +52,18 @@ class UserController extends Controller
      */
     public function messageListAction($page = 1)
     {
-        $repository = $this->getDoctrine()->getRepository('AppBundle:Notification');
-        $notifications = $repository->getNotifications($page, $this->getUser()->getId());
-        $maxPages = ceil($notifications->count() / NotificationRepository::MAX_RESULTS);
+        $repository     = $this->getDoctrine()->getRepository('AppBundle:Notification');
+        $notifications  = $repository->getNotifications($page, $this->getUser()->getId());
+        $maxPages       = ceil($notifications->count() / NotificationRepository::MAX_RESULTS);
 
         if ($page > $maxPages) {
             return $this->render('@App/Home/404.html.twig');
         }
         return $this->render('@App/User/messages.html.twig', [
-            'thisPage' => $page,
-            'maxPages' => $maxPages,
+            'thisPage'      => $page,
+            'maxPages'      => $maxPages,
             'notifications' => $notifications,
-            'limit' => NotificationRepository::MAX_RESULTS
+            'limit'         => NotificationRepository::MAX_RESULTS
         ]);
     }
 
@@ -142,18 +139,16 @@ class UserController extends Controller
      */
     public function userCategoryResultsAction($id)
     {
-        $securityContext = $this->get('security.authorization_checker');
+        $securityContext    = $this->get('security.authorization_checker');
         /** @var User $user */
-        $user = $this->getUser();
+        $user               = $this->getUser();
 
         if ($securityContext->isGranted('IS_AUTHENTICATED_FULLY') ||
             $securityContext->isGranted('IS_AUTHENTICATED_REMEMBERED')
         ) {
             $repository = $this->getDoctrine()->getRepository('AppBundle:Test');
-
-            $cat = $repository->categoryResults($user,$id);
-
-            $data=["100","10","20","30","40","50","60","70","80"];
+            $cat        = $repository->categoryResults($user,$id);
+            $data       = ["100","10","20","30","40","50","60","70","80"];
 
             return new JsonResponse(json_encode(['data' => $data, 'id' => $id, 'cat' => $cat]));
 

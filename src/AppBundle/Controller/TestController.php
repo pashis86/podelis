@@ -30,8 +30,8 @@ class TestController extends Controller
      */
     public function quickTestAction()
     {
-        $qRepository = $this->getDoctrine()->getRepository('AppBundle:Question');
-        $questions = $qRepository->getRandomQuestions(20);
+        $qRepository    = $this->getDoctrine()->getRepository('AppBundle:Question');
+        $questions      = $qRepository->getRandomQuestions(20);
 
         if (!empty($questions[0][0])) {
             $this->get('app.test_starter')->startTest($questions, '+2 minute,', false);
@@ -71,11 +71,10 @@ class TestController extends Controller
     public function testAction(Request $request, $id)
     {
 
-        $repository = $this->getDoctrine()->getRepository('AppBundle:Question');
-        $testControl = $this->get('app.test_control');
-        $question = $repository->findOneBy(['id' => $id]);
-
-        $session = $this->get('session');
+        $repository     = $this->getDoctrine()->getRepository('AppBundle:Question');
+        $testControl    = $this->get('app.test_control');
+        $question       = $repository->findOneBy(['id' => $id]);
+        $session        = $this->get('session');
 
         if($question && $testControl->questionInTest($id))
         {
@@ -103,10 +102,10 @@ class TestController extends Controller
             }
 
             return $this->render('@App/TestPages/question.html.twig', [
-                'form' => $form->createView(),
-                'current' => $question,
-                'index' => $testControl->getCurrentIndex($id),
-                'solved' => $testControl->isQuestionSolved($id)
+                'form'      => $form->createView(),
+                'current'   => $question,
+                'index'     => $testControl->getCurrentIndex($id),
+                'solved'    => $testControl->isQuestionSolved($id)
             ]);
         }
         return $this->render('@App/Home/404.html.twig');
@@ -121,11 +120,10 @@ class TestController extends Controller
 
         if($request->isXmlHttpRequest() && $session->get('endsAt') >= new \DateTime()){
             $repository = $this->getDoctrine()->getRepository('AppBundle:Answer');
-
             $questionId = $request->request->get('question');
-            $answerIds = $request->request->get('answer');
+            $answerIds  = $request->request->get('answer');
 
-            $answers = $repository->getAllChecked($answerIds);
+            $answers    = $repository->getAllChecked($answerIds);
             $this->get('app.test_control')->addAnswer($questionId, $answers);
         }
         return new Response();
@@ -139,16 +137,12 @@ class TestController extends Controller
         $session = $this->get('session');
 
         if($request->isXmlHttpRequest() && $session->get('endsAt') >= new \DateTime()){
-
-            $id = $request->request->get('question');
-
-            $answers = $this->getDoctrine()->getRepository('AppBundle:Answer')->getCorrectAnswers($id);
-
+            $id             = $request->request->get('question');
+            $answers        = $this->getDoctrine()->getRepository('AppBundle:Answer')->getCorrectAnswers($id);
             /** @var Question $question */
-            $question = $this->getDoctrine()->getRepository('AppBundle:Question')->findOneBy(['id' =>$id]);
-
-            $solved = $session->get('solved');
-            $solved[$id] = true;
+            $question       = $this->getDoctrine()->getRepository('AppBundle:Question')->findOneBy(['id' =>$id]);
+            $solved         = $session->get('solved');
+            $solved[$id]    = true;
             $session->set('solved', $solved);
 
             return new JsonResponse(json_encode(['answers' => $answers, 'explanation' => $question->getExplanation()]));
@@ -161,12 +155,12 @@ class TestController extends Controller
      */
     public function testResultsAction(Request $request, $id)
     {
-        $session = $this->get('session');
-        $testControl = $this->get('app.test_control');
+        $session        = $this->get('session');
+        $testControl    = $this->get('app.test_control');
         $testControl->checkAnswers();
 
-        $repository = $this->getDoctrine()->getRepository('AppBundle:Question');
-        $question = $repository->findOneBy(['id' => $id]);
+        $repository     = $this->getDoctrine()->getRepository('AppBundle:Question');
+        $question       = $repository->findOneBy(['id' => $id]);
 
         if($question && $testControl->questionInTest($id))
         {
@@ -188,10 +182,10 @@ class TestController extends Controller
                 return $this->redirectToRoute('homepage');
             }
             return $this->render('@App/TestPages/results.html.twig', [
-                'form' => $form->createView(),
-                'current' => $question,
-                'index' => $testControl->getCurrentIndex($id),
-                'solved' => $testControl->isQuestionSolved($id)
+                'form'      => $form->createView(),
+                'current'   => $question,
+                'index'     => $testControl->getCurrentIndex($id),
+                'solved'    => $testControl->isQuestionSolved($id)
             ]);
         }
         return $this->render('@App/Home/404.html.twig');
@@ -203,7 +197,7 @@ class TestController extends Controller
     public function questionReportAction(Request $request, $allow = false)
     {
         $report = new QuestionReport();
-        $form = $this->createForm(QuestionReportType::class, $report);
+        $form   = $this->createForm(QuestionReportType::class, $report);
 
         if (!$request->isXmlHttpRequest() && !$allow) {
             return new Response();
