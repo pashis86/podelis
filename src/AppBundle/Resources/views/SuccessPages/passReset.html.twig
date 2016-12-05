@@ -1,8 +1,0 @@
-{% extends "::base.html.twig" %}
-
-{% block title %}AppBundle:SecurityController:login{% endblock %}
-
-{% block body %}
-    <h4>Your password has been successfully reset. Please check your email.</h4>
-    <p><a href="{{ path('forgotPassword') }}">Didn't received a message? Try sending another request.</a></p>
-{% endblock %}
