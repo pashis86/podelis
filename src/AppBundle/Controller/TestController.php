@@ -26,33 +26,6 @@ use Symfony\Component\HttpFoundation\Session\Session;
 class TestController extends Controller
 {
     /**
-     * @Route("/work", name="test_options")
-     * @Security("has_role('ROLE_USER')")
-     */
-    public function testOptionsAction(Request $request)
-    {
-    /*    $question = new Question();
-        $form = $this->createForm(QuestionType::class, $question);
-        $form->handleRequest($request);
-
-        if($form->isSubmitted() && $form->isValid())
-        {
-            $qRepository = $this->getDoctrine()->getRepository('AppBundle:Question');
-            $questionGroups = $qRepository->getSpecificQuestions([
-                'books' => $form['book']->getData(),
-                'amount' => $form['amount']->getData()
-            ]);
-
-            $this->get('app.test_starter')->startTest($questionGroups, '+1 minute', true);
-            return $this->redirectToRoute('question', ['id' => $questionGroups[0][0]->getId()]);
-        }
-
-        return $this->render('@App/TestPages/test-options.html.twig', [
-            'form' => $form->createView(),
-        ]);*/
-    }
-
-    /**
      * @Route("/quick-test", name="quick_test")
      */
     public function quickTestAction()
