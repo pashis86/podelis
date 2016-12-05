@@ -14,7 +14,8 @@ var dir = {
 
 gulp.task('sass', function() {
     gulp.src([
-            dir.assets + 'style/main.scss'
+            dir.assets + 'style/main.scss',
+            dir.assets + 'style/css/*'
         ])
         .pipe(sass({ outputStyle: 'compressed' , includePaths:[dir.npm] }).on('error', sass.logError))
         .pipe(concat('style.css'))
