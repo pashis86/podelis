@@ -30,16 +30,16 @@ services:
         class: AppBundle\Service\FOSUBUserProvider
         arguments: ["@fos_user.user_manager", {facebook: facebook_id, google: google_id}]
 
-    app.form.registration:
-        class: AppBundle\Form\UserType
-        tags:
-            - { name: form.type, alias: app_user_registration }
+#    app.form.registration:
+#        class: AppBundle\Form\UserType
+#        tags:
+#            - { name: form.type, alias: app_user_registration }
 
-    app.user.redirect.listener:
-        class: AppBundle\EventListener\RedirectUserListener
-        arguments: ["@security.token_storage", "@router"]
-        tags:
-            - { name: kernel.event_listener, event: kernel.request, method: onKernelRequest }
+#    app.user.redirect.listener:
+#        class: AppBundle\EventListener\RedirectUserListener
+#        arguments: ["@security.token_storage", "@router"]
+#        tags:
+#            - { name: kernel.event_listener, event: kernel.request, method: onKernelRequest }
 
     app.contribution.listener:
         class: AppBundle\EventListener\NotificationListener

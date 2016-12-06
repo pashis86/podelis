@@ -129,6 +129,7 @@ class UserRepository extends \Doctrine\ORM\EntityRepository
             $data[] = [
                 'avatar'        => $user[0]->getAvatar(),
                 'name'          => $user[0]->getName(),
+                'surname'       => $user[0]->getSurname(),
                 'correct'       => $user[0]->getCorrect(),
                 'incorrect'     => $user[0]->getIncorrect(),
                 'testsTaken'    => $user[0]->getTestsTaken(),
