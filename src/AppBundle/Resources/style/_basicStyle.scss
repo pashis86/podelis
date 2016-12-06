@@ -234,3 +234,11 @@ a:hover{
   margin-top:10px;
   margin-bottom: 10px;
 }
+
+.min-height-100{
+  min-height: calc(100vh - 200px);
+}
+
+.leaderboard-thumb {
+  height: 50px;
+}

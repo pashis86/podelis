@@ -414,14 +414,7 @@ class Question
      */
     public function isCheckboxType()
     {
-        $correct = 0;
-        /** @var Answer $answer */
-        foreach ($this->answers as $answer) {
-            if ($answer->getCorrect()) {
-                $correct++;
-            }
-        }
-        $correct > 1 ? $this->setCheckboxAnswers(true) : $this->setCheckboxAnswers(false);
+        $this->answers->filter(function (Answer $answer){return $answer->getCorrect();})->count() > 1 ? $this->setCheckboxAnswers(true) : $this->setCheckboxAnswers(false);
         return $this;
     }
 
@@ -430,9 +423,7 @@ class Question
      */
     public function updateAnswers()
     {
-        /** @var Answer $answer */
-        foreach ($this->answers as $answer)
-            $answer->setUpdatedAt(new \DateTime());
+        $this->answers->map(function (Answer $answer){$answer->setUpdatedAt(new \DateTime());});
         return $this;
     }
 

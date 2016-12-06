@@ -156,6 +156,7 @@ class User extends BaseUser
         $this->timeSpent = 0;
         $this->avatar = 'http://www.iconsdb.com/icons/preview/black/guest-xxl.png';
         $this->questionsContributed = new ArrayCollection();
+        $this->notifications = new ArrayCollection();
     }
 
     /**
@@ -448,9 +449,7 @@ class User extends BaseUser
 
     public function getPercentage()
     {
-        if($this->correct + $this->incorrect == 0)
-            return 0;
-        return $this->correct / ($this->correct + $this->incorrect) * 100;
+        return $this->correct + $this->incorrect == 0 ? 0 : $this->correct / ($this->correct + $this->incorrect) * 100;
     }
 
     public function getFormatedTimeSpent()
@@ -500,18 +499,10 @@ class User extends BaseUser
 
     public function updateStats($time, $answers)
     {
-        $this->timeSpent += $time->s + $time->i * 60 + $time->h * 3600;
-
-        foreach ($answers as $answer)
-        {
-            if($answer == true){
-                $this->correct++;
-            }
-
-            else{
-                $this->incorrect++;
-            }
-        }
+        $correct            = count(array_map(function($answer){return $answer;}, $answers));
+        $this->correct      += $correct;
+        $this->incorrect    += count($answers) - $correct;
+        $this->timeSpent    += $time->s + $time->i * 60 + $time->h * 3600;
         $this->testsTaken++;
     }
 
@@ -611,7 +602,7 @@ class User extends BaseUser
     }
 
     /**
-     * @return mixed
+     * @return ArrayCollection
      */
     public function getNotifications()
     {
@@ -619,7 +610,7 @@ class User extends BaseUser
     }
 
     /**
-     * @param mixed $notifications
+     * @param ArrayCollection $notifications
      * @return User
      */
     public function setNotifications($notifications)
@@ -639,14 +630,7 @@ class User extends BaseUser
      */
     public function getUnseenCount()
     {
-        $counter = 0;
-        /** @var Notification $notification */
-        foreach ($this->notifications as $notification) {
-            if (!$notification->getSeen()) {
-                $counter++;
-            }
-        }
-        return $counter;
+        return $this->notifications->filter(function (Notification $notification) {return $notification->getSeen();})->count();
     }
 }
 

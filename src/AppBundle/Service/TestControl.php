@@ -39,18 +39,20 @@ class TestControl
      */
     public function __construct($session, $security, $em)
     {
-        $this->questions = [];
-        $this->session = $session;
-        $this->security = $security;
-        $this->answers = $session->get('answered');
-        $this->em = $em;
-        $this->questionGroups = $session->get('questionGroups');
+        $this->questions        = [];
+        $this->session          = $session;
+        $this->security         = $security;
+        $this->answers          = $session->get('answered');
+        $this->em               = $em;
+        $this->questionGroups   = $session->get('questionGroups');
 
-        foreach ($this->questionGroups as $group) {
-            /** @var Question $question */
-            foreach ($group as $question)
-                array_push($this->questions, $question->getId());
-        }
+        $this->questions        = array_map(function($category) { return array_map(function(Question $question){return $question->getId();}, $category);}, $this->questionGroups)[0];
+
+//        foreach ($this->questionGroups as $group) {
+//            /** @var Question $question */
+//            foreach ($group as $question)
+//                array_push($this->questions, $question->getId());
+//        }
     }
 
     public function getNext($currentQ)
@@ -67,6 +69,7 @@ class TestControl
 
     public function questionInTest($questionId)
     {
+      //  dump($this->questions);die;
         foreach ($this->questions as $question) {
 
             if ($question == $questionId) {
