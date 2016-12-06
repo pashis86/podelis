@@ -10,26 +10,28 @@
                     <span class="icon-bar"></span>
                 </button>
                 <a class="navbar-brand latoS font-40" href="/">
-                   { testify }
+                   <span class="orange">{</span> testify <span class="orange">}</span>
                 </a>
             </div>
             <div id="navbar" class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
                     <li><a href="{{ path('quick_test') }}">Quick test</a></li>
-                    <li class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Category tests <span class="caret"></span></a>
-                        <ul class="dropdown-menu position-topmost">
-                            <li><a href="/category-test/1-php-basics">PHP Basics</a></li>
-                            <li><a href="/category-test/2-functions-and-arrays">Functions and Arrays</a></li>
-                            <li><a href="/category-test/3-object-oriented-programming">Object Oriented Programming</a></li>
-                            <li><a href="/category-test/4-security">Security</a></li>
-                            <li><a href="/category-test/5-data-format-and-types">Data format and Types</a></li>
-                            <li><a href="/category-test/6-string-and-patterns">String and Patterns</a></li>
-                            <li><a href="/category-test/7-database-and-sql">Database and SQL</a></li>
-                            <li><a href="/category-test/8-web-features">Web features</a></li>
-                            <li><a href="/category-test/9-input-and-output">INPUT and OUTPUT</a></li>
-                        </ul>
-                    </li>
+                    {%  if app.user %}
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Category tests <span class="caret"></span></a>
+                            <ul class="dropdown-menu position-topmost">
+                                <li><a href="/category-test/1-php-basics">PHP Basics</a></li>
+                                <li><a href="/category-test/2-functions-and-arrays">Functions and Arrays</a></li>
+                                <li><a href="/category-test/3-object-oriented-programming">Object Oriented Programming</a></li>
+                                <li><a href="/category-test/4-security">Security</a></li>
+                                <li><a href="/category-test/5-data-format-and-types">Data format and Types</a></li>
+                                <li><a href="/category-test/6-string-and-patterns">String and Patterns</a></li>
+                                <li><a href="/category-test/7-database-and-sql">Database and SQL</a></li>
+                                <li><a href="/category-test/8-web-features">Web features</a></li>
+                                <li><a href="/category-test/9-input-and-output">INPUT and OUTPUT</a></li>
+                            </ul>
+                        </li>
+                    {%  endif %}
                 </ul>
                     {%  if app.user %}
                         <ul class="nav navbar-nav navbar-right">
