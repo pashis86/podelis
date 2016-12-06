@@ -16,8 +16,8 @@
 
                         {% for question in group %}
                             {% if question.id == current.id %}
-                                <b><a title="{{ question.title }}"
-                                      class="dd66 color-background-text" href="{{ path('question', {'id': question.id }) }}">{{ loop.index }}</a></b>
+                                <b><button title="{{ question.title }}"
+                                      class="dd66 color-background-text" href="{{ path('question', {'id': question.id }) }}">{{ loop.index }}</button></b>
                             {% else %}
                                 <a title="{{ question.title }}"
                                    class="dd66 color-background-text" href="{{ path('question', {'id': question.id }) }}">{{ loop.index }}</a>
@@ -42,12 +42,12 @@
                         </div>
                     {% endfor %}
 
-                    <div class="allignCenter">
+                    <div class="">
                         {{ form_widget(form.previous, {'attr': {'class': 'btn btn-3'}}) }} &nbsp;
-                        {{ form_widget(form.submit, {'attr': {'class': 'btn btn-3'}}) }} &nbsp;
                         {{ form_widget(form.next, {'attr': {'class': 'btn btn-3'}}) }} <br>
+                        {{ form_widget(form.submit, {'attr': {'class': 'btn btn-danger'}}) }} <br>
                         {{ form_end(form) }}
-                        <input type="button" id="solve" class="btn btn-2" value="Solve it">
+                        <input type="button" id="solve" class="btn btn-danger" value="Solve it">
                     </div>
                 </div>
             </div>
@@ -62,7 +62,7 @@
                                 <img src="{{ contributor.avatar }}" title="{{ contributor.name ~ ' ' ~ contributor.surname }}">
                                 {% endfor %}
                             {% endif %}
-                            <input type="button" id="reportBtn" class="btn btn-danger btn-lg" data-toggle="modal" data-target="#questionReport" value="Invalid question">
+                            <input type="button" id="reportBtn" class="btn btn-danger btn-lg" data-toggle="modal" data-target="#questionReport" value="Report question">
                         </div>
                     </div>
                 </div>

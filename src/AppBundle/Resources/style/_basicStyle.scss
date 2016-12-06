@@ -210,12 +210,13 @@ body {
 }
 
 .color-background-text{
+  color: black;
   display: inline-block;
-  padding: 2px;
+  padding: 10px;
   margin: 0 0 10px;
 }
 .color-background-text:hover{
-  background-color: #c09853;
+  background-color: white;
 }
 
 .margin-0{
@@ -240,9 +241,10 @@ a:hover{
 }
 
 #countdown p {
+  color: black;
   display: inline-block;
   padding: 5px;
-  background: #c09853;
+  background: white;
   margin: 0 0 20px;
 }
 
@@ -252,4 +254,17 @@ label{
 
 .leaderboard-thumb {
   height: 50px;
+}
+
+.navbar-default .navbar-nav .open .dropdown-menu>li>a {
+  color :black;
+}
+
+.orange{
+  color: #FF9900;
+}
+
+.row{
+  margin-left: 0;
+  margin-right: 0;
 }
