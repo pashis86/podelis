@@ -4,22 +4,12 @@
 
 {% block body %}
     <div id="headerwrap">
-        <div class="container min-height-100">
+        <div class="container ">
             <div class="row">
                 <div class="col-lg-12">
-                    {% if current.contributors.count > 0 %}
-                    <p>Contributors:</p>
-                        {% for contributor in current.contributors %}
-                        <img src="{{ contributor.avatar }}" title="{{ contributor.name ~ ' ' ~ contributor.surname }}">
-                        {% endfor %}
-                    {% else %}
-                        <p>Nobody has contributed to this question.</p>
-                    {% endif %}
-                </div>
-                <div class="col-lg-6 col-lg-offset-3 col-md-6 col-md-offset-3 col-sm-12">
                     {% for group in app.session.get('questionGroups') %}
                         {% if not group[0].book.title %}
-                            <b><h3>{{ loop.index ~ '. PHP Test' }}</h3></b>
+                            <b><h1>{{ 'Questions' }}</h1></b> <!--loop.index ~-->
                         {% else %}
                             <b>{{ loop.index }}.{{ group[0].book.title }}</b><br>
                         {% endif %}
@@ -35,12 +25,11 @@
                         {% endfor %}<br>
                     {% endfor %}
 
-                    <div id="countdown">
+                    <div class="dd66" id="countdown">
                         <p id="hours">00</p>
                         <p id="minutes">00</p>
                         <p id="seconds">00</p>
                     </div>
-                    <input type="button" id="reportBtn" class="btn btn-danger btn-lg" data-toggle="modal" data-target="#questionReport" value="Invalid question">
                         {{ form_start(form, { 'attr' : {'class': 'alert'}}) }}
                         {{ index ~ '.' }}{{ current.content|
                         replace({ "<pre>" : "<pre><code class='language-php'><xmp>" ,
@@ -62,11 +51,23 @@
                     </div>
                 </div>
             </div>
-            <div class="row">
-                <div class="col-lg-6 col-lg-offset-3 col-md-6 col-md-offset-3 col-sm-12">
-                    <div id="explanation"></div>
+                <div class="row alert">
+                    <div class="col-lg-12">
+                         <div id="explanation"></div>
+                         <hr>
+                        <div class="black-text">
+                            {% if current.contributors.count > 0 %}
+                            <p>Contributors:</p>
+                                {% for contributor in current.contributors %}
+                                <img src="{{ contributor.avatar }}" title="{{ contributor.name ~ ' ' ~ contributor.surname }}">
+                                {% endfor %}
+                            {% else %}
+                                <p>Nobody has contributed to this question.</p>
+                            {% endif %}
+                            <input type="button" id="reportBtn" class="btn btn-danger btn-lg" data-toggle="modal" data-target="#questionReport" value="Invalid question">
+                        </div>
+                    </div>
                 </div>
-            </div>
         </div>
     </div>
     <div class="modal fade" id="questionReport" tabindex="-1" role="dialog" aria-labelledby="Report this question" aria-hidden="true">

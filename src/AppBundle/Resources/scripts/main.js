@@ -31,11 +31,9 @@ function sendAnswers(inputSelector, url, question) {
         var answers = [];
         $(inputSelector).each(function () {
             if ($(this).is(':checked')) {
-                console.log(1);
                 answers.push($(this).val());
             }
         });
-        console.log(answers);
 
         $.ajax({
             type: "POST",
