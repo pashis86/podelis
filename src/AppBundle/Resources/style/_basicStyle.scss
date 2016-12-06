@@ -200,7 +200,7 @@ body {
 }
 
 .dd66{
-  color: #66dd66;
+  color: white;
   font-size: 20px;
 }
 
@@ -211,11 +211,11 @@ body {
 
 .color-background-text{
   display: inline-block;
-  padding: 5px;
-  margin: 0 0 20px;
+  padding: 2px;
+  margin: 0 0 10px;
 }
 .color-background-text:hover{
-  background-color: yellow;
+  background-color: #c09853;
 }
 
 .margin-0{
@@ -235,8 +235,19 @@ a:hover{
   margin-bottom: 10px;
 }
 
-.min-height-100{
-  min-height: calc(100vh - 200px);
+.black-text{
+  color: black;
+}
+
+#countdown p {
+  display: inline-block;
+  padding: 5px;
+  background: #c09853;
+  margin: 0 0 20px;
+}
+
+label{
+  font-weight: normal !important;
 }
 
 .leaderboard-thumb {
