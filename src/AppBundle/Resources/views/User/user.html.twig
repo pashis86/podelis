@@ -67,7 +67,7 @@
 
         $( document ).ready(function() {
             google.charts.load('current', {packages: ['corechart', 'bar']});
-            dataCharts('{{ path('user-data') }}', $('#data'));
+            dataCharts('{{ path('user-data', {id: app.user.id}) }}', $('#data'));
         });
     </script>
 {% endblock %}

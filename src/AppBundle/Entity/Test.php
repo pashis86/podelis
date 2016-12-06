@@ -65,22 +65,12 @@ class Test
 
     public function __construct($user, $time, $answers, $category = 'Random')
     {
-        $this->timeSpent = $time->s + $time->i * 60 + $time->h * 3600;
-        $this->category = $category;
-        $this->correct = $this->incorrect = 0;
-        $this->userId = $user;
+        $this->timeSpent    = $time->s + $time->i * 60 + $time->h * 3600;
+        $this->category     = $category;
+        $this->userId       = $user;
         $this->finisedAt = new \DateTime();
-
-        foreach ($answers as $answer)
-        {
-            if($answer == true){
-                $this->correct++;
-            }
-
-            else{
-                $this->incorrect++;
-            }
-        }
+        $this->correct = count(array_filter($answers, function($answer){return $answer;}));
+        $this->incorrect = count($answers) - $this->correct;
     }
 
     /**

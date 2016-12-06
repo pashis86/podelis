@@ -7,6 +7,8 @@ use AppBundle\Entity\Question;
 use AppBundle\Entity\QuestionReport;
 use AppBundle\Form\QuestionReportType;
 use AppBundle\Form\QuestionType;
+use AppBundle\Repository\QuestionReportRepository;
+use AppBundle\Repository\QuestionRepository;
 use Doctrine\ORM\PersistentCollection;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -51,17 +53,21 @@ class QuestionController extends Controller
     }
 
     /**
-     * @Route("/my-questions", name="myQuestions")
+     * @Route("/my-questions/{page}", name="myQuestions")
      * @Security("has_role('ROLE_USER')")
      */
-    public function myQuestionsAction(Request $request)
+    public function myQuestionsAction(Request $request, $page = 1)
     {
-        $questions = $this->getDoctrine()
-            ->getRepository('AppBundle:Question')
-            ->findBy(['created_by' => $this->getUser()->getId()]);
+        $repository = $this->getDoctrine()->getRepository('AppBundle:Question');
+
+        $questions  = $repository->getPaginatedQuestions($page, $this->getUser()->getId());
+        $maxPages   = ceil($questions->count() / QuestionRepository::MAX_RESULTS);
+
 
         return $this->render('@App/Questions/myQuestions.html.twig', [
-            'questions' => $questions
+            'questions' => $questions,
+            'maxPages'  => $maxPages,
+            'thisPage'  => $page
         ]);
     }
 
@@ -73,9 +79,9 @@ class QuestionController extends Controller
     {
         if ($request->isXmlHttpRequest()) {
             $repository = $request->request->get('repository');
-            $id = $request->get('id');
+            $id         = $request->get('id');
 
-            $em = $this->getDoctrine()->getManager();
+            $em     = $this->getDoctrine()->getManager();
             $entity = $em->getRepository('AppBundle:' . $repository)
                 ->findOneBy(['id' => $id, 'created_by' => $this->getUser()->getId()]);
             $response = new JsonResponse();
@@ -99,8 +105,8 @@ class QuestionController extends Controller
      */
     public function editQuestionAction(Request $request, $id)
     {
-        $em = $this->getDoctrine()->getManager();
-        $question = $em->getRepository('AppBundle:Question')
+        $em         = $this->getDoctrine()->getManager();
+        $question   = $em->getRepository('AppBundle:Question')
             ->findOneBy(['id' => $id, 'created_by' => $this->getUser()->getId()]);
 
         if ($question) {
@@ -131,17 +137,21 @@ class QuestionController extends Controller
     }
 
     /**
-     * @Route("/my-reports", name="myReports")
+     * @Route("/my-reports/{page}", name="myReports")
      * @Security("has_role('ROLE_USER')")
      */
-    public function myReportsAction(Request $request)
+    public function myReportsAction(Request $request, $page = 1)
     {
-        $reports = $this->getDoctrine()
-            ->getRepository('AppBundle:QuestionReport')
-            ->findBy(['created_by' => $this->getUser()->getId()]);
+        $repository = $this->getDoctrine()->getRepository('AppBundle:QuestionReport');
+
+        $reports    = $repository->getPaginatedReports($page, $this->getUser()->getId());
+        $maxPages   = ceil($reports->count() / QuestionReportRepository::MAX_RESULTS);
+
 
         return $this->render('@App/Questions/myReports.html.twig', [
-            'reports' => $reports
+            'reports'   => $reports,
+            'maxPages'  => $maxPages,
+            'thisPage'  => $page
         ]);
     }
 
@@ -151,7 +161,7 @@ class QuestionController extends Controller
      */
     public function editReportAction(Request $request, $id)
     {
-        $em = $this->getDoctrine()->getManager();
+        $em     = $this->getDoctrine()->getManager();
         $report = $em->getRepository('AppBundle:QuestionReport')
             ->findOneBy(['id' => $id, 'created_by' => $this->getUser()->getId()]);
 

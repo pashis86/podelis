@@ -235,11 +235,14 @@ function leaderboard(path, element) {
                 data: 'avatar',
                 orderable: false,
                 render: function(data) {
-                    return '<img src="'+data+'" />';
+                    return '<img class="img-circle leaderboard-thumb" src="'+data+'" />';
                 }
             },
             {
-                data: 'name'
+                mData: 'name',
+                render: function (data, type, full) {
+                    return data + ' ' + full['surname'];
+                }
             },
             {
                 data: 'correct'
