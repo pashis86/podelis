@@ -76,7 +76,7 @@ class TestController extends Controller
         $question       = $repository->findOneBy(['id' => $id]);
         $session        = $this->get('session');
 
-        if($question && $testControl->questionInTest($id))
+        if($question)
         {
             if($session->get('endsAt') <= new \DateTime('now')){
                 return $this->redirectToRoute('testResults', ['id' => $testControl->getQuestionGroups()[0][0]->getId()]);
