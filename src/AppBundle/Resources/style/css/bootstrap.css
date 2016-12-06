@@ -414,7 +414,6 @@ img
     display: block;
     height: auto;
     max-width: 100%;
-    margin-top: 80px;
 }
 
 .img-rounded
@@ -5385,7 +5384,6 @@ textarea.input-group-sm > .input-group-btn > .btn
 {
     float: left;
     padding: 15px 15px;
-    font-size: 18px;
     line-height: 20px;
 }
 
