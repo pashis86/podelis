@@ -427,8 +427,7 @@ class Question
     {
         $this->answers->map(function (Answer $answer) {
             $answer->setUpdatedAt(new \DateTime());
-        }
-        );
+        } );
         return $this;
     }
 
