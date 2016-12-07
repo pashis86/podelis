@@ -9,33 +9,35 @@
 
 {% block body %}
    <div class="container">
-
-       <table class="table" id="leaderboard">
-           <thead>
-           <tr>
-               <th width="14%">Avatar</th>
-               <th width="14%">Name</th>
-               <th width="14%">Correct answers</th>
-               <th width="14%">Incorrect answers</th>
-               <th width="14%">Tests Taken</th>
-               <th width="14%">Correct ratio</th>
-               <th width="14%">Time spent</th>
+       <div class="page-header">
+           <h1 class="white-text">Top testifiers</h1>
+       </div>
+       <table class="table blue-bg" id="leaderboard">
+           <thead class="white-text">
+           <tr class="white-text">
+               <th>Avatar</th>
+               <th>Name</th>
+               <th>Correct answers</th>
+               <th>Incorrect answers</th>
+               <th>Tests taken</th>
+               <th>Correct ratio</th>
+               <th>Time spent</th>
            </tr>
            </thead>
-           <tbody>
-           <tr>
+           <tbody class="blue-bg white-text">
+           <tr class="blue-bg white-text">
                <td colspan="3" class="dataTables_empty">Loading data from server</td>
            </tr>
            </tbody>
-           <tfoot>
-           <tr>
-               <th width="14%">Avatar</th>
-               <th width="14%">Name</th>
-               <th width="14%">Correct answers</th>
-               <th width="14%">Incorrect answers</th>
-               <th width="14%">Tests Taken</th>
-               <th width="14%">Correct ratio</th>
-               <th width="14%">Time spent</th>
+           <tfoot class="white-text blue-bg">
+           <tr class="white-text">
+               <th>Avatar</th>
+               <th>Name</th>
+               <th>Correct answers</th>
+               <th>Incorrect answers</th>
+               <th>Tests Taken</th>
+               <th>Correct ratio</th>
+               <th>Time spent</th>
            </tr>
            </tfoot>
        </table>

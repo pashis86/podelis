@@ -48,6 +48,7 @@ class QuestionController extends Controller
             return new RedirectResponse('/');
         }
         return $this->render('@App/Questions/createQuestion.html.twig', [
+            'pageTitle' => 'Create new question',
             'form' => $form->createView()
         ]);
     }
@@ -129,8 +130,9 @@ class QuestionController extends Controller
                 $this->addFlash('success', 'Your question has been updated!');
                 return new RedirectResponse('/my-questions');
             }
-            return $this->render('@App/Questions/editQuestion.html.twig', [
-                'form' => $form->createView()
+            return $this->render('@App/Questions/createQuestion.html.twig', [
+                'pageTitle' => 'Edit question',
+                'form'      => $form->createView()
             ]);
         }
         return $this->render('AppBundle:Home:404.html.twig');

@@ -164,10 +164,10 @@ function questionFormCollection() {
         var form = prototype.replace(/__name__/g, length);
 
 
-        if (length <= 6) {
-            collectionHolder.append('<div>' + form + '<a href="#" class="remove-answer">x</a>' + '</div>');
+        if (length <= 8) {
+            collectionHolder.append('<div>' + form + '<a href="#" class="remove-answer btn btn-danger">x</a>' + '</div>');
             $(this).attr('disabled', false);
-        } else {
+        } else if (length < 5) {
             $(this).attr('disabled', true);
         }
         return false;
@@ -178,13 +178,14 @@ function questionFormCollection() {
 
     answers.children().each(function () {
         i++;
-        if (i > 5) {
-            $(this).append('<a href="#" class="remove-answer">x</a>');
+        if (i > 7) {
+            $(this).append('<a href="#" class="remove-answer btn btn-danger">x</a>');
         }
     });
 
     answers.on('click', '.remove-answer', function(e) {
         e.preventDefault();
+        $('.btn-add').attr('disabled', false);
         $(this).parent().remove();
         return false;
     });
@@ -235,6 +236,7 @@ function leaderboard(path, element) {
         columns: [
             {
                 data: 'avatar',
+                className: 'data-row',
                 orderable: false,
                 render: function(data) {
                     return '<img class="img-circle leaderboard-thumb" src="'+data+'" />';
@@ -242,24 +244,30 @@ function leaderboard(path, element) {
             },
             {
                 mData: 'name',
+                className: 'data-row',
                 render: function (data, type, full) {
                     return data + ' ' + full['surname'];
                 }
             },
             {
-                data: 'correct'
+                data: 'correct',
+                className: 'data-row'
             },
             {
-                data: 'incorrect'
+                data: 'incorrect',
+                className: 'data-row'
             },
             {
-                data: 'testsTaken'
+                data: 'testsTaken',
+                className: 'data-row'
             },
             {
-                data: 'percentage'
+                data: 'percentage',
+                className: 'data-row'
             },
             {
-                data: 'timeSpent'
+                data: 'timeSpent',
+                className: 'data-row'
             }
         ]
     });
