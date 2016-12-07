@@ -230,7 +230,7 @@ class Book
         return preg_replace(
             '/[^a-z0-9]/',
             '-',
-            strtolower(trim(strip_tags($this->title))));
+            strtolower(trim(strip_tags($this->title)))
+        );
     }
 }
-

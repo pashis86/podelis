@@ -192,4 +192,3 @@ class Answer
         $this->updatedAt = new \DateTime();
     }
 }
-

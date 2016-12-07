@@ -8,7 +8,6 @@
 
 namespace AppBundle\Controller;
 
-
 use AppBundle\Entity\Answer;
 use AppBundle\Entity\Question;
 use AppBundle\Entity\QuestionReport;
@@ -76,26 +75,26 @@ class TestController extends Controller
         $question       = $repository->findOneBy(['id' => $id]);
         $session        = $this->get('session');
 
-        if($question && $testControl->questionInTest($id))
-        {
-            if($session->get('endsAt') <= new \DateTime('now')){
+        if ($question && $testControl->questionInTest($id)) {
+            if ($session->get('endsAt') <= new \DateTime('now')) {
                 return $this->redirectToRoute('testResults', ['id' => $testControl->getQuestionGroups()[0][0]->getId()]);
             }
-            $form = $this->createForm(TestQuestionType::class,
-                ['question' => $question, 'answered' => $session->get('answered')]);
+            $form = $this->createForm(TestQuestionType::class, [
+                'question' => $question, 'answered' => $session->get('answered')
+            ]);
             $form->handleRequest($request);
 
-            if($form->get('next')->isClicked()){
+            if ($form->get('next')->isClicked()) {
                 $testControl->addAnswer($id, $form['answers']->getData());
                 return $this->redirectToRoute('question', ['id' => $testControl->getNext($id)]);
             }
 
-            if($form->get('previous')->isClicked()){
+            if ($form->get('previous')->isClicked()) {
                 $testControl->addAnswer($id, $form['answers']->getData());
                 return $this->redirectToRoute('question', ['id' => $testControl->getPrevious($id)]);
             }
 
-            if($form->get('submit')->isClicked()){
+            if ($form->get('submit')->isClicked()) {
                 $testControl->submit($id, $form['answers']->getData());
 
                 return $this->redirectToRoute('testResults', ['id' => $testControl->getQuestionGroups()[0][0]->getId()]);
@@ -118,7 +117,7 @@ class TestController extends Controller
     {
         $session = $this->get('session');
 
-        if($request->isXmlHttpRequest() && $session->get('endsAt') >= new \DateTime()){
+        if ($request->isXmlHttpRequest() && $session->get('endsAt') >= new \DateTime()) {
             $repository = $this->getDoctrine()->getRepository('AppBundle:Answer');
             $questionId = $request->request->get('question');
             $answerIds  = $request->request->get('answer');
@@ -136,7 +135,7 @@ class TestController extends Controller
     {
         $session = $this->get('session');
 
-        if($request->isXmlHttpRequest() && $session->get('endsAt') >= new \DateTime()){
+        if ($request->isXmlHttpRequest() && $session->get('endsAt') >= new \DateTime()) {
             $id             = $request->request->get('question');
             $answers        = $this->getDoctrine()->getRepository('AppBundle:Answer')->getCorrectAnswers($id);
             /** @var Question $question */
@@ -153,7 +152,7 @@ class TestController extends Controller
     /**
      * @Route("/results/{id}", name="testResults")
      */
-    public function testResultsAction(Request $request, $id)
+    public function testResultsAction(Request $request, $id) 
     {
         $session        = $this->get('session');
         $testControl    = $this->get('app.test_control');
@@ -162,22 +161,21 @@ class TestController extends Controller
         $repository     = $this->getDoctrine()->getRepository('AppBundle:Question');
         $question       = $repository->findOneBy(['id' => $id]);
 
-        if($question && $testControl->questionInTest($id))
-        {
+        if ($question && $testControl->questionInTest($id)) {
             $form = $this->createForm(TestQuestionType::class,
                 ['question' => $question, 'answered' => $session->get('answered')]);
 
             $form->handleRequest($request);
 
-            if($form->get('next')->isClicked()){
+            if ($form->get('next')->isClicked()) {
                 return $this->redirectToRoute('testResults', ['id' => $testControl->getNext($id)]);
             }
 
-            if($form->get('previous')->isClicked()){
+            if ($form->get('previous')->isClicked()) {
                 return $this->redirectToRoute('testResults', ['id' => $testControl->getPrevious($id)]);
             }
 
-            if($form->get('submit')->isClicked()){
+            if ($form->get('submit')->isClicked()) {
                 $session->clear();
                 return $this->redirectToRoute('homepage');
             }

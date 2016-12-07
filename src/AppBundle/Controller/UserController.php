@@ -17,7 +17,8 @@ class UserController extends Controller
      * @Security("has_role('ROLE_USER')")
      * @Route("/profile/edit", name="keistiDuomenis")
      */
-    public function userEditAction(Request $request) {
+    public function userEditAction(Request $request)
+    {
         /** @var User $user */
         $user = $this->getUser();
 
@@ -117,15 +118,6 @@ class UserController extends Controller
                             ['', $res[7], 'silver', 'Web features'],
                             ['', $res[8], 'stroke-color: #703593; fill-color: #C5A5CF', 'INPUT and OUTPUT'],
                         ]);";
-            /*
-            $data = "var data = google.visualization.arrayToDataTable([
-                            ['Category', 'Results', { role: 'style' } ],
-                            ['Strings', 10, 'color: gray'],
-                            ['Security', 84, 'color: #76A7FA'],
-                            ['Inpute/output', 0, 'opacity: 0.2'],
-                            ['AI', 0, 'stroke-color: #703593; stroke-width: 4; fill-color: #C5A5CF'],
-                            ['Basics', 75, 'stroke-color: #871B47; stroke-opacity: 0.6; stroke-width: 8; fill-color: #BC5679; fill-opacity: 0.2']
-                        ]);";*/
 
             return new JsonResponse(json_encode(['data' => $data]));
 

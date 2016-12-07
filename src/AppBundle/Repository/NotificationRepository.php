@@ -1,6 +1,7 @@
 <?php
 
 namespace AppBundle\Repository;
+
 use Doctrine\ORM\Tools\Pagination\Paginator;
 
 /**
@@ -13,8 +14,7 @@ class NotificationRepository extends \Doctrine\ORM\EntityRepository
 {
      const MAX_RESULTS = 20;
 
-        public function paginate($dql, $page = 1, $limit = NotificationRepository::MAX_RESULTS)
-    {
+    public function paginate($dql, $page = 1, $limit = NotificationRepository::MAX_RESULTS) {
         $paginator = new Paginator($dql);
 
         $paginator->getQuery()
@@ -30,8 +30,7 @@ class NotificationRepository extends \Doctrine\ORM\EntityRepository
      * @param int $limit
      * @return Paginator
      */
-    public function getNotifications($currentPage = 1, $userId, $limit = NotificationRepository::MAX_RESULTS)
-    {
+    public function getNotifications($currentPage = 1, $userId, $limit = NotificationRepository::MAX_RESULTS) {
         $query = $this->createQueryBuilder('n')
             ->select('n')
             ->where('n.user = :userId')

@@ -18,7 +18,7 @@ class TestRepository extends \Doctrine\ORM\EntityRepository
             ->andWhere('t.category = :category')
             ->setParameter('userId', $userId)
             ->setParameter('category', $category)
-            ->addOrderBy('t.correct','desc')
+            ->addOrderBy('t.correct', 'desc')
             ->addOrderBy('t.timeSpent', 'asc');
             $limit ? $qb = $qb->setMaxResults($limit)->getQuery() : $qb = $qb->getQuery();
 
