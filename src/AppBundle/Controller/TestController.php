@@ -84,7 +84,6 @@ class TestController extends Controller
             ]);
 
             if ($form->get('next')->isClicked()) {
-                die;
                 $testControl->addAnswer($id, $form['answers']->getData());
                 return $this->redirectToRoute('question', ['id' => $testControl->getNext($id)]);
             }
