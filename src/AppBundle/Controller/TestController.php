@@ -214,7 +214,7 @@ class TestController extends Controller
                     ->find($request->request->get('questionId'));
 
                 $report->setCreatedBy($this->getUser())
-                    ->setQuestionId($question)
+                    ->setQuestion($question)
                     ->setCreatedAt(new \DateTime())
                     ->setUpdatedAt(new \DateTime());
 

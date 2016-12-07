@@ -58,15 +58,16 @@ class QuestionRepository extends \Doctrine\ORM\EntityRepository
     public function getCategoryQuestions($categoryId)
     {
       return [0 => $questions = $this->createQueryBuilder('q')
-            ->select('q')
-            ->where('q.book = :categoryId')
-            ->andWhere('q.status = :status')
-            ->setParameter('categoryId', $categoryId)
-            ->setParameter('status', 'Added')
-            ->addSelect('RAND() as HIDDEN rand')
-            ->orderBy('rand')
-            ->getQuery()
-            ->getResult()];
+          ->select('q')
+          ->where('q.book = :categoryId')
+          ->andWhere('q.status = :status')
+          ->setParameter('categoryId', $categoryId)
+          ->setParameter('status', 'Added')
+          ->addSelect('RAND() as HIDDEN rand')
+          ->orderBy('rand')
+          ->setMaxResults(20)
+          ->getQuery()
+          ->getResult()];
     }
 
     const MAX_RESULTS = 20;

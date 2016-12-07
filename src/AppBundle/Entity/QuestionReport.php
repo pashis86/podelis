@@ -85,7 +85,7 @@ class QuestionReport
      *
      * @return QuestionReport
      */
-    public function setQuestionI($question)
+    public function setQuestion($question)
     {
         $this->question = $question;
 
