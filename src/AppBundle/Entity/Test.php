@@ -69,8 +69,7 @@ class Test
         $this->category     = $category;
         $this->userId       = $user;
         $this->finisedAt = new \DateTime();
-        $this->correct = count(array_filter($answers, function($answer) {
-            return $answer;
+        $this->correct = count(array_filter($answers, function ($answer) {return $answer;
         }
         ));
         $this->incorrect = count($answers) - $this->correct;

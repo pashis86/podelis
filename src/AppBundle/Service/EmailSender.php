@@ -24,8 +24,7 @@ class EmailSender
             ->setFrom('podelis@gmail.com')
             ->setTo($user->getEmail())
             ->setBody(
-                $this->templating->render('@App/Emails/registerEmail.html.twig', [
-                        'name' => $user->getName(),
+                $this->templating->render('@App/Emails/registerEmail.html.twig', ['name' => $user->getName(),
                         'token' => $user->getConfirmationToken(),
                         'text/html'
                     ]
@@ -51,8 +50,7 @@ class EmailSender
             ->setFrom('podelis@gmail.com')
             ->setTo($user->getEmail())
             ->setBody(
-                $this->templating->render('@App/Emails/registerEmail.html.twig', [
-                        'name' => $user->getName(),
+                $this->templating->render('@App/Emails/registerEmail.html.twig', ['name' => $user->getName(),
                         'plainPass' => $plainPass,
                         'text/html'
                     ]

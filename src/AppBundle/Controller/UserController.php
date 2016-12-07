@@ -118,9 +118,7 @@ class UserController extends Controller
                             ['', $res[7], 'silver', 'Web features'],
                             ['', $res[8], 'stroke-color: #703593; fill-color: #C5A5CF', 'INPUT and OUTPUT'],
                         ]);";
-
             return new JsonResponse(json_encode(['data' => $data]));
-
         } else {
             return $this->redirectToRoute('homepage');
         }
@@ -139,14 +137,11 @@ class UserController extends Controller
             $securityContext->isGranted('IS_AUTHENTICATED_REMEMBERED')
         ) {
             $repository = $this->getDoctrine()->getRepository('AppBundle:Test');
-            $cat        = $repository->categoryResults($user,$id);
-            $data       = ["100","10","20","30","40","50","60","70","80"];
-
+            $cat        = $repository->categoryResults($user, $id);
+            $data       = ["100", "10", "20", "30", "40", "50", "60", "70", "80"];
             return new JsonResponse(json_encode(['data' => $data, 'id' => $id, 'cat' => $cat]));
-
         } else {
             return $this->redirectToRoute('homepage');
         }
     }
-
 }

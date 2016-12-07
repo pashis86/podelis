@@ -45,12 +45,11 @@ class TestControl
         $this->em               = $em;
         $this->questionGroups   = $session->get('questionGroups');
 
-        $this->questions        = array_map(function($category) { return array_map(function(Question $question) {
-            return $question->getId();
-        }
-            , $category);
-        }
-            , $this->questionGroups)[0];
+        $this->questions        = array_map(function ($category) {
+            return array_map(function (Question $question) {
+                return $question->getId();
+        }, $category);
+        }, $this->questionGroups)[0];
 
 //        foreach ($this->questionGroups as $group) {
 //            /** @var Question $question */
@@ -108,7 +107,6 @@ class TestControl
         foreach ($this->questionGroups as $group) {
             /**@var Question $question */
             foreach ($group as $key => $question) {
-
                 if ($question->getId() == $currentQ) {
                     return $key + 1;
                 }
@@ -117,8 +115,7 @@ class TestControl
         return false;
     }
 
-    public function array_equal($a, $b)
-    {
+    public function array_equal($a, $b) {
         return (
             is_array($a) && is_array($b) &&
             count($a) == count($b) &&
@@ -129,7 +126,6 @@ class TestControl
     public function checkAnswers()
     {
         if (count($this->session->get('isCorrect')) != count($this->questions)) {
-
             $ended = new \DateTime();
             if ($this->session->get('endsAt') <= $ended) {
                 $ended = $this->session->get('endsAt');
@@ -244,5 +240,4 @@ class TestControl
         $this->questionGroups = $questionGroups;
         return $this;
     }
-
 }
