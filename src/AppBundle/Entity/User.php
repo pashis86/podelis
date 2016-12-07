@@ -8,7 +8,6 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use FOS\UserBundle\Model\User as BaseUser;
 use Symfony\Component\Validator\Constraints as Assert;
 
-
 /**
  * User
  *
@@ -458,35 +457,35 @@ class User extends BaseUser
         $time = $this->timeSpent;
 
         $seconds = 31556926;
-        if($time >= $seconds){
+        if ($time >= $seconds) {
             $yr = floor($time / $seconds);
             $time -= $yr * $seconds;
             $formated .= sprintf('%d years ', $yr);
         }
 
         $seconds = 2629744;
-        if($time >= $seconds){
+        if ($time >= $seconds) {
             $mnt = floor($time / $seconds);
             $time -= $mnt * $seconds;
             $formated .= sprintf('%d months ', $mnt);
         }
 
         $seconds = 86400;
-        if($time >= $seconds){
+        if ($time >= $seconds) {
             $day = floor($time / $seconds);
             $time -= $day * $seconds;
             $formated .= sprintf('%d days ', $day);
         }
 
         $seconds = 3600;
-        if($time >= $seconds){
+        if ($time >= $seconds) {
             $hr = floor($time / $seconds);
             $time -= $hr * $seconds;
             $formated .= sprintf('%d hours ', $hr);
         }
 
         $seconds = 60;
-        if($time >= $seconds){
+        if ($time >= $seconds) {
             $min = floor($time / $seconds);
             $time -= $min * $seconds;
             $formated .= sprintf('%d minutes ', $min);
@@ -499,7 +498,10 @@ class User extends BaseUser
 
     public function updateStats($time, $answers)
     {
-        $correct            = count(array_map(function($answer){return $answer;}, $answers));
+        $correct            = count(array_map(function($answer) {
+            return $answer;
+        }
+            , $answers));
         $this->correct      += $correct;
         $this->incorrect    += count($answers) - $correct;
         $this->timeSpent    += $time->s + $time->i * 60 + $time->h * 3600;
@@ -630,7 +632,9 @@ class User extends BaseUser
      */
     public function getUnseenCount()
     {
-        return $this->notifications->filter(function (Notification $notification) {return $notification->getSeen();})->count();
+        return $this->notifications->filter(function (Notification $notification) {
+            return $notification->getSeen();
+        }
+        )->count();
     }
 }
-

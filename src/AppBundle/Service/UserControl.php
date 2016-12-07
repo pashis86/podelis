@@ -8,7 +8,6 @@
 
 namespace AppBundle\Service;
 
-
 use AppBundle\AppBundle;
 use Doctrine\ORM\EntityManager;
 

@@ -8,7 +8,6 @@
 
 namespace AppBundle\Service;
 
-
 use AppBundle\Entity\Answer;
 use AppBundle\Entity\Book;
 use AppBundle\Entity\Question;
@@ -46,7 +45,12 @@ class TestControl
         $this->em               = $em;
         $this->questionGroups   = $session->get('questionGroups');
 
-        $this->questions        = array_map(function($category) { return array_map(function(Question $question){return $question->getId();}, $category);}, $this->questionGroups)[0];
+        $this->questions        = array_map(function($category) { return array_map(function(Question $question) {
+            return $question->getId();
+        }
+            , $category);
+        }
+            , $this->questionGroups)[0];
 
 //        foreach ($this->questionGroups as $group) {
 //            /** @var Question $question */
@@ -71,7 +75,6 @@ class TestControl
     {
       //  dump($this->questions);die;
         foreach ($this->questions as $question) {
-
             if ($question == $questionId) {
                 return true;
             }
@@ -90,7 +93,6 @@ class TestControl
     public function submit($id, $answer)
     {
         if ($this->session->get('endsAt') >= new \Datetime()) {
-
             //  $answered = $this->session->get('answered');
             $this->answers[$id] = $answer;
 
@@ -178,11 +180,11 @@ class TestControl
     {
         $checkedAnswers = (array_key_exists($id, $answered) ? $answered[$id] : null);
 
-        if ($checkedAnswers == null)
+        if ($checkedAnswers == null) {
             return $checkedAnswers;
+        }
         if (is_array($checkedAnswers)) {
             foreach ($checkedAnswers as $key => $answer) {
-
                 if ($answer instanceof Answer) {
                     $checkedAnswers[$key] = $this->em->merge($answer);
                 } else {
@@ -199,8 +201,9 @@ class TestControl
         $solved = $this->session->get('solved');
         if (is_array($solved)) {
             foreach ($solved as $key => $value) {
-                if ($key == $id && $value == true)
+                if ($key == $id && $value == true) {
                     return true;
+                }
             }
         }
         return false;

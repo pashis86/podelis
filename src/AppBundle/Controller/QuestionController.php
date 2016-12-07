@@ -120,7 +120,10 @@ class QuestionController extends Controller
                 $answers = $form['answers']->getData();
 
                 $question->setUpdatedAt(new \DateTime())
-                    ->setAnswers($answers->map(function ($answer) {return $answer; }))
+                    ->setAnswers($answers->map(function ($answer) {
+                        return $answer;
+                    }
+                    ))
                     ->isCheckboxType()
                     ->updateAnswers();
 
@@ -185,5 +188,4 @@ class QuestionController extends Controller
         }
         return $this->render('AppBundle:Home:404.html.twig');
     }
-
 }

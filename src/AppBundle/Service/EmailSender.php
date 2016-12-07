@@ -5,8 +5,6 @@ namespace AppBundle\Service;
 use AppBundle\Entity\User;
 use Symfony\Bridge\Twig\TwigEngine;
 
-
-
 class EmailSender
 {
     private $mailer;
@@ -26,10 +24,13 @@ class EmailSender
             ->setFrom('podelis@gmail.com')
             ->setTo($user->getEmail())
             ->setBody(
-                $this->templating->render('@App/Emails/registerEmail.html.twig',
-                    ['name' => $user->getName(),
+                $this->templating->render('@App/Emails/registerEmail.html.twig', [
+                        'name' => $user->getName(),
                         'token' => $user->getConfirmationToken(),
-                        'text/html']));
+                        'text/html'
+                    ]
+                )
+            );
         /*
          * If you also want to include a plaintext version of the message
         ->addPart(
@@ -50,10 +51,13 @@ class EmailSender
             ->setFrom('podelis@gmail.com')
             ->setTo($user->getEmail())
             ->setBody(
-                $this->templating->render('@App/Emails/registerEmail.html.twig',
-                    ['name' => $user->getName(),
+                $this->templating->render('@App/Emails/registerEmail.html.twig', [
+                        'name' => $user->getName(),
                         'plainPass' => $plainPass,
-                        'text/html']));
+                        'text/html'
+                    ]
+                )
+            );
         /*
          * If you also want to include a plaintext version of the message
         ->addPart(

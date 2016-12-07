@@ -8,7 +8,6 @@
 
 namespace AppBundle\DoctrineFunction;
 
-
 use Doctrine\ORM\Query\AST\Functions\FunctionNode;
 use Doctrine\ORM\Query\Lexer;
 

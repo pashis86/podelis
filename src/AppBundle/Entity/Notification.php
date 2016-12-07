@@ -212,14 +212,16 @@ class Notification
                     $this->content = 'Report No.'.$entity->getId().' on question '.$entity->getQuestion()->getTitle().' status has been changed to '.$entity->getStatus().' by '.$admin->getFullName().'.';
                 } elseif ($entity instanceof Question) {
                     $this->content = 'Question "'.$entity->getTitle().'"" status has been changed to '.$entity->getStatus().'. by '.$admin->getFullName().'.';
-                } break;
+                }
+                break;
 
             case false:
                 if ($entity instanceof QuestionReport) {
                     $this->content = 'New report on question '.$entity->getQuestion()->getTitle().' has been submitted by '.$entity->getCreatedBy()->getFullName().'.';
                 } elseif ($entity instanceof Question) {
                     $this->content = 'New question for category '.$entity->getBook()->getTitle().' has been submitted by '.$entity->getCreatedBy()->getFullName().'.';
-                } break;
+                }
+                break;
 
             default:
                 $this->content = 'New message!';
@@ -233,7 +235,7 @@ class Notification
         return preg_replace(
             '/[^a-z0-9]/',
             '-',
-            strtolower(trim(strip_tags($this->title))));
+            strtolower(trim(strip_tags($this->title)))
+        );
     }
 }
-
