@@ -125,7 +125,7 @@ class UserController extends Controller
     }
 
     /**
-     * @Route("/api/user/category/{id}", name="user-data")
+     * @Route("/api/user/category/{id}", name="category-data")
      */
     public function userCategoryResultsAction($id)
     {
