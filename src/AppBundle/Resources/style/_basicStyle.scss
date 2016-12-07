@@ -315,3 +315,8 @@ label{
 #answers {
   display: inline;
 }
+
+.dropdown-2:focus, .dropdown-2:hover, .navbar-nav > li > a:hover, .navbar-default .navbar-nav > .open > a, .navbar-default .navbar-nav > .open > a:hover, .navbar-default .navbar-nav > .open > a:focus {
+  background-color: transparent !important;
+}
+
