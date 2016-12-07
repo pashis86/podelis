@@ -1,6 +1,8 @@
 <?php
 
 namespace AppBundle\Repository;
+use AppBundle\Entity\Answer;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * AnswerRepository
@@ -30,5 +32,35 @@ class AnswerRepository extends \Doctrine\ORM\EntityRepository
             ->setParameter('qId', $qId)
             ->getQuery()
             ->getResult();
+    }
+
+    /**
+     * @param int $questionId
+     * @param ArrayCollection $answers
+     */
+    public function removeAnswers($questionId, $answers)
+    {
+        $oldAnswers = $this->createQueryBuilder('a')
+            ->select('a')
+            ->where('a.question = :question')
+            ->setParameter('question', $questionId)
+            ->getQuery()
+            ->getResult();
+
+        /** @var Answer $answer */
+        foreach ($answers as $answer) {
+            /**
+             * @var Answer $oldAnswer */
+            foreach ($oldAnswers as $key => $oldAnswer) {
+                if ($answer->getId() == $oldAnswer->getId()) {
+                    unset($oldAnswers[$key]);
+                }
+            }
+        }
+        /** @var Answer $answer */
+        foreach ($oldAnswers as $answer) {
+            $this->_em->remove($answer);
+        }
+        $this->_em->flush();
     }
 }

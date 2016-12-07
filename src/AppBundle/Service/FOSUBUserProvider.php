@@ -21,20 +21,20 @@ class FOSUBUserProvider extends BaseClass
      */
     public function connect(UserInterface $user, UserResponseInterface $response)
     {
-        $property = $this->getProperty($response);
-        $username = $response->getUsername();
-        //on connect - get the access token and the user ID
-        $service = $response->getResourceOwner()->getName();
-        $setter = 'set'.ucfirst($service);
-        $setter_id = $setter.'Id';
-        $setter_token = $setter.'AccessToken';
-        //we "disconnect" previously connected users
+        $property       = $this->getProperty($response);
+        $username       = $response->getUsername();
+
+        $service        = $response->getResourceOwner()->getName();
+        $setter         = 'set'.ucfirst($service);
+        $setter_id      = $setter.'Id';
+        $setter_token   = $setter.'AccessToken';
+
         if (null !== $previousUser = $this->userManager->findUserBy(array($property => $username))) {
             $previousUser->$setter_id(null);
             $previousUser->$setter_token(null);
             $this->userManager->updateUser($previousUser);
         }
-        //we connect current user
+
         $user->$setter_id($username);
         $user->$setter_token($response->getAccessToken());
         $this->userManager->updateUser($user);
@@ -44,35 +44,38 @@ class FOSUBUserProvider extends BaseClass
      */
     public function loadUserByOAuthUserResponse(UserResponseInterface $response)
     {
-        $username = $response->getUsername();
-        $user = $this->userManager->findUserBy(array($this->getProperty($response) => $username));
+        $username   = $response->getUsername();
+        $user       = $this->userManager->findUserBy(array($this->getProperty($response) => $username));
 
         if (null === $user) {
-            $service = $response->getResourceOwner()->getName();
-            $setter = 'set'.ucfirst($service);
-            $setter_id = $setter.'Id';
-            $setter_token = $setter.'AccessToken';
-
-            //dump($response);
+            $service        = $response->getResourceOwner()->getName();
+            $setter         = 'set'.ucfirst($service);
+            $setter_id      = $setter.'Id';
+            $setter_token   = $setter.'AccessToken';
 
             $user = new User();
             $user->$setter_id($username)
                 ->$setter_token($response->getAccessToken())
-                ->setAvatar($response->getProfilePicture())
                 ->setUsername($response->getUsername())
-                ->setEmail($response->getUsername())
+                ->setEmail($response->getEmail())
                 ->setPassword(md5((uniqid())))
                 ->setEnabled(true)
                 ->setName($response->getFirstName())
                 ->setSurname($response->getLastName());
+            
+            if ($service === 'facebook') {
+                $user->setAvatar('https://graph.facebook.com/'.$user->getUsername().'/picture?type=large');
+            } else {
+                $user->setAvatar($response->getProfilePicture());
+            }
 
             $this->userManager->updateUser($user);
             return $user;
         }
         //if user exists - go with the HWIOAuth way
-        $user = parent::loadUserByOAuthUserResponse($response);
-        $serviceName = $response->getResourceOwner()->getName();
-        $setter = 'set' . ucfirst($serviceName) . 'AccessToken';
+        $user           = parent::loadUserByOAuthUserResponse($response);
+        $serviceName    = $response->getResourceOwner()->getName();
+        $setter         = 'set' . ucfirst($serviceName) . 'AccessToken';
         //update access token
         $user->$setter($response->getAccessToken());
         return $user;

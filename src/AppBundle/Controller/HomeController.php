@@ -2,8 +2,10 @@
 
 namespace AppBundle\Controller;
 
+use AppBundle\Entity\User;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 
 class HomeController extends Controller
@@ -14,45 +16,27 @@ class HomeController extends Controller
      */
     public function indexAction(Request $request)
     {
-        $usercount = $this->get('app.user')->userCount();
+        $usercount  = $this->get('app.user')->userCount();
+        $categories = $this->getDoctrine()->getRepository('AppBundle:Book')->findAll();
+
         return $this->render('AppBundle:Home:index.html.twig', [
-            'usercount' => $usercount
+            'usercount'     => $usercount,
+            'categories'    => $categories
         ]);
     }
 
     /**
-     * @Route("/profile", name="user")
-
+     * @Route("/leaderboard", name="leaderboard")
      */
-    public function userAction(Request $request)
+    public function leaderboardAction(Request $request)
     {
-        //* @Security("has_role('ROLE_USER')")
-        return $this->render('AppBundle:Home:user.html.twig', []);
-    }
+        if ($request->isXmlHttpRequest()) {
+            $repository = $this->getDoctrine()->getRepository('AppBundle:User');
+            $best       = $repository->getLeaderBoard($request->request);
 
-
-    /**
-     * @Route("/leaderboard/{page}", name="leaderboard")
-     */
-    public function leaderboardAction(Request $request, $page = 1)
-    {
-        $repository = $this->getDoctrine()->getRepository('AppBundle:User');
-
-        $orderParams = $request->query->all();
-
-        $best = $repository->findBest($orderParams, $page, $limit = 2);
-        $maxPages = ceil($best->count() / $limit);
-
-        if($page > $maxPages){
-            return $this->render('@App/Home/404.html.twig');
+            return new JsonResponse(json_encode($best), 200, array(), true);
         }
-
-        return $this->render('@App/Home/leaderboard.html.twig', [
-            'thisPage' => $page,
-            'maxPages' => $maxPages,
-            'best' => $best,
-            'limit' => $limit
-        ]);
+        return $this->render('@App/Home/leaderboard.html.twig', []);
     }
 
     /**
@@ -64,3 +48,4 @@ class HomeController extends Controller
         ]);
     }
 }
+

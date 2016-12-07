@@ -23,9 +23,9 @@ class TestQuestionType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         /** @var Question $question */
-        $question = $options['data']['question'];
-        $answered = $options['data']['answered'];
-        $id = $question->getId();
+        $question       = $options['data']['question'];
+        $answered       = $options['data']['answered'];
+        $id             = $question->getId();
         $checkedAnswers = $this->testControl->prepareSelectedOptions($answered, $id);
 
         $builder->add('answers', EntityType::class, [

@@ -185,6 +185,7 @@ class Answer
         return $this->updatedAt;
     }
 
+
     public function __construct()
     {
         $this->createdAt = new \DateTime();

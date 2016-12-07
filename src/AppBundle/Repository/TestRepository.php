@@ -10,4 +10,18 @@ namespace AppBundle\Repository;
  */
 class TestRepository extends \Doctrine\ORM\EntityRepository
 {
+    public function bestResultsFromEachCategory($userId, $category, $limit = false)
+    {
+        $qb = $this->createQueryBuilder('t')
+            ->select('t')
+            ->where('t.userId = :userId')
+            ->andWhere('t.category = :category')
+            ->setParameter('userId', $userId)
+            ->setParameter('category', $category)
+            ->addOrderBy('t.correct','desc')
+            ->addOrderBy('t.timeSpent', 'asc');
+            $limit ? $qb = $qb->setMaxResults($limit)->getQuery() : $qb = $qb->getQuery();
+
+        return $qb->getResult();
+    }
 }

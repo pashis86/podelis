@@ -23,12 +23,11 @@ class QuestionReport
     private $id;
 
     /**
-     * @var int
      *
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Question", inversedBy="reports")
      * @ORM\JoinColumn(name="question_id", referencedColumnName="id")
      */
-    private $questionId;
+    private $question;
 
     /**
      * @var int
@@ -80,42 +79,42 @@ class QuestionReport
     }
 
     /**
-     * Set questionId
+     * Set question
      *
-     * @param integer $questionId
+     * @param Question $question
      *
      * @return QuestionReport
      */
-    public function setQuestionId($questionId)
+    public function setQuestionI($question)
     {
-        $this->questionId = $questionId;
+        $this->question = $question;
 
         return $this;
     }
 
     /**
-     * Get questionId
+     * Get question
      *
-     * @return int
+     * @return Question
      */
-    public function getQuestionId()
+    public function getQuestion()
     {
-        return $this->questionId;
+        return $this->question;
     }
 
     /**
      * @return int
      */
-    public function getCreatedBy(): int
+    public function getCreatedBy()
     {
         return $this->created_by;
     }
 
     /**
-     * @param int $created_by
+     * @param User $created_by
      * @return QuestionReport
      */
-    public function setCreatedBy(int $created_by): QuestionReport
+    public function setCreatedBy($created_by): QuestionReport
     {
         $this->created_by = $created_by;
         return $this;
@@ -141,9 +140,9 @@ class QuestionReport
     }
 
     /**
-     * @return \DateTime
+     * @return \DateTime|null
      */
-    public function getCreatedAt(): \DateTime
+    public function getCreatedAt()
     {
         return $this->created_at;
     }
@@ -159,9 +158,9 @@ class QuestionReport
     }
 
     /**
-     * @return \DateTime
+     * @return \DateTime|null
      */
-    public function getUpdatedAt(): \DateTime
+    public function getUpdatedAt()
     {
         return $this->updated_at;
     }
@@ -196,6 +195,11 @@ class QuestionReport
      * @return string
      */
     public function getReason()
+    {
+        return $this->reason;
+    }
+
+    public function __toString()
     {
         return $this->reason;
     }

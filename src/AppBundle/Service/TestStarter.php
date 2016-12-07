@@ -9,6 +9,7 @@
 namespace AppBundle\Service;
 
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\HttpFoundation\Session\Session;
 
 class TestStarter
@@ -29,12 +30,12 @@ class TestStarter
     public function startTest($questions, $timePerQuestion, $trackResults)
     {
         $test = [
-            'questionGroups' => $questions,
-            'trackResults' => $trackResults,
-            'solved' => [],
-            'started' => new \DateTime(),
-            'endsAt' => new \DateTime($this->setTimeLimit($timePerQuestion, $questions)),
-            'answered' => []
+            'questionGroups'    => $questions,
+            'trackResults'      => $trackResults,
+            'solved'            => [],
+            'started'           => new \DateTime(),
+            'endsAt'            => new \DateTime($this->setTimeLimit($timePerQuestion, $questions)),
+            'answered'          => []
         ];
 
         $this->session->clear();

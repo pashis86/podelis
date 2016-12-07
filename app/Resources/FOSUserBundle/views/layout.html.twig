@@ -20,15 +20,13 @@
                         <div class="panel-heading">
                             Log in
                             <div>
-                                {% block fos_user_content %}
-                                {% endblock fos_user_content %}
+                                <a href="{{ path('hwi_oauth_service_redirect', {'service': 'facebook' }) }}">Sign in with Facebook</a><br>
+                                <a href="{{ path('hwi_oauth_service_redirect', {'service': 'google' }) }}">Sign in with Google</a>
                             </div>
                         </div>
                         <div class="panel-body">
                         </div>
                         <div class="panel-footer">
-                            <a href="{{ path('hwi_oauth_service_redirect', {'service': 'facebook' }) }}">Sign in with Facebook</a><br>
-                            <a href="{{ path('hwi_oauth_service_redirect', {'service': 'google' }) }}">Sign in with Google</a>
                         </div>
                     </div>
                 </div>

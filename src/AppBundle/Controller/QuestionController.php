@@ -2,10 +2,14 @@
 
 namespace AppBundle\Controller;
 
+use AppBundle\Entity\Answer;
 use AppBundle\Entity\Question;
 use AppBundle\Entity\QuestionReport;
 use AppBundle\Form\QuestionReportType;
 use AppBundle\Form\QuestionType;
+use AppBundle\Repository\QuestionReportRepository;
+use AppBundle\Repository\QuestionRepository;
+use Doctrine\ORM\PersistentCollection;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\BrowserKit\Response;
@@ -23,6 +27,7 @@ class QuestionController extends Controller
     public function addQuestionAction(Request $request)
     {
         $question = new Question();
+        $question->prepareAnswerFields(4);
         $form = $this->createForm(QuestionType::class, $question);
 
         $form->handleRequest($request);
@@ -31,7 +36,8 @@ class QuestionController extends Controller
             $question->setCreatedBy($this->getUser())
                 ->setCheckboxAnswers(false)
                 ->setCreatedAt(new \DateTime())
-                ->setUpdatedAt(new \DateTime());
+                ->setUpdatedAt(new \DateTime())
+                ->isCheckboxType();
 
             $em = $this->getDoctrine()->getManager();
 
@@ -47,17 +53,21 @@ class QuestionController extends Controller
     }
 
     /**
-     * @Route("/my-questions", name="myQuestions")
+     * @Route("/my-questions/{page}", name="myQuestions")
      * @Security("has_role('ROLE_USER')")
      */
-    public function myQuestionsAction(Request $request)
+    public function myQuestionsAction(Request $request, $page = 1)
     {
-        $questions = $this->getDoctrine()
-            ->getRepository('AppBundle:Question')
-            ->findBy(['created_by' => $this->getUser()->getId()]);
+        $repository = $this->getDoctrine()->getRepository('AppBundle:Question');
+
+        $questions  = $repository->getPaginatedQuestions($page, $this->getUser()->getId());
+        $maxPages   = ceil($questions->count() / QuestionRepository::MAX_RESULTS);
+
 
         return $this->render('@App/Questions/myQuestions.html.twig', [
-            'questions' => $questions
+            'questions' => $questions,
+            'maxPages'  => $maxPages,
+            'thisPage'  => $page
         ]);
     }
 
@@ -65,22 +75,29 @@ class QuestionController extends Controller
      * @Route("/delete", name="delete")
      * @Security("has_role('ROLE_USER')")
      */
-    public function deletePanelAction(Request $request)
+    public function deleteAction(Request $request)
     {
         if ($request->isXmlHttpRequest()) {
-            $entity = $request->request->get('entity');
-            $id = $request->get('id');
+            $repository = $request->request->get('repository');
+            $id         = $request->get('id');
 
-            if ($entity == 'question')
-                $this->deleteAction('AppBundle:Question', $id);
-            else if ($entity == 'report')
-                $this->deleteAction('AppBundle:QuestionReport', $id);
-            else
-                return new JsonResponse(400, 'error');
+            $em     = $this->getDoctrine()->getManager();
+            $entity = $em->getRepository('AppBundle:' . $repository)
+                ->findOneBy(['id' => $id, 'created_by' => $this->getUser()->getId()]);
+            $response = new JsonResponse();
+
+            if ($entity) {
+                $em->remove($entity);
+                $em->flush();
+
+                $response->setStatusCode(200, 'success');
+            } else {
+                $response->setStatusCode(400, 'error');
+            }
+            return $response;
         }
         return new Response();
     }
-
 
     /**
      * @Route("/edit-question/{id}-{slug}", name="editQuestion")
@@ -88,8 +105,8 @@ class QuestionController extends Controller
      */
     public function editQuestionAction(Request $request, $id)
     {
-        $em = $this->getDoctrine()->getManager();
-        $question = $em->getRepository('AppBundle:Question')
+        $em         = $this->getDoctrine()->getManager();
+        $question   = $em->getRepository('AppBundle:Question')
             ->findOneBy(['id' => $id, 'created_by' => $this->getUser()->getId()]);
 
         if ($question) {
@@ -98,7 +115,15 @@ class QuestionController extends Controller
             $form->handleRequest($request);
 
             if ($form->isSubmitted() && $form->isValid()) {
-                $question->setUpdatedAt(new \DateTime());
+                /** @var PersistentCollection $answers */
+                $answers = $form['answers']->getData();
+
+                $question->setUpdatedAt(new \DateTime())
+                    ->setAnswers($answers->map(function ($answer) {return $answer; }))
+                    ->isCheckboxType()
+                    ->updateAnswers();
+
+                $em->getRepository('AppBundle:Answer')->removeAnswers($question->getId(), $question->getAnswers());
                 $em->flush();
 
                 $this->addFlash('success', 'Your question has been updated!');
@@ -112,17 +137,21 @@ class QuestionController extends Controller
     }
 
     /**
-     * @Route("/my-reports", name="myReports")
+     * @Route("/my-reports/{page}", name="myReports")
      * @Security("has_role('ROLE_USER')")
      */
-    public function myReportsAction(Request $request)
+    public function myReportsAction(Request $request, $page = 1)
     {
-        $reports = $this->getDoctrine()
-            ->getRepository('AppBundle:QuestionReport')
-            ->findBy(['created_by' => $this->getUser()->getId()]);
+        $repository = $this->getDoctrine()->getRepository('AppBundle:QuestionReport');
+
+        $reports    = $repository->getPaginatedReports($page, $this->getUser()->getId());
+        $maxPages   = ceil($reports->count() / QuestionReportRepository::MAX_RESULTS);
+
 
         return $this->render('@App/Questions/myReports.html.twig', [
-            'reports' => $reports
+            'reports'   => $reports,
+            'maxPages'  => $maxPages,
+            'thisPage'  => $page
         ]);
     }
 
@@ -132,7 +161,7 @@ class QuestionController extends Controller
      */
     public function editReportAction(Request $request, $id)
     {
-        $em = $this->getDoctrine()->getManager();
+        $em     = $this->getDoctrine()->getManager();
         $report = $em->getRepository('AppBundle:QuestionReport')
             ->findOneBy(['id' => $id, 'created_by' => $this->getUser()->getId()]);
 
@@ -155,19 +184,4 @@ class QuestionController extends Controller
         return $this->render('AppBundle:Home:404.html.twig');
     }
 
-    public function deleteAction($repository, $id)
-    {
-        $em = $this->getDoctrine()->getManager();
-        $entity = $em->getRepository($repository)
-            ->findOneBy(['id' => $id, 'created_by' => $this->getUser()->getId()]);
-
-        if ($entity) {
-            $em->remove($entity);
-            $em->flush();
-
-            return new JsonResponse(200, 'success');
-        } else {
-            return new JsonResponse(400, 'error');
-        }
-    }
 }

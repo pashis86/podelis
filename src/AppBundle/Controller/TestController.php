@@ -26,50 +26,24 @@ use Symfony\Component\HttpFoundation\Session\Session;
 class TestController extends Controller
 {
     /**
-     * @Route("/test-options", name="test_options")
-     * @Security("has_role('ROLE_USER')")
-     */
-    public function testOptionsAction(Request $request)
-    {
-    /*    $question = new Question();
-        $form = $this->createForm(QuestionType::class, $question);
-        $form->handleRequest($request);
-
-        if($form->isSubmitted() && $form->isValid())
-        {
-            $qRepository = $this->getDoctrine()->getRepository('AppBundle:Question');
-            $questionGroups = $qRepository->getSpecificQuestions([
-                'books' => $form['book']->getData(),
-                'amount' => $form['amount']->getData()
-            ]);
-
-            $this->get('app.test_starter')->startTest($questionGroups, '+1 minute', true);
-            return $this->redirectToRoute('question', ['id' => $questionGroups[0][0]->getId()]);
-        }
-
-        return $this->render('@App/TestPages/test-options.html.twig', [
-            'form' => $form->createView(),
-        ]);*/
-    }
-
-    /**
      * @Route("/quick-test", name="quick_test")
      */
     public function quickTestAction()
     {
-        $qRepository = $this->getDoctrine()->getRepository('AppBundle:Question');
-        $questions = $qRepository->getRandomQuestions(10);
+        $qRepository    = $this->getDoctrine()->getRepository('AppBundle:Question');
+        $questions      = $qRepository->getRandomQuestions(20);
 
-        $this->get('app.test_starter')->startTest($questions, '+2 minutes', false);
-
-        return $this->redirectToRoute('question', ['id' => $questions[0][0]->getId()]);
+        if (!empty($questions[0][0])) {
+            $this->get('app.test_starter')->startTest($questions, '+2 minute,', false);
+            return $this->redirectToRoute('question', ['id' => $questions[0][0]->getId()]);
+        }
+        return $this->render('@App/Home/404.html.twig');
     }
 
     /**
      * @Route("/categories", name="test_categories")
-     * @Security("has_role('ROLE_USER')")
      */
-    public function categoryTestAction()
+    public function categoryListAction()
     {
         $categories = $this->getDoctrine()->getRepository('AppBundle:Book')->findAll();
 
@@ -78,13 +52,12 @@ class TestController extends Controller
 
     /**
      * @Route("/category-test/{id}-{slug}", name="categoryTest")
-     * @Security("has_role('ROLE_USER')")
      */
-    public function categoryTestAction1($id)
+    public function categoryTestAction($id)
     {
         $questions = $this->getDoctrine()->getRepository('AppBundle:Question')->getCategoryQuestions($id);
-        if($questions)
-        {
+
+        if (!empty($questions[0][0])) {
             $this->get('app.test_starter')->startTest($questions, '+1 minute,', true);
             return $this->redirectToRoute('question', ['id' => $questions[0][0]->getId()]);
         }
@@ -98,11 +71,10 @@ class TestController extends Controller
     public function testAction(Request $request, $id)
     {
 
-        $repository = $this->getDoctrine()->getRepository('AppBundle:Question');
-        $testControl = $this->get('app.test_control');
-        $question = $repository->findOneBy(['id' => $id]);
-
-        $session = $this->get('session');
+        $repository     = $this->getDoctrine()->getRepository('AppBundle:Question');
+        $testControl    = $this->get('app.test_control');
+        $question       = $repository->findOneBy(['id' => $id]);
+        $session        = $this->get('session');
 
         if($question && $testControl->questionInTest($id))
         {
@@ -130,10 +102,10 @@ class TestController extends Controller
             }
 
             return $this->render('@App/TestPages/question.html.twig', [
-                'form' => $form->createView(),
-                'current' => $question,
-                'index' => $testControl->getCurrentIndex($id),
-                'solved' => $testControl->isQuestionSolved($id)
+                'form'      => $form->createView(),
+                'current'   => $question,
+                'index'     => $testControl->getCurrentIndex($id),
+                'solved'    => $testControl->isQuestionSolved($id)
             ]);
         }
         return $this->render('@App/Home/404.html.twig');
@@ -148,11 +120,10 @@ class TestController extends Controller
 
         if($request->isXmlHttpRequest() && $session->get('endsAt') >= new \DateTime()){
             $repository = $this->getDoctrine()->getRepository('AppBundle:Answer');
-
             $questionId = $request->request->get('question');
-            $answerIds = $request->request->get('answer');
+            $answerIds  = $request->request->get('answer');
 
-            $answers = $repository->getAllChecked($answerIds);
+            $answers    = $repository->getAllChecked($answerIds);
             $this->get('app.test_control')->addAnswer($questionId, $answers);
         }
         return new Response();
@@ -166,16 +137,12 @@ class TestController extends Controller
         $session = $this->get('session');
 
         if($request->isXmlHttpRequest() && $session->get('endsAt') >= new \DateTime()){
-
-            $id = $request->request->get('question');
-
-            $answers = $this->getDoctrine()->getRepository('AppBundle:Answer')->getCorrectAnswers($id);
-
+            $id             = $request->request->get('question');
+            $answers        = $this->getDoctrine()->getRepository('AppBundle:Answer')->getCorrectAnswers($id);
             /** @var Question $question */
-            $question = $this->getDoctrine()->getRepository('AppBundle:Question')->findOneBy(['id' =>$id]);
-
-            $solved = $session->get('solved');
-            $solved[$id] = true;
+            $question       = $this->getDoctrine()->getRepository('AppBundle:Question')->findOneBy(['id' =>$id]);
+            $solved         = $session->get('solved');
+            $solved[$id]    = true;
             $session->set('solved', $solved);
 
             return new JsonResponse(json_encode(['answers' => $answers, 'explanation' => $question->getExplanation()]));
@@ -188,12 +155,12 @@ class TestController extends Controller
      */
     public function testResultsAction(Request $request, $id)
     {
-        $session = $this->get('session');
-        $testControl = $this->get('app.test_control');
+        $session        = $this->get('session');
+        $testControl    = $this->get('app.test_control');
         $testControl->checkAnswers();
 
-        $repository = $this->getDoctrine()->getRepository('AppBundle:Question');
-        $question = $repository->findOneBy(['id' => $id]);
+        $repository     = $this->getDoctrine()->getRepository('AppBundle:Question');
+        $question       = $repository->findOneBy(['id' => $id]);
 
         if($question && $testControl->questionInTest($id))
         {
@@ -215,34 +182,13 @@ class TestController extends Controller
                 return $this->redirectToRoute('homepage');
             }
             return $this->render('@App/TestPages/results.html.twig', [
-                'form' => $form->createView(),
-                'current' => $question,
-                'index' => $testControl->getCurrentIndex($id),
-                'solved' => $testControl->isQuestionSolved($id)
+                'form'      => $form->createView(),
+                'current'   => $question,
+                'index'     => $testControl->getCurrentIndex($id),
+                'solved'    => $testControl->isQuestionSolved($id)
             ]);
         }
         return $this->render('@App/Home/404.html.twig');
-    }
-
-    /**
-     * @Route("/api/user/data", name="user-data")
-     */
-    public function userDataAction(Request $request)
-    {
-        $securityContext = $this->get('security.authorization_checker');
-        /** @var User $user */
-        $user = $this->getUser();
-
-        if ($securityContext->isGranted('IS_AUTHENTICATED_FULLY') ||
-            $securityContext->isGranted('IS_AUTHENTICATED_REMEMBERED')
-        ) {
-
-
-            return new JsonResponse(json_encode(['id' => $user->getId()]));
-
-        } else {
-            return $this->redirectToRoute('homepage');
-        }
     }
 
     /**
@@ -251,18 +197,17 @@ class TestController extends Controller
     public function questionReportAction(Request $request, $allow = false)
     {
         $report = new QuestionReport();
-        $form = $this->createForm(QuestionReportType::class, $report);
+        $form   = $this->createForm(QuestionReportType::class, $report);
 
-        if(!$request->isXmlHttpRequest() && !$allow){
+        if (!$request->isXmlHttpRequest() && !$allow) {
             return new Response();
         }
 
-        if($request->isXmlHttpRequest() && $request->isMethod('POST'))
-        {
+        if ($request->isXmlHttpRequest() && $request->isMethod('POST')) {
             $form->handleRequest($request);
             $response = new JsonResponse();
 
-            if($form->isSubmitted() && $form->isValid()){
+            if ($form->isSubmitted() && $form->isValid()) {
 
                 $question = $this->getDoctrine()
                     ->getRepository('AppBundle:Question')
@@ -272,13 +217,14 @@ class TestController extends Controller
                     ->setQuestionId($question)
                     ->setCreatedAt(new \DateTime())
                     ->setUpdatedAt(new \DateTime());
+
                 $em = $this->getDoctrine()->getManager();
                 $em->persist($report);
                 $em->flush();
 
                 $response->setStatusCode(200, 'success');
 
-            } else{
+            } else {
                 $response->setStatusCode(400, 'error');
             }
             return $response;

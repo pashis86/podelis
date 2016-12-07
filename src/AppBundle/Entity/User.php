@@ -2,6 +2,7 @@
 
 namespace AppBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use FOS\UserBundle\Model\User as BaseUser;
@@ -15,6 +16,10 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @UniqueEntity(fields="username", message="Username already taken")
  * @UniqueEntity(fields="email", message="Email already taken")
  * @ORM\Entity(repositoryClass="AppBundle\Repository\UserRepository")
+ * @ORM\AttributeOverrides({
+ *      @ORM\AttributeOverride(name="email", column=@ORM\Column(type="string", name="email", length=255, unique=false, nullable=true)),
+ *      @ORM\AttributeOverride(name="emailCanonical", column=@ORM\Column(type="string", name="email_canonical", length=255, unique=false, nullable=true))
+ * })
  */
 class User extends BaseUser
 {
@@ -72,7 +77,6 @@ class User extends BaseUser
     /** @ORM\Column(name="google_access_token", type="string", length=255, nullable=true) */
     protected $google_access_token;
 
-    // ---------------------------------------------------------------------
     /**
      * @var integer
      *
@@ -105,7 +109,11 @@ class User extends BaseUser
      * @ORM\OneToMany(targetEntity="AppBundle\Entity\Test", mappedBy="userId")
      */
     protected $tests;
-    // ---------------------------------------------------------------------
+
+    /**
+     * @ORM\Column(name="public_profile", type="boolean")
+     */
+    protected $publicProfile;
     /**
      * @var string
      *
@@ -122,6 +130,34 @@ class User extends BaseUser
      * @ORM\OneToMany(targetEntity="AppBundle\Entity\Question", mappedBy="created_by")
      */
     protected $questions_created;
+
+    /**
+     * @ORM\ManyToMany(targetEntity="AppBundle\Entity\Question", inversedBy="contributors", indexBy="id", cascade={"remove"})
+     * @ORM\JoinTable(name="contributors")
+     */
+    protected $questionsContributed;
+
+    /**
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Notification", mappedBy="user", cascade={"remove"})
+     */
+    protected $notifications;
+
+    public function __construct()
+    {
+        parent::__construct();
+
+        $this->publicProfile = true;
+        $this->createdAt = new \DateTime('now');
+        $this->updatedAt = new \DateTime('now');
+        $this->addRole('ROLE_USER');
+        $this->correct = 0;
+        $this->incorrect = 0;
+        $this->testsTaken = 0;
+        $this->timeSpent = 0;
+        $this->avatar = 'http://www.iconsdb.com/icons/preview/black/guest-xxl.png';
+        $this->questionsContributed = new ArrayCollection();
+        $this->notifications = new ArrayCollection();
+    }
 
     /**
      * @return string
@@ -214,6 +250,22 @@ class User extends BaseUser
     }
 
     /**
+     * @return mixed
+     */
+    public function getPublicProfile()
+    {
+        return $this->publicProfile;
+    }
+
+    /**
+     * @param mixed $publicProfile
+     */
+    public function setPublicProfile($publicProfile)
+    {
+        $this->publicProfile = $publicProfile;
+    }
+
+    /**
      * @return \DateTime
      */
     public function getUpdatedAt()
@@ -230,7 +282,6 @@ class User extends BaseUser
         $this->updatedAt = $updatedAt;
         return $this;
     }
-
 
 
     /**
@@ -398,9 +449,7 @@ class User extends BaseUser
 
     public function getPercentage()
     {
-        if($this->correct + $this->incorrect == 0)
-            return 0;
-        return $this->correct / ($this->correct + $this->incorrect) * 100;
+        return $this->correct + $this->incorrect == 0 ? 0 : $this->correct / ($this->correct + $this->incorrect) * 100;
     }
 
     public function getFormatedTimeSpent()
@@ -448,35 +497,12 @@ class User extends BaseUser
         return $formated;
     }
 
-    public function __construct()
-    {
-        parent::__construct();
-
-     //   $this->active = true;
-        $this->createdAt = new \DateTime('now');
-        $this->updatedAt = new \DateTime('now');
-    //    $this->level = 1;
-        $this->correct = 0;
-        $this->incorrect = 0;
-        $this->testsTaken = 0;
-        $this->timeSpent = 0;
-        $this->avatar = 'http://www.iconsdb.com/icons/preview/black/guest-xxl.png';
-    }
-
     public function updateStats($time, $answers)
     {
-        $this->timeSpent += $time->s + $time->i * 60 + $time->h * 3600;
-
-        foreach ($answers as $answer)
-        {
-            if($answer == true){
-                $this->correct++;
-            }
-
-            else{
-                $this->incorrect++;
-            }
-        }
+        $correct            = count(array_map(function($answer){return $answer;}, $answers));
+        $this->correct      += $correct;
+        $this->incorrect    += count($answers) - $correct;
+        $this->timeSpent    += $time->s + $time->i * 60 + $time->h * 3600;
         $this->testsTaken++;
     }
 
@@ -504,7 +530,17 @@ class User extends BaseUser
      */
     public function getRoles()
     {
-        return ['ROLE_USER'];
+        return $this->roles;
+    }
+
+    public function addRole($role)
+    {
+        $this->roles[] = $role;
+    }
+
+    public function setRoles(array $roles)
+    {
+        $this->roles = $roles;
     }
 
     /**
@@ -533,6 +569,68 @@ class User extends BaseUser
         return $this;
     }
 
+    /**
+     * @return ArrayCollection
+     */
+    public function getQuestionsContributed()
+    {
+        return $this->questionsContributed;
+    }
 
+    /**
+     * @param Question $questionsContributed
+     * @return User
+     */
+    public function addQuestionsContributed($questionsContributed)
+    {
+        if (!$this->questionsContributed->contains($questionsContributed)) {
+            $this->questionsContributed->add($questionsContributed);
+        }
+        return $this;
+    }
+
+    /**
+     * @param Question $questionsContributed
+     * @return User
+     */
+    public function removeQuestionsContributed($questionsContributed)
+    {
+        if ($this->questionsContributed->contains($questionsContributed)) {
+            $this->questionsContributed->remove($questionsContributed);
+        }
+        return $this;
+    }
+
+    /**
+     * @return ArrayCollection
+     */
+    public function getNotifications()
+    {
+        return $this->notifications;
+    }
+
+    /**
+     * @param ArrayCollection $notifications
+     * @return User
+     */
+    public function setNotifications($notifications)
+    {
+        $this->notifications = $notifications;
+        return $this;
+    }
+
+
+    public function getFullName()
+    {
+        return $this->getSurname() ? $this->getName().' '.$this->getSurname() : $this->getName();
+    }
+
+    /**
+     * @return int
+     */
+    public function getUnseenCount()
+    {
+        return $this->notifications->filter(function (Notification $notification) {return $notification->getSeen();})->count();
+    }
 }
 

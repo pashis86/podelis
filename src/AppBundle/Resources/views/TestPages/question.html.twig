@@ -3,21 +3,21 @@
 {% set charArray = {1 : 'A', 2 : 'B', 3 : 'C', 4 : 'D', 5 : 'E', 6 : 'F', 7 : 'G'} %}
 
 {% block body %}
-    <div class="grey-background">
-        <div class="container">
+    <div id="headerwrap">
+        <div class="container ">
             <div class="row">
-                <div class="col-lg-6 col-lg-offset-3 col-md-6 col-md-offset-3 col-sm-12">
+                <div class="col-lg-12">
                     {% for group in app.session.get('questionGroups') %}
                         {% if not group[0].book.title %}
-                            <b><h3>{{ loop.index ~ '. PHP Test' }}</h3></b>
+                            <b><h1>{{ 'Questions' }}</h1></b> <!--loop.index ~-->
                         {% else %}
                             <b>{{ loop.index }}.{{ group[0].book.title }}</b><br>
                         {% endif %}
 
                         {% for question in group %}
                             {% if question.id == current.id %}
-                                <b><a title="{{ question.title }}"
-                                      class="dd66 color-background-text" href="{{ path('question', {'id': question.id }) }}">{{ loop.index }}</a></b>
+                                <b><button title="{{ question.title }}"
+                                      class="dd66 color-background-text" href="{{ path('question', {'id': question.id }) }}">{{ loop.index }}</button></b>
                             {% else %}
                                 <a title="{{ question.title }}"
                                    class="dd66 color-background-text" href="{{ path('question', {'id': question.id }) }}">{{ loop.index }}</a>
@@ -25,13 +25,12 @@
                         {% endfor %}<br>
                     {% endfor %}
 
-                    <div id="countdown">
+                    <div class="dd66" id="countdown">
                         <p id="hours">00</p>
                         <p id="minutes">00</p>
                         <p id="seconds">00</p>
                     </div>
-                    <input type="button" id="reportBtn" class="btn btn-danger btn-lg" data-toggle="modal" data-target="#questionReport" value="Invalid question">
-                        {{ form_start(form) }}
+                        {{ form_start(form, { 'attr' : {'class': 'alert'}}) }}
                         {{ index ~ '.' }}{{ current.content|
                         replace({ "<pre>" : "<pre><code class='language-php'><xmp>" ,
                             "</pre>" : "</xmp></code></pre>" })|raw }}
@@ -43,20 +42,30 @@
                         </div>
                     {% endfor %}
 
-                    <div class="allignCenter">
+                    <div class="">
                         {{ form_widget(form.previous, {'attr': {'class': 'btn btn-3'}}) }} &nbsp;
                         {{ form_widget(form.next, {'attr': {'class': 'btn btn-3'}}) }} <br>
-                        {{ form_widget(form.submit, {'attr': {'class': 'btn btn-3'}}) }} <br>
+                        {{ form_widget(form.submit, {'attr': {'class': 'btn btn-danger'}}) }} <br>
                         {{ form_end(form) }}
-                        <input type="button" id="solve" class="btn btn-2 btn-2a" value="Solve it">
+                        <input type="button" id="solve" class="btn btn-danger" value="Solve it">
                     </div>
                 </div>
             </div>
-            <div class="row">
-                <div class="col-lg-6 col-lg-offset-3 col-md-6 col-md-offset-3 col-sm-12">
-                    <div id="explanation"></div>
+                <div class="row alert">
+                    <div class="col-lg-12">
+                         <div id="explanation"></div>
+                         <hr>
+                        <div class="black-text">
+                            {% if current.contributors.count > 0 %}
+                            <p>Contributors:</p>
+                                {% for contributor in current.contributors %}
+                                <img src="{{ contributor.avatar }}" title="{{ contributor.name ~ ' ' ~ contributor.surname }}">
+                                {% endfor %}
+                            {% endif %}
+                            <input type="button" id="reportBtn" class="btn btn-danger btn-lg" data-toggle="modal" data-target="#questionReport" value="Report question">
+                        </div>
+                    </div>
                 </div>
-            </div>
         </div>
     </div>
     <div class="modal fade" id="questionReport" tabindex="-1" role="dialog" aria-labelledby="Report this question" aria-hidden="true">
@@ -78,7 +87,7 @@
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
             </div>
     {% endif %}
-            </div>
+
         </div>
     </div>
 {% endblock %}

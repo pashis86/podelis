@@ -1,0 +1,73 @@
+{% extends "::base.html.twig" %}
+
+{% block title %}Profile{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+{% endblock %}
+
+{% block body %}
+    <div class="sand-background">
+        <div class="container">
+            <h1>Hello, {{ app.user.name }}</h1>
+            <div id="data"></div>
+            <div id="chart_div"></div>
+        </div>
+
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type="text/javascript">
+
+        function dataCharts(reqPath, idEl) {
+            $.ajax({
+                type: "POST",
+                url: reqPath,
+                dataType: 'json',
+                success: function (data) {
+                    var obj = JSON.parse(data);
+
+                    //$(idEl).html(obj.data);
+
+                    /*for (i = 0; i < obj.data.length; i++) {
+                        $(idEl).append("<br>", obj.data[i]);
+                    }
+
+                    obj.data = eval(obj.data);*/
+
+                    google.charts.setOnLoadCallback(drawChart);
+
+                    function drawChart() {
+                        console.log(obj.data);
+                        obj.data = eval(obj.data);
+                        var options = {
+                            title: 'Category results',
+                            hAxis: {
+                                title: 'Categories'
+                            },
+                            vAxis: {
+                                title: '% results'
+                            },
+                            bar: {groupWidth: "90%"},
+                            legend: { position:"none"}
+                        };
+
+                        var chart = new google.visualization.ColumnChart(
+                                document.getElementById('chart_div'));
+
+                        chart.draw(data, options);
+                    }
+                }
+
+            });
+        }
+
+        $( document ).ready(function() {
+            google.charts.load('current', {packages: ['corechart', 'bar']});
+            dataCharts('{{ path('user-data', {id: app.user.id}) }}', $('#data'));
+        });
+    </script>
+{% endblock %}

@@ -39,18 +39,20 @@ class TestControl
      */
     public function __construct($session, $security, $em)
     {
-        $this->questions = [];
-        $this->session = $session;
-        $this->security = $security;
-        $this->answers = $session->get('answered');
-        $this->em = $em;
-        $this->questionGroups = $session->get('questionGroups');
+        $this->questions        = [];
+        $this->session          = $session;
+        $this->security         = $security;
+        $this->answers          = $session->get('answered');
+        $this->em               = $em;
+        $this->questionGroups   = $session->get('questionGroups');
 
-        foreach ($this->questionGroups as $group) {
-            /** @var Question $question */
-            foreach ($group as $question)
-                array_push($this->questions, $question->getId());
-        }
+        $this->questions        = array_map(function($category) { return array_map(function(Question $question){return $question->getId();}, $category);}, $this->questionGroups)[0];
+
+//        foreach ($this->questionGroups as $group) {
+//            /** @var Question $question */
+//            foreach ($group as $question)
+//                array_push($this->questions, $question->getId());
+//        }
     }
 
     public function getNext($currentQ)
@@ -67,6 +69,7 @@ class TestControl
 
     public function questionInTest($questionId)
     {
+      //  dump($this->questions);die;
         foreach ($this->questions as $question) {
 
             if ($question == $questionId) {
@@ -79,21 +82,19 @@ class TestControl
     public function addAnswer($questionId, $answer)
     {
         if ($this->session->get('endsAt') >= new \DateTime()) {
-            $answered = $this->session->get('answered');
-            $answered[$questionId] = $answer;
-            $this->session->set('answered', $answered);
+            $this->answers[$questionId] = $answer;
+            $this->session->set('answered', $this->answers);
         }
-
     }
 
     public function submit($id, $answer)
     {
         if ($this->session->get('endsAt') >= new \Datetime()) {
 
-            $answered = $this->session->get('answered');
-            $answered[$id] = $answer;
+            //  $answered = $this->session->get('answered');
+            $this->answers[$id] = $answer;
 
-            $this->session->set('answered', $answered);
+            $this->session->set('answered', $this->answers);
             $this->checkAnswers();
         } else {
             $this->checkAnswers();
@@ -128,7 +129,7 @@ class TestControl
         if (count($this->session->get('isCorrect')) != count($this->questions)) {
 
             $ended = new \DateTime();
-            if($this->session->get('endsAt') <= $ended){
+            if ($this->session->get('endsAt') <= $ended) {
                 $ended = $this->session->get('endsAt');
             }
             $started = $this->session->get('started');
@@ -162,9 +163,12 @@ class TestControl
             if ($user != 'anon.' && $this->session->get('trackResults')) {
 
                 /** @var Book $book */
-                $book = $this->em->getRepository('AppBundle:Book')->findOneBy(['id' =>$this->questionGroups[0][0]->getBook()->getId()]);
+                $book = $this->em->getRepository('AppBundle:Book')->findOneBy(['id' => $this->questionGroups[0][0]->getBook()->getId()]);
                 $test = new Test($user, $this->session->get('timeSpent'), $this->session->get('isCorrect'), $book);
+                $user->updateStats($this->session->get('timeSpent'), $this->session->get('isCorrect'));
+
                 $this->em->persist($test);
+                $this->em->persist($user);
                 $this->em->flush();
             }
         }
@@ -176,31 +180,26 @@ class TestControl
 
         if ($checkedAnswers == null)
             return $checkedAnswers;
-
-        if ($checkedAnswers instanceof ArrayCollection) {
-
+        if (is_array($checkedAnswers)) {
             foreach ($checkedAnswers as $key => $answer) {
 
                 if ($answer instanceof Answer) {
                     $checkedAnswers[$key] = $this->em->merge($answer);
-                } else{
+                } else {
                     continue;
                 }
             }
-            return $checkedAnswers;
-        } else{
-
-            return $this->em->merge($checkedAnswers);
+            return count($checkedAnswers) > 1 ? $checkedAnswers : $checkedAnswers[0];
         }
+        return $this->em->merge($checkedAnswers);
     }
 
     public function isQuestionSolved($id)
     {
         $solved = $this->session->get('solved');
-        if(is_array($solved)){
-            foreach ($solved as $key => $value)
-            {
-                if($key == $id && $value == true)
+        if (is_array($solved)) {
+            foreach ($solved as $key => $value) {
+                if ($key == $id && $value == true)
                     return true;
             }
         }

@@ -13,7 +13,10 @@ var dir = {
 };
 
 gulp.task('sass', function() {
-    gulp.src(dir.assets + 'style/main.scss')
+    gulp.src([
+            dir.assets + 'style/main.scss',
+            dir.assets + 'style/css/*'
+        ])
         .pipe(sass({ outputStyle: 'compressed' , includePaths:[dir.npm] }).on('error', sass.logError))
         .pipe(concat('style.css'))
         .pipe(gulp.dest(dir.dist + 'css'));
@@ -24,9 +27,9 @@ gulp.task('scripts', function() {
             //Third party assets
             dir.npm + 'jquery/dist/jquery.min.js',
             dir.npm + 'bootstrap-sass/assets/javascripts/bootstrap.min.js',
-          //  dir.npm + 'jquery.countdown/jquery.countdown.js',
 
             // Main JS file
+            dir.assets + 'scripts/dataTables.js',
             dir.assets + 'scripts/main.js',
             dir.assets + 'scripts/script.js',
             dir.assets + 'scripts.bunttons.js',
