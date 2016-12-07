@@ -414,7 +414,9 @@ class Question
      */
     public function isCheckboxType()
     {
-        $this->answers->filter(function (Answer $answer){return $answer->getCorrect();})->count() > 1 ? $this->setCheckboxAnswers(true) : $this->setCheckboxAnswers(false);
+        $this->answers->filter(function (Answer $answer) {
+            return $answer->getCorrect();
+        })->count() > 1 ? $this->setCheckboxAnswers(true) : $this->setCheckboxAnswers(false);
         return $this;
     }
 
@@ -423,7 +425,9 @@ class Question
      */
     public function updateAnswers()
     {
-        $this->answers->map(function (Answer $answer){$answer->setUpdatedAt(new \DateTime());});
+        $this->answers->map(function (Answer $answer) {
+            $answer->setUpdatedAt(new \DateTime());
+        } );
         return $this;
     }
 
@@ -432,7 +436,7 @@ class Question
         return preg_replace(
             '/[^a-z0-9]/',
             '-',
-            strtolower(trim(strip_tags($this->title))));
+            strtolower(trim(strip_tags($this->title)))
+        );
     }
 }
-

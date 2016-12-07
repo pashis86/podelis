@@ -39,7 +39,7 @@ class NotificationListener
                 $em->persist($notification);
                 $em->remove($entity);
                 $em->flush();
-            } else if ($entity->getStatus() != 'Submitted'){
+            } else if ($entity->getStatus() != 'Submitted') {
                 $notification->userNotification($entity->getCreatedBy(), $entity);
                 $this->notifyAdmins($em, $entity, true);
 

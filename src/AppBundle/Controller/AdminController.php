@@ -27,7 +27,7 @@ class AdminController extends BaseAdminController
             $entity->setUpdatedAt(new \DateTime());
         }
 
- //       $this->updateSlug($entity);
+        //       $this->updateSlug($entity);
     }
 
 //    public function prePersistEntity($entity)
@@ -42,5 +42,4 @@ class AdminController extends BaseAdminController
 //            $entity->setSlug($this->get('app.slugger')->slugify($entity->getTitle()));
 //        }
 //    }
-
 }

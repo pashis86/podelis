@@ -204,4 +204,3 @@ class QuestionReport
         return $this->reason;
     }
 }
-

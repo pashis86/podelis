@@ -1,5 +1,7 @@
 ![](https://avatars0.githubusercontent.com/u/4995607?v=3&s=100)
 
+[![Build Status](https://travis-ci.org/nfqakademija/podelis.svg?branch=master)](https://travis-ci.org/nfqakademija/podelis)
+
 NFQ Akademija
 ============
 
@@ -7,11 +9,11 @@ NFQ Akademija
 
 PHP žinių testavimo sistema.
 
-## Komanda
+# Komanda
 
-# Komandos pavadinimas - podėlis
+## Komandos pavadinimas - podėlis
 
-# Nariai
+## Nariai
 
 Danielius Strašunskis
 Eimantas Markevičius

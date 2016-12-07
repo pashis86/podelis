@@ -54,7 +54,6 @@ p
 
 a
 {
-    color: black;
     word-wrap: break-word;
     -webkit-transition: color 0.1s ease-in, background 0.1s ease-in;
     -moz-transition: color 0.1s ease-in, background 0.1s ease-in;
@@ -89,6 +88,10 @@ hr
     border-top: 1px solid #ccc;
     margin: 1em 0;
     padding: 0;
+}
+
+.mg-bot-10{
+    margin-bottom: 10px;
 }
 
 .navbar-default
@@ -130,7 +133,7 @@ i
 	background-attachment: relative;
 	background-position: center center;
 	width: 100%;
-	
+
     -webkit-background-size: 100%;
     -moz-background-size: 100%;
     -o-background-size: 100%;

@@ -30,7 +30,6 @@ class RedirectUserListener
         if ($this->isUserLogged() && $event->isMasterRequest()) {
             $currentRoute = $event->getRequest()->attributes->get('_route');
             if ($this->isAuthenticatedUserOnAnonymousPage($currentRoute)) {
-
                 $url = $this->router->generate('homepage');
                 $response = new RedirectResponse($url);
                 $event->setResponse($response);
@@ -42,9 +41,9 @@ class RedirectUserListener
     {
         $token = $this->tokenStorage->getToken();
 
-        if($token == null)
+        if ($token == null) {
             return false;
-
+        }
         return $token->getUser() instanceof User;
     }
 

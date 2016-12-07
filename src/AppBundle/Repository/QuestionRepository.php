@@ -1,6 +1,7 @@
 <?php
 
 namespace AppBundle\Repository;
+
 use AppBundle\Entity\Question;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Tools\Pagination\Paginator;
@@ -17,8 +18,7 @@ class QuestionRepository extends \Doctrine\ORM\EntityRepository
     {
         $questions = [];
 
-        foreach ($options['books'] as $book)
-        {
+        foreach ($options['books'] as $book) {
             $results = $this->createQueryBuilder('q')
                 ->select('q')
                 ->where('q.book = :book')

@@ -8,7 +8,6 @@
 
 namespace AppBundle\Service;
 
-
 use AppBundle\Entity\Answer;
 use AppBundle\Entity\Book;
 use AppBundle\Entity\Question;
@@ -22,10 +21,15 @@ use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorage;
 class TestControl
 {
     private $questions;
+
     private $questionGroups;
+
     private $session;
+
     private $security;
+
     private $em;
+
     private $answers;
 
     /** @param Session $session
@@ -103,8 +107,7 @@ class TestControl
         return false;
     }
 
-    public function array_equal($a, $b)
-    {
+    public function array_equal($a, $b) {
         return (
             is_array($a) && is_array($b) &&
             count($a) == count($b) &&
