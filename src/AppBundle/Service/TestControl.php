@@ -155,14 +155,17 @@ class TestControl
 
     public function prepareSelectedOptions($answered, $id)
     {
+        $question = $this->em->getRepository('AppBundle:Question')->findOneBy(['id' => $id]);
         $checkedAnswers = (array_key_exists($id, $answered) ? $answered[$id] : null);
-
         if ($checkedAnswers == null) {
             return $checkedAnswers;
         }
         if (is_array($checkedAnswers)) {
             foreach ($checkedAnswers as $key => $answer) {
                 $checkedAnswers[$key] = $this->em->merge($answer);
+            }
+            if ($question->getCheckboxAnswers()) {
+                return $checkedAnswers;
             }
             return count($checkedAnswers) > 1 ? $checkedAnswers : $checkedAnswers[0];
         }
