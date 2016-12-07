@@ -31,7 +31,7 @@ class TestController extends Controller
     public function quickTestAction()
     {
         $qRepository    = $this->getDoctrine()->getRepository('AppBundle:Question');
-        $questions      = $qRepository->getRandomQuestions(20);
+        $questions      = $qRepository->getRandomQuestions(10);
 
         if (!empty($questions[0][0])) {
             $this->get('app.test_starter')->startTest($questions, '+2 minute,', false);
