@@ -16,7 +16,7 @@ class QuestionType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-      /*  $builder->add('book', EntityType::class, [
+        /*  $builder->add('book', EntityType::class, [
             'class' => 'AppBundle\Entity\Book',
             'multiple' => true,
             'expanded' => true,
@@ -37,8 +37,7 @@ class QuestionType extends AbstractType
                 ],
                 'mapped' => false
             ]);*/
-      $builder->add('book', EntityType::class, [
-              'class' => 'AppBundle\Entity\Book'
+        $builder->add('book', EntityType::class, ['class' => 'AppBundle\Entity\Book'
             ]
           )
           ->add('title', TextType::class)

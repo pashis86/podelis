@@ -152,7 +152,7 @@ class TestController extends Controller
     /**
      * @Route("/results/{id}", name="testResults")
      */
-    public function testResultsAction(Request $request, $id) 
+    public function testResultsAction(Request $request, $id)
     {
         $session        = $this->get('session');
         $testControl    = $this->get('app.test_control');
@@ -162,8 +162,10 @@ class TestController extends Controller
         $question       = $repository->findOneBy(['id' => $id]);
 
         if ($question && $testControl->questionInTest($id)) {
-            $form = $this->createForm(TestQuestionType::class,
-                ['question' => $question, 'answered' => $session->get('answered')]);
+            $form = $this->createForm(TestQuestionType::class, ['question' => $question,
+                    'answered' => $session->get('answered')
+                ]
+            );
 
             $form->handleRequest($request);
 
@@ -206,7 +208,6 @@ class TestController extends Controller
             $response = new JsonResponse();
 
             if ($form->isSubmitted() && $form->isValid()) {
-
                 $question = $this->getDoctrine()
                     ->getRepository('AppBundle:Question')
                     ->find($request->request->get('questionId'));
@@ -221,7 +222,6 @@ class TestController extends Controller
                 $em->flush();
 
                 $response->setStatusCode(200, 'success');
-
             } else {
                 $response->setStatusCode(400, 'error');
             }
@@ -229,5 +229,4 @@ class TestController extends Controller
         }
         return $this->render('@App/TestPages/reportQuestion.html.twig', ['report' => $form->createView()]);
     }
-
 }

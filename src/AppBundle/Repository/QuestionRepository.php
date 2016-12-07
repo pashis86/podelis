@@ -55,9 +55,8 @@ class QuestionRepository extends \Doctrine\ORM\EntityRepository
         return $questions;
     }
 
-    public function getCategoryQuestions($categoryId)
-    {
-      return [0 => $questions = $this->createQueryBuilder('q')
+    public function getCategoryQuestions($categoryId) {
+        return [0 => $questions = $this->createQueryBuilder('q')
             ->select('q')
             ->where('q.book = :categoryId')
             ->andWhere('q.status = :status')

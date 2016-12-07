@@ -122,8 +122,7 @@ class QuestionController extends Controller
                 $question->setUpdatedAt(new \DateTime())
                     ->setAnswers($answers->map(function ($answer) {
                         return $answer;
-                    }
-                    ))
+                    }))
                     ->isCheckboxType()
                     ->updateAnswers();
 

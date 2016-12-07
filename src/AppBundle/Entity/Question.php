@@ -416,8 +416,7 @@ class Question
     {
         $this->answers->filter(function (Answer $answer) {
             return $answer->getCorrect();
-        }
-        )->count() > 1 ? $this->setCheckboxAnswers(true) : $this->setCheckboxAnswers(false);
+        })->count() > 1 ? $this->setCheckboxAnswers(true) : $this->setCheckboxAnswers(false);
         return $this;
     }
 

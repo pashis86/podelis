@@ -498,10 +498,9 @@ class User extends BaseUser
 
     public function updateStats($time, $answers)
     {
-        $correct            = count(array_map(function($answer) {
+        $correct            = count(array_map(function ($answer) {
             return $answer;
-        }
-            , $answers));
+        }, $answers));
         $this->correct      += $correct;
         $this->incorrect    += count($answers) - $correct;
         $this->timeSpent    += $time->s + $time->i * 60 + $time->h * 3600;
@@ -634,7 +633,6 @@ class User extends BaseUser
     {
         return $this->notifications->filter(function (Notification $notification) {
             return $notification->getSeen();
-        }
-        )->count();
+        })->count();
     }
 }
