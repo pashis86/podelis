@@ -1,25 +1,67 @@
 {% extends "::base.html.twig" %}
 
-{% block title %}Create a new question - {{ parent() }}{% endblock %}
+{% block title %}{{ pageTitle }}{% endblock %}
 
 {% block stylesheets %}
     {{ parent() }}
 {% endblock %}
 
 {% block body %}
-{{ form_start(form) }}
-    {{ form_row(form.title) }}
-    {{ form_row(form.book) }}
-    {{ form_row(form.content) }}
-    <div id="answers" data-prototype="{{ form_widget(form.answers.vars.prototype)|e('html_attr') }}">
-        <a class="btn-add" data-target="answers">Add tag</a>
-        {% for answer in form.answers %}
-            {{ form_row(answer) }}
-        {% endfor %}
-    </div>
-    {{ form_row(form.explanation) }}
-    <input type="submit" value="Add question">
-    {{ form_end(form) }}
+    <div class="container">
+        <div class="row" id="contact">
+            <div class="page-header centered">
+                <h1>Create a new question</h1>
+            </div>
+            {{ form_start(form) }}
+            <div class="col-lg-8 col-lg-offset-2 col-md-8 col-md-offset-2 col-sm-8 col-sm-offset-2">
+                <label class="form-label" for="title">Title</label>
+                <div class="input-group">
+                    <span class="input-group-addon glyphicon glyphicon-pencil" id="basic-addon1"></span>
+                    {{ form_widget(form.title, {attr: {class: 'input input-lg form-control'}}) }}
+                </div>
+            </div>
+            <div class="col-lg-8 col-lg-offset-2 col-md-8 col-md-offset-2 col-sm-8 col-sm-offset-2">
+                <label class="form-label" for="category">Category</label>
+                <div class="input-group">
+                    <span class="input-group-addon glyphicon glyphicon-pencil" id="basic-addon1"></span>
+                    {{ form_widget(form.book, {attr: {class: 'input input-lg form-control'}}) }}
+                </div>
+            </div>
+            <div class="col-lg-8 col-lg-offset-2 col-md-8 col-md-offset-2 col-sm-8 col-sm-offset-2">
+                <label class="form-label" for="content">Question content</label>
+                <div class="input-group">
+                    <span class="input-group-addon glyphicon glyphicon-pencil" id="basic-addon1"></span>
+                    {{ form_widget(form.content, {attr: {class: 'input input-lg form-control'}}) }}
+                </div>
+            </div>
+
+                    <div class="col-lg-8 col-lg-offset-2 col-md-8 col-md-offset-2 col-sm-8 col-sm-offset-2" id="answers" data-prototype="{% filter escape %}{% include 'AppBundle:Home:answersForm.html.twig' with {answer: form.answers.vars.prototype} %}{% endfilter %}">
+                        <label class="form-label" for="answers">Write answers and check the correct ones</label>
+                        <a class="btn-add btn btn-warning" data-target="answers">Add answer</a><br>
+                        {% for answer in form.answers %}
+                            <div class="answer">
+                                <div class="input-group">
+                            <span class="input-group-addon">
+                                {{ form_widget(answer.correct, {attr: {class: 'input input-sm'}}) }}
+                            </span>
+                                    {{ form_widget(answer.content, {attr: {class: 'input input-lg form-control'}}) }}
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+            <div class="col-lg-8 col-lg-offset-2 col-md-8 col-md-offset-2 col-sm-8 col-sm-offset-2">
+                <label class="form-label" for="explanation">Explanation</label>
+                <div class="input-group">
+                    <span class="input-group-addon glyphicon glyphicon-pencil" id="basic-addon1"></span>
+                    {{ form_widget(form.explanation, {attr: {class: 'input input-lg form-control'}}) }}
+                </div>
+            </div>
+            <div class="col-lg-2 col-lg-offset-5 col-md-2 col-md-offset-5 col-sm-4 col-sm-offset-2 col-xs-6 col-xs-offset-3">
+                <input class="btn btn-default top-offset" type="submit" value="Add question">
+            </div>
+        </div>
+        {{ form_end(form) }}
+        </div>
 {% endblock %}
 
 

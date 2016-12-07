@@ -283,3 +283,35 @@ label{
   margin-left: 0;
   margin-right: 0;
 }
+.blue-bg {
+  background-color: #3498db;
+}
+
+.data-row {
+  background-color: #3498db;
+  font-size: 20px;
+  font-weight: 500;
+  color: white;
+}
+
+.info {
+  color: white;
+  font-size: 20px;
+}
+
+#leaderboard_length > label:nth-child(1) > select:nth-child(1) {
+  color: #222;
+}
+
+#leaderboard_length > label:nth-child(1), #leaderboard_info, #leaderboard_previous, #leaderboard_next {
+  color: white !important;
+  font-size: 20px;
+}
+
+.answer {
+  margin-bottom: 10px;
+}
+
+#answers {
+  display: inline;
+}
