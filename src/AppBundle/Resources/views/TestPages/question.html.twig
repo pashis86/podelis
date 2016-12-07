@@ -30,13 +30,13 @@
                         <p id="minutes">00</p>
                         <p id="seconds">00</p>
                     </div>
-                        {{ form_start(form, { 'attr' : {'class': 'alert'}}) }}
+                        {{ form_start(form, { 'attr' : {'class': 'grey-new'}}) }}
                         {{ index ~ '.' }}{{ current.content|
                         replace({ "<pre>" : "<pre><code class='language-php'><xmp>" ,
                             "</pre>" : "</xmp></code></pre>" })|raw }}
 
                     {% for answer in form.answers %}
-                        <div class="alert">
+                        <div class="agrey-new">
                             {{ charArray[loop.index] }}{{ form_widget(answer) }}
                             {{ form_label(answer)|raw}}
                         </div>
@@ -51,7 +51,7 @@
                     </div>
                 </div>
             </div>
-                <div class="row alert">
+                <div class="row grey-new">
                     <div class="col-lg-12">
                          <div id="explanation"></div>
                          <hr>
