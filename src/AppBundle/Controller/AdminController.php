@@ -26,20 +26,5 @@ class AdminController extends BaseAdminController
         if (method_exists($entity, 'setUpdatedAt')) {
             $entity->setUpdatedAt(new \DateTime());
         }
-
-        //       $this->updateSlug($entity);
     }
-
-//    public function prePersistEntity($entity)
-//    {
-//        $this->updateSlug($entity);
-//    }
-//
-//
-//    private function updateSlug($entity)
-//    {
-//        if (method_exists($entity, 'setSlug') and method_exists($entity, 'getTitle')) {
-//            $entity->setSlug($this->get('app.slugger')->slugify($entity->getTitle()));
-//        }
-//    }
 }

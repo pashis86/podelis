@@ -32,37 +32,6 @@ class UserRepository extends \Doctrine\ORM\EntityRepository
         $this->_em->flush();
     }
 
-//    public function paginate($dql, $page = 1, $limit = UserRepository::MAX_RESULTS)
-//    {
-//        $paginator = new Paginator($dql);
-//
-//        $paginator->getQuery()
-//            ->setFirstResult(($page - 1) * $limit)
-//            ->setMaxResults($limit);
-//
-//        return $paginator;
-//    }
-
-//    public function findBest($orderParams, $currentPage = 1, $limit)
-//    {
-//        $orderBy = (isset($orderParams['order'])) ? $orderParams['order'] : 'correct';
-//        $direction = (isset($orderParams['direction'])) ? $orderParams['direction'] : 'DESC';
-//
-//        if($orderBy == 'percentage') {
-//            $query = $this->findByPercentage();
-//        }
-//        else{
-//            $query = $this->createQueryBuilder('u')
-//                ->select('u')
-//                ->orderBy('u.'.$orderBy, $direction)
-//                ->getQuery();
-//        }
-//
-//        $paginator = $this->paginate($query, $currentPage, $limit);
-//
-//        return $paginator;
-//    }
-
     public function findByPercentage()
     {
         return $this->_em->createQuery('SELECT u, u.correct / (u.correct + u.incorrect) AS HIDDEN percentage
