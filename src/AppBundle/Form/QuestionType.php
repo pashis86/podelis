@@ -38,8 +38,7 @@ class QuestionType extends AbstractType
                 'mapped' => false
             ]);*/
         $builder->add('book', EntityType::class, ['class' => 'AppBundle\Entity\Book'
-            ]
-          )
+            ])
           ->add('title', TextType::class)
           ->add('content', TextareaType::class)
           ->add('explanation', TextareaType::class)
