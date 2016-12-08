@@ -31,7 +31,7 @@ class NotificationRepository extends \Doctrine\ORM\EntityRepository
      * @param int $limit
      * @return Paginator
      */
-    public function getNotifications($currentPage = 1, $userId, $limit = NotificationRepository::MAX_RESULTS)
+    public function getNotifications($userId, $currentPage = 1, $limit = NotificationRepository::MAX_RESULTS)
     {
         $query = $this->createQueryBuilder('n')
             ->select('n')
