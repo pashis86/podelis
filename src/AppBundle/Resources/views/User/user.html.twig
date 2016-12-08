@@ -12,6 +12,7 @@
             <h1>Hello, {{ app.user.name }}</h1>
             <div id="data"></div>
             <div id="chart_div"></div>
+            <div id="cat_div"></div>
         </div>
 
     </div>
@@ -65,9 +66,39 @@
             });
         }
 
+        function categoryChart(reqPath, idEl) {
+            $.ajax({
+                type: "POST",
+                url: reqPath,
+                dataType: 'json',
+                success: function (data) {
+                    var obj = JSON.parse(data);
+
+                    google.charts.setOnLoadCallback(drawCatChart);
+
+                    function drawCatChart() {
+
+                        //obj.data = eval(obj.data);
+                        var options = {
+                            title: 'Category',
+                            bar: {groupWidth: "90%"},
+                            legend: { position:"none"}
+                        };
+
+                        var chart = new google.visualization.ColumnChart(
+                                document.getElementById('cat_div'));
+
+                        chart.draw(data, options);
+                    }
+                }
+
+            });
+        }
+
         $( document ).ready(function() {
             google.charts.load('current', {packages: ['corechart', 'bar']});
             dataCharts('{{ path('user-data', {id: app.user.id}) }}', $('#data'));
+            categoryChart('{{ path('category-data', {id: 1}) }}', $('#data'));
         });
     </script>
 {% endblock %}
