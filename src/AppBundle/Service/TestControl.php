@@ -146,7 +146,11 @@ class TestControl
             /** @var User $user */
             $user = $this->security->getToken()->getUser();
             if ($user != 'anon.' && $this->session->get('trackResults')) {
+                /** @var Book $book */
+                $book = $this->em->getRepository('AppBundle:Book')->findOneBy(['id' => $this->questionGroups[0][0]->getBook()->getId()]);
+                $test = new Test($user, $this->session->get('timeSpent'), $this->session->get('isCorrect'), $book);
                 $user->updateStats($this->session->get('timeSpent'), $this->session->get('isCorrect'));
+                $this->em->persist($test);
                 $this->em->persist($user);
                 $this->em->flush();
             }
