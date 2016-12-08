@@ -82,6 +82,7 @@ class TestController extends Controller
             $form = $this->createForm(TestQuestionType::class, [
                 'question' => $question, 'answered' => $session->get('answered')
             ]);
+            $form->handleRequest($request);
 
             if ($form->get('next')->isClicked()) {
                 $testControl->addAnswer($id, $form['answers']->getData());
