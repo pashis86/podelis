@@ -24,8 +24,7 @@
 
                             {% for question in group %}
                                 {% if question.id == current.id %}
-                                    <b><button class="mg-bot-10 curvy"><a title="{{ question.title }}"
-                                          class="dd66 color-background-text">{{ loop.index }}</a></button></b>
+                                    <b><a  class="dd66 color-background-text mg-bot-10" href="{{ path('question', {'id': question.id }) }}"><button class="curvy">{{ loop.index }}</button></a></b>
                                 {% else %}
                                     <a  class="dd66 color-background-text mg-bot-10" href="{{ path('question', {'id': question.id }) }}"><button class="curvy">{{ loop.index }}</button></a>
                                 {% endif %}

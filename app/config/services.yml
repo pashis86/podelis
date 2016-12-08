@@ -18,10 +18,6 @@ services:
         tags:
             - { name: form.type }
 
-    app.user:
-        class: AppBundle\Service\UserControl
-        arguments: ["@doctrine.orm.entity_manager"]
-
     app.test_starter:
         class: AppBundle\Service\TestStarter
         arguments: ["@session"]
