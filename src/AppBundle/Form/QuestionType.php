@@ -16,27 +16,6 @@ class QuestionType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        /*  $builder->add('book', EntityType::class, [
-            'class' => 'AppBundle\Entity\Book',
-            'multiple' => true,
-            'expanded' => true,
-        'constraints' => new Count([
-            'min' => 1,
-            'minMessage' => 'Turite pasirinkti bent 1 kategoriją'
-        ])])
-            ->add('amount', ChoiceType::class, [
-                'choices' => [
-                    5 => 5,
-                    10 => 10,
-                    15 => 15,
-                    20 => 20,
-                    25 => 25,
-                    30 => 30,
-                    35 => 35,
-                    40 => 40
-                ],
-                'mapped' => false
-            ]);*/
         $builder->add('book', EntityType::class, ['class' => 'AppBundle\Entity\Book'
             ])
           ->add('title', TextType::class)
