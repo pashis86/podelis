@@ -16,11 +16,9 @@ class HomeController extends Controller
      */
     public function indexAction(Request $request)
     {
-        $usercount  = $this->get('app.user')->userCount();
         $categories = $this->getDoctrine()->getRepository('AppBundle:Book')->findAll();
 
         return $this->render('AppBundle:Home:index.html.twig', [
-            'usercount'     => $usercount,
             'categories'    => $categories
         ]);
     }
