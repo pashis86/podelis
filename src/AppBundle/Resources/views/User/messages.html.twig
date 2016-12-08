@@ -9,41 +9,69 @@
 
 {% block body %}
     <div class="container">
-        {% if maxPages > 1 %}
-            <ul class="pagination pagination-sm">
-                {# `«` arrow  #}
-                <li {{ thisPage == 1 ? 'class="disabled"' }}>
-                    <a href="{{ path('messages', {page: thisPage-1 < 1 ? 1 : thisPage-1}) }}">«</a>
-                </li>
+        <div class="col-lg-12">
+            {% if maxPages > 1 %}
+                <ul class="pagination pagination-lg">
+                    {# `«` arrow  #}
+                    <li {{ thisPage == 1 ? 'class="disabled"' }}>
+                        <a href="{{ path('messages', {page: thisPage-1 < 1 ? 1 : thisPage-1}) }}">«</a>
+                    </li>
 
-                {# Render each page number #}
-                {% for i in 1..maxPages %}
-                    {% if i - 6 < thisPage and i + 6 > thisPage %}
-                        <li {{ thisPage == i ? 'class="active"' }}>
-                            <a href="{{ path('messages', {page: i}) }}">{{ i }}</a>
-                        </li>
-                    {% endif %}
-                {% endfor %}
+                    {# Render each page number #}
+                    {% for i in 1..maxPages %}
+                        {% if i - 6 < thisPage and i + 6 > thisPage %}
+                            <li {{ thisPage == i ? 'class="active"' }}>
+                                <a href="{{ path('messages', {page: i}) }}">{{ i }}</a>
+                            </li>
+                        {% endif %}
+                    {% endfor %}
 
-                {# `»` arrow #}
-                <li {{ thisPage == maxPages ? 'class="disabled"' }}>
-                    <a href="{{ path('messages', { page: thisPage+1 <= maxPages ? thisPage+1 : thisPage }) }}">»</a>
-                </li>
-            </ul>
-        {% endif %}
-        <div class="row">
-            <div class="col-lg-8 col-md-8 col-sm-8 col-xs-10"><b>Message</b></div>
-            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-2"><b>Received</b></div>
+                    {# `»` arrow #}
+                    <li {{ thisPage == maxPages ? 'class="disabled"' }}>
+                        <a href="{{ path('messages', { page: thisPage+1 <= maxPages ? thisPage+1 : thisPage }) }}">»</a>
+                    </li>
+                </ul>
+            {% endif %}
         </div>
-        {% if notifications %}
-        {% for message in notifications %}
-            <div class="row alert {% if not message.seen %}alert-warning {% endif %}">
-                <div class="col-lg-8 col-md-8 col-sm-8 col-xs-10"><a href="{{ path('viewMessage', { id: message.id, slug: message.slugify }) }}">{{ message.title }}</a></div>
-                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-2">{{ message.received|date('Y/m/d H:i:s') }}</div>
+        <div id="contact">
+            <div class="row">
+                <div class="col-lg-8 col-md-8 col-sm-8 col-xs-10"><b>Message</b></div>
+                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-2"><b>Received</b></div>
             </div>
-        {% endfor %}
-        {% else %}
-            <div class="col-lg-12">You have no messages.</div>
-        {% endif %}
+            {% if notifications %}
+                {% for message in notifications %}
+                    <div class="row alert {% if not message.seen %} seen {% endif %}">
+                        <div class="col-lg-8 col-md-8 col-sm-8 col-xs-10"><a href="{{ path('viewMessage', { id: message.id, slug: message.slugify }) }}">{{ message.title }}</a></div>
+                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-2">{{ message.received|date('Y/m/d H:i:s') }}</div>
+                    </div>
+                {% endfor %}
+            {% else %}
+                <div class="col-lg-12">You have no messages.</div>
+            {% endif %}
+        </div>
+        <div class="col-lg-12">
+            {% if maxPages > 1 %}
+                <ul class="pagination pagination-lg">
+                    {# `«` arrow  #}
+                    <li {{ thisPage == 1 ? 'class="disabled"' }}>
+                        <a href="{{ path('messages', {page: thisPage-1 < 1 ? 1 : thisPage-1}) }}">«</a>
+                    </li>
+
+                    {# Render each page number #}
+                    {% for i in 1..maxPages %}
+                        {% if i - 6 < thisPage and i + 6 > thisPage %}
+                            <li {{ thisPage == i ? 'class="active"' }}>
+                                <a href="{{ path('messages', {page: i}) }}">{{ i }}</a>
+                            </li>
+                        {% endif %}
+                    {% endfor %}
+
+                    {# `»` arrow #}
+                    <li {{ thisPage == maxPages ? 'class="disabled"' }}>
+                        <a href="{{ path('messages', { page: thisPage+1 <= maxPages ? thisPage+1 : thisPage }) }}">»</a>
+                    </li>
+                </ul>
+            {% endif %}
+        </div>
     </div>
 {% endblock %}
