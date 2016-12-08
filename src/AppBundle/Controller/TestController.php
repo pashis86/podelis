@@ -164,8 +164,7 @@ class TestController extends Controller
         if ($question && $testControl->questionInTest($id)) {
             $form = $this->createForm(TestQuestionType::class, ['question' => $question,
                     'answered' => $session->get('answered')
-                ]
-            );
+                ]);
 
             $form->handleRequest($request);
 

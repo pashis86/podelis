@@ -131,16 +131,14 @@ class UserController extends Controller
     public function userCategoryResultsAction($id)
     {
         $securityContext    = $this->get('security.authorization_checker');
-        /** @var User $user */
         $user               = $this->getUser();
 
         if ($securityContext->isGranted('IS_AUTHENTICATED_FULLY') ||
             $securityContext->isGranted('IS_AUTHENTICATED_REMEMBERED')
         ) {
             $repository = $this->getDoctrine()->getRepository('AppBundle:Test');
-            $cat        = $repository->categoryResults($user, $id);
-            $data       = ["100", "10", "20", "30", "40", "50", "60", "70", "80"];
-            return new JsonResponse(json_encode(['data' => $data, 'id' => $id, 'cat' => $cat]));
+            $data       = $repository->bestResultsFromEachCategory($user, $id);
+            return new JsonResponse(json_encode(['data' => $data, 'category' => $id]));
         } else {
             return $this->redirectToRoute('homepage');
         }
