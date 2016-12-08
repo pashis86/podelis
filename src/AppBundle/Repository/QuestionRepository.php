@@ -1,6 +1,7 @@
 <?php
 
 namespace AppBundle\Repository;
+
 use AppBundle\Entity\Question;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Tools\Pagination\Paginator;
@@ -17,8 +18,7 @@ class QuestionRepository extends \Doctrine\ORM\EntityRepository
     {
         $questions = [];
 
-        foreach ($options['books'] as $book)
-        {
+        foreach ($options['books'] as $book) {
             $results = $this->createQueryBuilder('q')
                 ->select('q')
                 ->where('q.book = :book')
@@ -58,15 +58,16 @@ class QuestionRepository extends \Doctrine\ORM\EntityRepository
     public function getCategoryQuestions($categoryId)
     {
       return [0 => $questions = $this->createQueryBuilder('q')
-            ->select('q')
-            ->where('q.book = :categoryId')
-            ->andWhere('q.status = :status')
-            ->setParameter('categoryId', $categoryId)
-            ->setParameter('status', 'Added')
-            ->addSelect('RAND() as HIDDEN rand')
-            ->orderBy('rand')
-            ->getQuery()
-            ->getResult()];
+          ->select('q')
+          ->where('q.book = :categoryId')
+          ->andWhere('q.status = :status')
+          ->setParameter('categoryId', $categoryId)
+          ->setParameter('status', 'Added')
+          ->addSelect('RAND() as HIDDEN rand')
+          ->orderBy('rand')
+          ->setMaxResults(20)
+          ->getQuery()
+          ->getResult()];
     }
 
     const MAX_RESULTS = 20;

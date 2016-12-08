@@ -8,7 +8,6 @@
 
 namespace AppBundle\Validator;
 
-
 use AppBundle\Entity\Answer;
 use AppBundle\Entity\Question;
 use Symfony\Component\Validator\Context\ExecutionContextInterface;
@@ -23,7 +22,9 @@ class AnswersCollection
     public static function hasCorrectAnswer($question, ExecutionContextInterface $context, $payload)
     {
         $correctAnswers     = 0;
-        $correctAnswers     += count($question->getAnswers()->filter(function (Answer $answer) {return $answer->getCorrect();}));
+        $correctAnswers     += count($question->getAnswers()->filter(function (Answer $answer) {
+            return $answer->getCorrect();
+        }));
         $correctAnswers     == 0 ? $context->buildViolation('At least one answer has to be correct!')
             ->atPath('title')
             ->addViolation() : null;

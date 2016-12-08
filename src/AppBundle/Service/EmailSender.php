@@ -5,8 +5,6 @@ namespace AppBundle\Service;
 use AppBundle\Entity\User;
 use Symfony\Bridge\Twig\TwigEngine;
 
-
-
 class EmailSender
 {
     private $mailer;
@@ -26,20 +24,11 @@ class EmailSender
             ->setFrom('podelis@gmail.com')
             ->setTo($user->getEmail())
             ->setBody(
-                $this->templating->render('@App/Emails/registerEmail.html.twig',
-                    ['name' => $user->getName(),
+                $this->templating->render('@App/Emails/registerEmail.html.twig', ['name' => $user->getName(),
                         'token' => $user->getConfirmationToken(),
-                        'text/html']));
-        /*
-         * If you also want to include a plaintext version of the message
-        ->addPart(
-            $this->renderView(
-                'Emails/registration.txt.twig',
-                array('name' => $name)
-            ),
-            'text/plain'
-        )
-        */
+                        'text/html'
+                    ])
+            );
         $this->mailer->send($message);
     }
 
@@ -50,20 +39,11 @@ class EmailSender
             ->setFrom('podelis@gmail.com')
             ->setTo($user->getEmail())
             ->setBody(
-                $this->templating->render('@App/Emails/registerEmail.html.twig',
-                    ['name' => $user->getName(),
+                $this->templating->render('@App/Emails/registerEmail.html.twig', ['name' => $user->getName(),
                         'plainPass' => $plainPass,
-                        'text/html']));
-        /*
-         * If you also want to include a plaintext version of the message
-        ->addPart(
-            $this->renderView(
-                'Emails/registration.txt.twig',
-                array('name' => $name)
-            ),
-            'text/plain'
-        )
-        */
+                        'text/html'
+                    ])
+            );
         $this->mailer->send($message);
     }
 }

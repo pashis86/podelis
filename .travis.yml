@@ -1,4 +1,5 @@
 sudo: false
+warnings_are_errors: false
 language: php
 php:
   - 7.0
@@ -11,7 +12,4 @@ before_script:
 #  - composer config -g github-oauth.github.com $GITHUB_COMPOSER_AUTH
   - composer install --no-interaction --prefer-dist
 script:
-  - bin/console doctrine:database:create
-  - bin/console doctrine:schema:update --force
-
   - vendor/bin/phpcs -p --standard=PSR2 --extensions=php ./src

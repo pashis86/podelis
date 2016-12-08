@@ -5,21 +5,35 @@
 {% block body %}
     <div id="headerwrap">
         <div class="container ">
-            {% for group in app.session.get('questionGroups') %}
-                {% if not group[0].book.title %}
-                    <b><h1>Results</h1></b>
-                {% else %}
-                    <b><h1>{{ loop.index }}.{{ group[0].book.title }}</h1></b><br>
-                {% endif %}
-                {% for question in group %}
-                    {% if app.session.get('isCorrect')[question.id]  %}
-                        {% set correct = correct + 1 %}
-                        <a class="dd66 color-background-text" title="{{ question.title }}" href="{{ path('testResults', {'id': question.id }) }}">{{ loop.index }}</a>
-                    {% else %}
-                        <a class="dd77 color-background-text" title="{{ question.title }}" href="{{ path('testResults', {'id': question.id }) }}">{{ loop.index }}</a>
-                    {% endif %}
-                {% endfor %}<br>
-            {% endfor %}
+            <div class="row">
+                <div class="col-lg-12 paddin-0">
+                    <div class="alert">
+                        {% for group in app.session.get('questionGroups') %}
+                            {% if not group[0].book.title %}
+                                <b><h1>Results</h1></b>
+                            {% else %}
+                                <b><h1>{{ loop.index }}.{{ group[0].book.title }}</h1></b><br>
+                            {% endif %}
+                            {% for question in group %}
+                                {% if app.session.get('isCorrect')[question.id]  %}
+                                    {% set correct = correct + 1 %}
+                                    {% if question.id == current.id %}
+                                        <b><a title="{{ question.title }}" class="dd88 color-background-text" href="{{ path('testResults', {'id': question.id }) }}"><button class="curvy">{{ loop.index }}</button></a></b>
+                                    {% else %}
+                                        <a title="{{ question.title }}" class="dd88 color-background-text" href="{{ path('testResults', {'id': question.id }) }}"><button class="curvy">{{ loop.index }}</button></a>
+                                    {% endif %}
+                                {% else %}
+                                    {% if question.id == current.id %}
+                                        <b><a title="{{ question.title }}" class="dd77 color-background-text" href="{{ path('testResults', {'id': question.id }) }}"><button class="curvy">{{ loop.index }}</button></a></b>
+                                    {% else %}
+                                        <a title="{{ question.title }}" class="dd77 color-background-text" href="{{ path('testResults', {'id': question.id }) }}"><button class="curvy">{{ loop.index }}</button></a>
+                                    {% endif %}
+                                {% endif %}
+                            {% endfor %}<br>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
             <div class="row alert">
                 <div class="col-lg-12">
                     <div class="">
@@ -122,7 +136,7 @@
                     {{ render(controller('AppBundle:Test:questionReport', {'allow' : true})) }}
                 {% else %}
                     <div class="modal-body">
-                        <h3>Only registered users can use this!</h3>
+                        <h3 class="black-text">Only registered users can use this!</h3>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -135,6 +149,7 @@
 {% block javascripts %}
     {{ parent() }}
     <script>
+        $("#test_question_submit").hide();
         reportQuestion($("form[name='question_report']"), '{{ path('report') }}', '{{ current.id }}');
     </script>
 {% endblock %}

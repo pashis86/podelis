@@ -17,7 +17,8 @@ class UserController extends Controller
      * @Security("has_role('ROLE_USER')")
      * @Route("/profile/edit", name="keistiDuomenis")
      */
-    public function userEditAction(Request $request) {
+    public function userEditAction(Request $request)
+    {
         /** @var User $user */
         $user = $this->getUser();
 
@@ -83,6 +84,7 @@ class UserController extends Controller
             $message->setSeen(true);
             $em->persist($message);
             $em->flush();
+            dump($message);
             return $this->render('@App/User/viewMessage.html.twig', ['message' => $message]);
         }
         return $this->render('AppBundle:Home:404.html.twig');
@@ -102,59 +104,48 @@ class UserController extends Controller
         ) {
             $repository = $this->getDoctrine()->getRepository('AppBundle:Test');
 
-            //$cat = $repository->bestResultFromEachCategory($user);
-
-            $res=["100","10","20","30","40","50","60","70","80"];
+            for($i = 0; $i < 9; $i++ ) {
+                $temp = $repository->bestResultsFromEachCategory($user, $i);
+                if ($temp == null) {
+                    $res[$i] = 0;
+                } else {
+                    $res[$i] = $temp[0];
+                }
+            }
             $data = "var data = google.visualization.arrayToDataTable([
                             ['Categories', 'Results', { role: 'style' }, { role: 'annotation' } ],
-                            ['', $res[0], 'color: gray', 'PHP Basics'],
-                            ['', $res[1], 'color: #76A7FA', 'Functions and Arrays'],
-                            ['', $res[2], '', 'OOP'],
-                            ['', $res[3], 'stroke-color: #703593; fill-color: #C5A5CF', 'Security'],
-                            ['', $res[4], 'stroke-color: #871B47; fill-color: #BC5679; ', 'Data format and Types'],
-                            ['', $res[5], 'gold', 'String and Patterns'],
-                            ['', $res[6], 'color: #76A7FA', 'Database and SQL'],
-                            ['', $res[7], 'silver', 'Web features'],
-                            ['', $res[8], 'stroke-color: #703593; fill-color: #C5A5CF', 'INPUT and OUTPUT'],
+                            ['1', $res[0], 'color: gray', 'PHP Basics'],
+                            ['2', $res[1], 'color: #76A7FA', 'Functions and Arrays'],
+                            ['3', $res[2], '', 'OOP'],
+                            ['4', $res[3], 'stroke-color: #703593; fill-color: #C5A5CF', 'Security'],
+                            ['5', $res[4], 'stroke-color: #871B47; fill-color: #BC5679; ', 'Data format and Types'],
+                            ['6', $res[5], 'gold', 'String and Patterns'],
+                            ['7', $res[6], 'color: #76A7FA', 'Database and SQL'],
+                            ['8', $res[7], 'silver', 'Web features'],
+                            ['9', $res[8], 'stroke-color: #703593; fill-color: #C5A5CF', 'INPUT and OUTPUT'],
                         ]);";
-            /*
-            $data = "var data = google.visualization.arrayToDataTable([
-                            ['Category', 'Results', { role: 'style' } ],
-                            ['Strings', 10, 'color: gray'],
-                            ['Security', 84, 'color: #76A7FA'],
-                            ['Inpute/output', 0, 'opacity: 0.2'],
-                            ['AI', 0, 'stroke-color: #703593; stroke-width: 4; fill-color: #C5A5CF'],
-                            ['Basics', 75, 'stroke-color: #871B47; stroke-opacity: 0.6; stroke-width: 8; fill-color: #BC5679; fill-opacity: 0.2']
-                        ]);";*/
-
             return new JsonResponse(json_encode(['data' => $data]));
-
         } else {
             return $this->redirectToRoute('homepage');
         }
     }
 
     /**
-     * @Route("/api/user/category/{id}", name="user-data")
+     * @Route("/api/user/category/{id}", name="category-data")
      */
     public function userCategoryResultsAction($id)
     {
         $securityContext    = $this->get('security.authorization_checker');
-        /** @var User $user */
         $user               = $this->getUser();
 
         if ($securityContext->isGranted('IS_AUTHENTICATED_FULLY') ||
             $securityContext->isGranted('IS_AUTHENTICATED_REMEMBERED')
         ) {
             $repository = $this->getDoctrine()->getRepository('AppBundle:Test');
-            $cat        = $repository->categoryResults($user,$id);
-            $data       = ["100","10","20","30","40","50","60","70","80"];
-
-            return new JsonResponse(json_encode(['data' => $data, 'id' => $id, 'cat' => $cat]));
-
+            $data       = $repository->bestResultsFromEachCategory($user, $id);
+            return new JsonResponse(json_encode(['data' => $data, 'category' => $id]));
         } else {
             return $this->redirectToRoute('homepage');
         }
     }
-
 }

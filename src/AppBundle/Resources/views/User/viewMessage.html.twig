@@ -9,9 +9,11 @@
 
 {% block body %}
     <div class="container">
-        <h5>{{ message.title }}</h5>
-        <p>{{ message.content }}</p>
-        <p>{{ message.received|date('Y/m/d H:i:s') }}</p>
+        <div id="contact">
+            <h5>{{ message.title }}</h5>
+            <p>{{ message.content }}</p>
+            <p>{{ message.received|date('Y/m/d H:i:s') }}</p>
+        </div>
     </div>
     <div><a href="{{ path('messages') }}">Back to list</a></div>
 {% endblock %}

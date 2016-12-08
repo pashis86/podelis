@@ -7,16 +7,8 @@ html {
 }
 
 body {
-  min-width: 360px !important;
   height: 100%;
   margin: 0;
-}
-
-.image-background {
-  height: 100%;
-  background-repeat: no-repeat;
-  background-size: cover;
-  background-image: url("../images/seigaiha.png");
 }
 
 .list-social a {
@@ -172,26 +164,8 @@ body {
   font-weight: bold;
 }
 
-.formCategories, .loginForm, .registerForm{
-  display: none;
-}
-
 .navbar{
   margin-bottom: 0px;
-}
-
-.user-count{
-  position: relative;
-  bottom: 35px;
-}
-
-.opacity{
-  position: relative;
-  background: rgba(255,255,255,0.25);
-}
-
-.position-topmost{
-  z-index: 10000;
 }
 
 .alert{
@@ -200,23 +174,26 @@ body {
 }
 
 .dd66{
-  color: white;
-  font-size: 20px;
+  color: black;
 }
 
 .dd77{
   color: red;
-  font-size: 20px;
+}
+
+.dd88{
+  color: green;
 }
 
 .color-background-text{
-  color: black;
+  font-size: 25px;
+  font-family: "Times New Roman";
   display: inline-block;
-  padding: 10px;
-  margin: 0 0 10px;
+  padding: 5px;
 }
-.color-background-text:hover{
-  background-color: white;
+.color-background-text:hover {
+  color: inherit;
+  border-color: black;
 }
 
 .margin-0{
@@ -241,11 +218,14 @@ a:hover{
 }
 
 #countdown p {
-  color: black;
+  font-size: 25px;
+  font-family: "Times New Roman";
   display: inline-block;
+  color: black;
   padding: 5px;
-  background: white;
-  margin: 0 0 20px;
+  background: #E0BE23;
+  margin: 0 0 5px;
+  margin-top: 10px;
 }
 
 label{
@@ -279,10 +259,10 @@ label{
 
 }
 
-.row{
-  margin-left: 0;
-  margin-right: 0;
+.paddin-0{
+  padding: 0;
 }
+
 .blue-bg {
   background-color: #3498db;
 }
@@ -341,6 +321,37 @@ label{
   color: #353939;
 }
 
-.container-fluid {
-  max-width: 1170px;
+.seen {
+  font-weight: 900;
+}
+
+.img-circle {
+  border-radius: 50%;
+}
+
+.inline-block{
+  display: inline-block;
+}
+
+.img-circle-b {
+  width: 85%;
+  max-width: 150px;
+  display: block;
+}
+
+.curvy{
+  width: 40px;
+  height: 40px;
+}
+
+.mg-0{
+  margin: 0;
+}
+
+input[type=radio]{
+  margin: 5px;
+}
+
+input[type=checkbox]{
+  margin: 5px;
 }
