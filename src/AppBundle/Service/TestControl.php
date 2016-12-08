@@ -46,8 +46,9 @@ class TestControl
         $this->questionGroups = $session->get('questionGroups');
         foreach ($this->questionGroups as $group) {
             /** @var Question $question */
-            foreach ($group as $question)
+            foreach ($group as $question) {
                 array_push($this->questions, $question->getId());
+            }
         }
     }
 
@@ -107,9 +108,9 @@ class TestControl
         return false;
     }
 
-    public function array_equal($a, $b) {
-        return (
-            is_array($a) && is_array($b) &&
+    public function array_equal($a, $b)
+    {
+        return (is_array($a) && is_array($b) &&
             count($a) == count($b) &&
             array_diff($a, $b) === array_diff($b, $a)
         );
@@ -188,8 +189,9 @@ class TestControl
         $solved = $this->session->get('solved');
         if (is_array($solved)) {
             foreach ($solved as $key => $value) {
-                if ($key == $id && $value == true)
+                if ($key == $id && $value == true) {
                     return true;
+                }
             }
         }
         return false;
