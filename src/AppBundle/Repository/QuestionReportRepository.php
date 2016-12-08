@@ -31,7 +31,7 @@ class QuestionReportRepository extends \Doctrine\ORM\EntityRepository
      * @param int $limit
      * @return Paginator
      */
-    public function getPaginatedReports($currentPage = 1, $userId, $limit = NotificationRepository::MAX_RESULTS)
+    public function getPaginatedReports($userId, $currentPage = 1, $limit = NotificationRepository::MAX_RESULTS)
     {
         $query = $this->createQueryBuilder('n')
             ->select('n')

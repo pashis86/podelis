@@ -27,7 +27,8 @@ class EmailSender
                 $this->templating->render('@App/Emails/registerEmail.html.twig', ['name' => $user->getName(),
                         'token' => $user->getConfirmationToken(),
                         'text/html'
-                    ]));
+                    ])
+            );
         /*
          * If you also want to include a plaintext version of the message
         ->addPart(
@@ -51,7 +52,8 @@ class EmailSender
                 $this->templating->render('@App/Emails/registerEmail.html.twig', ['name' => $user->getName(),
                         'plainPass' => $plainPass,
                         'text/html'
-                    ]));
+                    ])
+            );
         /*
          * If you also want to include a plaintext version of the message
         ->addPart(
