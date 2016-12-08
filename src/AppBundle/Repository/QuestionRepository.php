@@ -57,7 +57,7 @@ class QuestionRepository extends \Doctrine\ORM\EntityRepository
 
     public function getCategoryQuestions($categoryId)
     {
-        return [0 => $questions = $this->createQueryBuilder('q')
+      return [0 => $questions = $this->createQueryBuilder('q')
           ->select('q')
           ->where('q.book = :categoryId')
           ->andWhere('q.status = :status')
@@ -89,7 +89,7 @@ class QuestionRepository extends \Doctrine\ORM\EntityRepository
      * @param int $limit
      * @return Paginator
      */
-    public function getPaginatedQuestions($userId, $currentPage = 1, $limit = NotificationRepository::MAX_RESULTS)
+    public function getPaginatedQuestions($currentPage = 1, $userId, $limit = NotificationRepository::MAX_RESULTS)
     {
         $query = $this->createQueryBuilder('n')
             ->select('n')
