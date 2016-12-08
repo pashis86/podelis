@@ -11,13 +11,6 @@ body {
   margin: 0;
 }
 
-.image-background {
-  height: 100%;
-  background-repeat: no-repeat;
-  background-size: cover;
-  background-image: url("../images/seigaiha.png");
-}
-
 .list-social a {
   width: 30px;
   height: 30px;
@@ -171,26 +164,8 @@ body {
   font-weight: bold;
 }
 
-.formCategories, .loginForm, .registerForm{
-  display: none;
-}
-
 .navbar{
   margin-bottom: 0px;
-}
-
-.user-count{
-  position: relative;
-  bottom: 35px;
-}
-
-.opacity{
-  position: relative;
-  background: rgba(255,255,255,0.25);
-}
-
-.position-topmost{
-  z-index: 10000;
 }
 
 .alert{
