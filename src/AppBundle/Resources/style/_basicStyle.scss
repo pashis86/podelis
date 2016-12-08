@@ -7,7 +7,6 @@ html {
 }
 
 body {
-  min-width: 360px !important;
   height: 100%;
   margin: 0;
 }
@@ -330,4 +329,8 @@ label{
 
 .img-circle {
   border-radius: 50%;
+}
+
+.curvy{
+  border-radius: 20%;
 }
