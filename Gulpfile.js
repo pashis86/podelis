@@ -31,8 +31,6 @@ gulp.task('scripts', function() {
             // Main JS file
             dir.assets + 'scripts/dataTables.js',
             dir.assets + 'scripts/main.js',
-            dir.assets + 'scripts/script.js',
-            dir.assets + 'scripts.bunttons.js',
             dir.assets + 'scripts/basic.js',
             dir.assets + 'scripts/markup.js'
         ])

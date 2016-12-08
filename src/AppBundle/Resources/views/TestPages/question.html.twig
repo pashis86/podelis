@@ -24,10 +24,10 @@
 
                             {% for question in group %}
                                 {% if question.id == current.id %}
-                                    <b><button class="mg-bot-10"><a title="{{ question.title }}"
+                                    <b><button class="mg-bot-10 curvy"><a title="{{ question.title }}"
                                           class="dd66 color-background-text">{{ loop.index }}</a></button></b>
                                 {% else %}
-                                    <a  class="dd66 color-background-text mg-bot-10" href="{{ path('question', {'id': question.id }) }}"><button>{{ loop.index }}</button></a>
+                                    <a  class="dd66 color-background-text mg-bot-10" href="{{ path('question', {'id': question.id }) }}"><button class="curvy">{{ loop.index }}</button></a>
                                 {% endif %}
                             {% endfor %}<br>
                         {% endfor %}
@@ -85,7 +85,7 @@
                     {{ render(controller('AppBundle:Test:questionReport', {'allow' : true})) }}
         {% else %}
             <div class="modal-body">
-                <h3>Only registered users can use this!</h3>
+                <h3 class="black-text">Only registered users can use this!</h3>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
