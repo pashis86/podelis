@@ -27,8 +27,7 @@
                                     <b><button class="mg-bot-10"><a title="{{ question.title }}"
                                           class="dd66 color-background-text">{{ loop.index }}</a></button></b>
                                 {% else %}
-                                    <button class="mg-bot-10"><a title="{{ question.title }}"
-                                       class="dd66 color-background-text" href="{{ path('question', {'id': question.id }) }}">{{ loop.index }}</a></button>
+                                    <a  class="dd66 color-background-text mg-bot-10" href="{{ path('question', {'id': question.id }) }}"><button>{{ loop.index }}</button></a>
                                 {% endif %}
                             {% endfor %}<br>
                         {% endfor %}
@@ -57,7 +56,7 @@
                 </div>
             </div>
                 <div class="row alert">
-                    <div class="col-lg-12">
+                    <div class="col-lg-12 paddin-0">
                          <div id="explanation"></div>
                          <hr>
                         <div class="black-text">

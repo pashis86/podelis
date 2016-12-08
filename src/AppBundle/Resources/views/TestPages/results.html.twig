@@ -21,16 +21,14 @@
                                         <b><button class="mg-bot-10"><a title="{{ question.title }}"
                                                                         class="dd88 color-background-text" href="{{ path('testResults', {'id': question.id }) }}">{{ loop.index }}</a></button></b>
                                     {% else %}
-                                        <button class="mg-bot-10"><a title="{{ question.title }}"
-                                                                     class="dd88 color-background-text" href="{{ path('testResults', {'id': question.id }) }}">{{ loop.index }}</a></button>
+                                        <a title="{{ question.title }}" class="dd88 color-background-text" href="{{ path('testResults', {'id': question.id }) }}"><button>{{ loop.index }}</button></a>
                                     {% endif %}
                                 {% else %}
                                     {% if question.id == current.id %}
                                         <b><button class="mg-bot-10"><a title="{{ question.title }}"
                                                                         class="dd77 color-background-text" href="{{ path('testResults', {'id': question.id }) }}">{{ loop.index }}</a></button></b>
                                     {% else %}
-                                        <button class="mg-bot-10"><a title="{{ question.title }}"
-                                                                        class="dd77 color-background-text" href="{{ path('testResults', {'id': question.id }) }}">{{ loop.index }}</a></button>
+                                        <a title="{{ question.title }}" class="dd77 color-background-text" href="{{ path('testResults', {'id': question.id }) }}"><button>{{ loop.index }}</button></a>
                                     {% endif %}
                                 {% endif %}
                             {% endfor %}<br>
