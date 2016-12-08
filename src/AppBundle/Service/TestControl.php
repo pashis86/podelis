@@ -108,9 +108,12 @@ class TestControl
         return false;
     }
 
-    public function array_equal($a, $b)
+    public function arrayEqual($a, $b)
     {
-        return $a === $b;
+        return (is_array($a) && is_array($b) &&
+            count($a) == count($b) &&
+            array_diff($a, $b) === array_diff($b, $a)
+        );
     }
 
     public function checkAnswers()
