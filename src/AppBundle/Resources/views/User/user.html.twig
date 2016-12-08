@@ -7,12 +7,29 @@
 {% endblock %}
 
 {% block body %}
-    <div class="sand-background">
+    <div class="sand-background" xmlns="http://www.w3.org/1999/html">
         <div class="container">
-            <h1>Hello, {{ app.user.name }}</h1>
-            <div id="data"></div>
-            <div id="chart_div"></div>
-            <div id="cat_div"></div>
+            <div class="row">
+                <div class="col-lg-3 col-md-3 col-sm-3">
+                    <img src="{{ app.user.avatar }}"  class="img-circle mg-bot-10 img-circle-b" >
+                </div>
+                <div class="col-lg-9 col-md-9 col-sm-9 mg-bot-10">
+                    <h4>1 - PHP Basics</h4>
+                    <h4>2 - Functions and Arrays</h4>
+                    <h4>3 - Object Oriented Programming</h4>
+                    <h4>4 - Security</h4>
+                    <h4>5 - Data format and Types</h4>
+                    <h4>6 - Strings and patterns</h4>
+                    <h4>7 - Database and SQL</h4>
+                    <h4>8 - Web features</h4>
+                    <h4>9 - INPUT and OUTPUT</h4>
+                </div>
+            </div>
+            <div class="row">
+                <div id="data"></div>
+                <div id="chart_div"></div>
+                <div id="cat_div"></div>
+            </div>
         </div>
 
     </div>
@@ -50,10 +67,17 @@
                                 title: 'Categories'
                             },
                             vAxis: {
+                                viewWindowMode:'explicit',
+                                viewWindow: {
+                                    max:100,
+                                    min:0
+                                },
+                                gridlines: { count: 10 },
                                 title: '% results'
                             },
                             bar: {groupWidth: "90%"},
                             legend: { position:"none"}
+
                         };
 
                         var chart = new google.visualization.ColumnChart(
@@ -66,7 +90,7 @@
             });
         }
 
-        function categoryChart(reqPath, idEl) {
+        /*function categoryChart(reqPath, idEl) {
             $.ajax({
                 type: "POST",
                 url: reqPath,
@@ -93,12 +117,12 @@
                 }
 
             });
-        }
+        }*/
 
         $( document ).ready(function() {
             google.charts.load('current', {packages: ['corechart', 'bar']});
             dataCharts('{{ path('user-data', {id: app.user.id}) }}', $('#data'));
-            categoryChart('{{ path('category-data', {id: 1}) }}', $('#data'));
+            //categoryChart('{{ path('category-data', {id: 1}) }}', $('#data'));
         });
     </script>
 {% endblock %}

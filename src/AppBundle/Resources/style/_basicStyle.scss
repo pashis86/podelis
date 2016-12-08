@@ -306,6 +306,20 @@ label{
   border-radius: 50%;
 }
 
+.inline-block{
+  display: inline-block;
+}
+
+.img-circle-b {
+  width: 85%;
+  max-width: 150px;
+  display: block;
+}
+
 .curvy{
   border-radius: 20%;
+}
+
+.mg-0{
+  margin: 0;
 }

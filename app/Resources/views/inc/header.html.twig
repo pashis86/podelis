@@ -44,7 +44,11 @@
                                         <li><a href="{{ path('easyadmin') }}">Admin panel</a></li>
                                     {% endif %}
                                     <li><a href="{{ path('user') }}">Profile</a></li>
+                                    <li><a href="{{ path('leaderboard') }}">Leaderboard</a></li>
                                     <li><a href="{{ path('messages') }}">New messages<b>({{ app.user.unseenCount }})</b></a></li>
+                                    <li><a href="{{ path('addQuestion') }}">Add question</a></li>
+                                    <li><a href="{{ path('myQuestions') }}">My question</a></li>
+                                    <li><a href="{{ path('myReports') }}">My reports</a></li>
                                     <li><a href="{{ path('logout') }}">Log out</a></li>
                                 </ul>
                             </li>

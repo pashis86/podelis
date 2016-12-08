@@ -104,20 +104,25 @@ class UserController extends Controller
         ) {
             $repository = $this->getDoctrine()->getRepository('AppBundle:Test');
 
-            //$cat = $repository->bestResultFromEachCategory($user);
-
-            $res=["100","10","20","30","40","50","60","70","80"];
+            for($i = 0; $i < 9; $i++ ) {
+                $temp = $repository->bestResultsFromEachCategory($user, $i);
+                if ($temp == null) {
+                    $res[$i] = 0;
+                } else {
+                    $res[$i] = $temp[0];
+                }
+            }
             $data = "var data = google.visualization.arrayToDataTable([
                             ['Categories', 'Results', { role: 'style' }, { role: 'annotation' } ],
-                            ['', $res[0], 'color: gray', 'PHP Basics'],
-                            ['', $res[1], 'color: #76A7FA', 'Functions and Arrays'],
-                            ['', $res[2], '', 'OOP'],
-                            ['', $res[3], 'stroke-color: #703593; fill-color: #C5A5CF', 'Security'],
-                            ['', $res[4], 'stroke-color: #871B47; fill-color: #BC5679; ', 'Data format and Types'],
-                            ['', $res[5], 'gold', 'String and Patterns'],
-                            ['', $res[6], 'color: #76A7FA', 'Database and SQL'],
-                            ['', $res[7], 'silver', 'Web features'],
-                            ['', $res[8], 'stroke-color: #703593; fill-color: #C5A5CF', 'INPUT and OUTPUT'],
+                            ['1', $res[0], 'color: gray', 'PHP Basics'],
+                            ['2', $res[1], 'color: #76A7FA', 'Functions and Arrays'],
+                            ['3', $res[2], '', 'OOP'],
+                            ['4', $res[3], 'stroke-color: #703593; fill-color: #C5A5CF', 'Security'],
+                            ['5', $res[4], 'stroke-color: #871B47; fill-color: #BC5679; ', 'Data format and Types'],
+                            ['6', $res[5], 'gold', 'String and Patterns'],
+                            ['7', $res[6], 'color: #76A7FA', 'Database and SQL'],
+                            ['8', $res[7], 'silver', 'Web features'],
+                            ['9', $res[8], 'stroke-color: #703593; fill-color: #C5A5CF', 'INPUT and OUTPUT'],
                         ]);";
             return new JsonResponse(json_encode(['data' => $data]));
         } else {
